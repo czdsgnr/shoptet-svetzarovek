@@ -212,6 +212,27 @@ body.type-product .p-image .flags-extra,
 }
 
 /* ---------------------------------------------------------
+   USP pruh (.benefitBanner) – ikony NAD nadpis+text a větší,
+   vše vystředěné (původně ikona vlevo vedle textu).
+   --------------------------------------------------------- */
+.benefitBanner__item {
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+.benefitBanner__picture {
+  margin: 0 0 12px 0 !important;
+}
+.benefitBanner__img {
+  width: 62px !important;
+  height: 62px !important;
+  max-width: none !important;
+}
+.benefitBanner__content {
+  text-align: center !important;
+}
+
+/* ---------------------------------------------------------
    3) Benefity registrace v přihlašovacím popupu (vpravo)
    HTML vkládá shoptet.js (aside.login-benefits). Akcent = brand teal.
    --------------------------------------------------------- */
