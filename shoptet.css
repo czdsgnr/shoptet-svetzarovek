@@ -83,7 +83,7 @@ html, body {
 #category-filter-hover .filter-section {
   border: 1px solid #e2e6ea !important;
   border-radius: 8px !important;
-  overflow: hidden !important;
+  /* POZOR: žádný overflow:hidden – ořezával by rozbalený obsah filtru! */
   margin-bottom: 8px !important;
   background: #fff !important;
   transition: box-shadow .15s, border-color .15s !important;
