@@ -47,3 +47,132 @@
   font-size: 14px;
   white-space: nowrap;
 }
+
+/* ---------------------------------------------------------
+   3) Benefity registrace v přihlašovacím popupu (vpravo)
+   HTML vkládá shoptet.js (aside.login-benefits). Akcent = brand teal.
+   --------------------------------------------------------- */
+#login.has-benefits {
+  width: min(760px, 95vw) !important;
+  max-width: none !important;
+  right: 0 !important;
+  left: auto !important;
+}
+#login.has-benefits .popup-widget-inner {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: auto 1fr !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 60px rgba(16, 34, 59, .18) !important;
+}
+#login.has-benefits > .popup-widget-inner > h2 {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  margin: 0 !important;
+  padding: 40px 38px 18px !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #16223b !important;
+  background: 0 !important;
+}
+#login.has-benefits > .popup-widget-inner > #customerLogin {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  padding: 0 38px 40px !important;
+}
+#login.has-benefits .login-benefits {
+  grid-column: 2 !important;
+  grid-row: 1 / -1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 56px 56px 48px 48px !important;
+  background: linear-gradient(180deg, #f1f7f8, #e6f0f2) !important;
+  border-left: 1px solid #d8e6e9 !important;
+}
+#login .lb-title {
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #16223b !important;
+  background: 0 !important;
+  border: 0 !important;
+}
+#login .lb-sub {
+  margin: 0 0 22px !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #5a6b7e !important;
+}
+#login .lb-list {
+  list-style: none !important;
+  margin: 0 0 28px !important;
+  padding: 0 !important;
+}
+#login .lb-list li {
+  position: relative !important;
+  margin: 0 !important;
+  padding: 9px 0 9px 38px !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  color: #2c3a4f !important;
+}
+#login .lb-list li::before {
+  content: "✓" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 6px !important;
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  text-align: center !important;
+  border-radius: 50% !important;
+  background: #216d8f !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+#login .lb-cta {
+  display: block !important;
+  margin-top: auto !important;
+  padding: 15px 18px !important;
+  text-align: center !important;
+  background: #216d8f !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  text-decoration: none !important;
+  box-shadow: 0 6px 16px rgba(33, 109, 143, .28) !important;
+  transition: .15s;
+}
+#login .lb-cta:hover {
+  background: #18566f !important;
+  color: #fff !important;
+  box-shadow: 0 8px 20px rgba(33, 109, 143, .36) !important;
+}
+@media (min-width: 992px) {
+  #login.has-benefits { right: 120px !important; left: auto !important; }
+}
+@media (max-width: 767px) {
+  #login.has-benefits { width: min(440px, 96vw) !important; }
+  #login.has-benefits .popup-widget-inner {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    border-radius: 14px !important;
+  }
+  #login.has-benefits > .popup-widget-inner > h2 { padding: 28px 24px 14px !important; font-size: 20px !important; }
+  #login.has-benefits > .popup-widget-inner > #customerLogin { padding: 0 24px 26px !important; }
+  #login.has-benefits .login-benefits {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    padding: 28px 24px !important;
+    border-left: 0 !important;
+    border-top: 1px solid #d8e6e9 !important;
+  }
+  #login .lb-title { font-size: 19px !important; }
+  #login .lb-cta { margin-top: 8px !important; }
+}
