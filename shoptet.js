@@ -128,6 +128,15 @@
     if (alt && pd && pd.lastElementChild !== alt) pd.appendChild(alt);
   }
 
+  /* === D2) USP pruh (.benefitBanner) na detailu POD produkt ============
+     Na detailu lezl USP nad produkt – patří pod něj. Přesuneme za .p-detail. */
+  function moveUspBelowProduct() {
+    if (!document.body.classList.contains('type-product')) return;
+    var usp = document.querySelector('.benefitBanner');
+    var pd = document.querySelector('.p-detail');
+    if (usp && pd && pd.nextElementSibling !== usp) pd.after(usp);
+  }
+
   /* === E) Karty ve výpisu: přeškrtnutá původní cena k akční ===========
      Původní cena (.price-standard) je uvnitř slevového badge. Naklonujeme
      ji k akční ceně do .prices (struck-through, viz CSS). Idempotentně. */
@@ -153,6 +162,7 @@
     initFilters(); // vodorovné filtry v obsahu (přeneseno ze script.js)
     initDetailSklad();
     moveAltToBottom();
+    moveUspBelowProduct();
     addOrigPrice();
   }
 
@@ -176,6 +186,11 @@
   setTimeout(moveAltToBottom, 600);
   setTimeout(moveAltToBottom, 1800);
   window.addEventListener('load', moveAltToBottom);
+  // USP pod produkt (detail)
+  document.addEventListener('ShoptetDOMPageContentLoaded', moveUspBelowProduct);
+  setTimeout(moveUspBelowProduct, 600);
+  setTimeout(moveUspBelowProduct, 1800);
+  window.addEventListener('load', moveUspBelowProduct);
   document.addEventListener('ShoptetDOMPageContentLoaded', initDetailSklad);
   setTimeout(initDetailSklad, 600);
   setTimeout(initDetailSklad, 1500);
