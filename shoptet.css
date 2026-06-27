@@ -95,10 +95,28 @@
   background-color: #04a70f !important;
   border-color: #04a70f !important;
   color: #fff !important;
+  /* tlačítko plavalo (top:5px, výška 48px v 61px baru) → roztáhnout
+     na plnou výšku, ať sedí flush jako v originále */
+  top: 0 !important;
+  bottom: 0 !important;
+  height: auto !important;
 }
 #header .search-form .btn:hover {
   background-color: #04880d !important;
   border-color: #04880d !important;
+}
+
+/* ---------------------------------------------------------
+   Oprava: nákupní box na detailu byl neviditelný
+   Motiv má na .p-info-wrapper reveal efekt (opacity:0 →
+   transition na 1), který se ale nespouští (souvisí s tím, že
+   stránka scrolluje přes <body>, ne window). Box s cenou a
+   tlačítkem „Přidat do košíku" tak zůstával průhledný → nešlo
+   nakoupit. Natvrdo zviditelníme. (Není to naše regrese – děje
+   se to i bez našeho CSS.)
+   --------------------------------------------------------- */
+.p-info-wrapper {
+  opacity: 1 !important;
 }
 
 /* ---------------------------------------------------------
