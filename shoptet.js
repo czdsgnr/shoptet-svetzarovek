@@ -159,7 +159,8 @@
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
-    initFilters(); // vodorovné filtry v obsahu (přeneseno ze script.js)
+    /* initFilters() VYPNUTO – filtry řeší vrácený původní script.js
+       (jinak by se to pralo). Necháváme to na něm. */
     initDetailSklad();
     moveAltToBottom();
     moveUspBelowProduct();
@@ -169,12 +170,6 @@
   if (document.readyState !== 'loading') initAll();
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
-  // Shoptet překresluje filtry/výpis – chyť i tyhle eventy
-  document.addEventListener('ShoptetDOMPageContentLoaded', initFilters);
-  document.addEventListener('ShoptetDOMPageMoreProductsLoaded', initFilters);
-  document.addEventListener('ShoptetDOMPageProductsLoaded', initFilters);
-  setTimeout(initFilters, 600);
-  setTimeout(initFilters, 1500);
   // karty se donačítají (carousely, lazy) – doplnit i pak
   document.addEventListener('ShoptetDOMPageContentLoaded', addOrigPrice);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', addOrigPrice);
