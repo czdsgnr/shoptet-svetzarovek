@@ -154,6 +154,14 @@ body.type-product .p-image .flags-extra,
    Teď to motiv řeší sám, záplaty by dělaly duplicitní název. */
 
 /* ---------------------------------------------------------
+   Skrytí starého benefit pruhu .kn_benefits (vkládá inline JS
+   v Shoptetu) – duplikuje nativní theme .benefitBanner.
+   --------------------------------------------------------- */
+.kn_benefits {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------
    3) Benefity registrace v přihlašovacím popupu (vpravo)
    HTML vkládá shoptet.js (aside.login-benefits). Akcent = brand teal.
    --------------------------------------------------------- */
