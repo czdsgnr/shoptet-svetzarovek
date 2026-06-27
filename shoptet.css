@@ -21,6 +21,19 @@
   background-color: #000 !important;
 }
 
+/* Modré/šedé linky kolem nav menu z původního style.css
+   (.navigation-in border-top #1977b5, #navigation border-bottom #e4e4e4)
+   – na tmavém headeru ruší, sjednotíme do tmava. */
+.navigation-in {
+  border-top-color: transparent !important;
+}
+#navigation {
+  border-bottom-color: transparent !important;
+}
+.navigation-in > ul > li {
+  border-color: transparent !important;
+}
+
 /* ---------------------------------------------------------
    2) Otevírací doba v horní liště (vedle telefonu)
    Stejný princip jako na protvoreni: ::before na kontakty.
