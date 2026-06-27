@@ -92,32 +92,17 @@ html, body {
   border-color: transparent !important;
 }
 
-/* ---------------------------------------------------------
-   Filtry – vlastní rozbalování (nativní toggle nefungoval).
-   <form> v sekci má display:none (zavřeno). Třídu .sz-open
-   přidává náš shoptet.js (klik na h4) → form se ukáže.
-   --------------------------------------------------------- */
-#category-filter-hover .filter-section > h4 {
-  cursor: pointer !important;
-}
-#category-filter-hover .filter-section > form {
-  display: none !important;
-}
-#category-filter-hover .filter-section.sz-open > form {
-  display: block !important;
-}
-#category-filter-hover .filter-section.sz-open fieldset {
-  display: block !important;
-  max-height: 320px !important;
-  overflow-y: auto !important;
-}
-/* šipka (chevron) v otevřené sekci otočit */
-#category-filter-hover .filter-section.sz-open > h4::before {
-  transform: rotate(180deg);
-  display: inline-block;
-}
+/* =========================================================
+   FILTRY – jednotný vzhled + rozbalování pro VŠECHNY boxy:
+   parametrické (#category-filter-hover .filter-section),
+   "Dle ceny" (.slider-wrapper) i "Dle štítku" (.param-filter-top).
+   Toggle řídí náš shoptet.js třídou .sz-open (na init je u všech).
+   ŽÁDNÝ overflow:hidden – ořezal by rozbalený obsah!
+   ========================================================= */
 
-/* --- Vzhled filtrů (toggle už funguje, jen styl; ŽÁDNÝ overflow:hidden!) --- */
+/* společný selektor karet */
+.filters .slider-wrapper,
+.filters .param-filter-top.filter-section,
 #category-filter-hover .filter-section {
   border: 1px solid #e2e6ea !important;
   border-radius: 10px !important;
@@ -125,13 +110,21 @@ html, body {
   margin-bottom: 10px !important;
   transition: border-color .15s, box-shadow .15s !important;
 }
+.filters .slider-wrapper:hover,
+.filters .param-filter-top.filter-section:hover,
 #category-filter-hover .filter-section:hover {
   border-color: #174A61 !important;
 }
+.filters .slider-wrapper.sz-open,
+.filters .param-filter-top.filter-section.sz-open,
 #category-filter-hover .filter-section.sz-open {
   border-color: #174A61 !important;
   box-shadow: 0 4px 14px rgba(23, 74, 97, .10) !important;
 }
+
+/* hlavička (klikací) – stejná všude */
+.filters .slider-wrapper > h4,
+.filters .param-filter-top.filter-section > h4,
 #category-filter-hover .filter-section > h4 {
   display: flex !important;
   align-items: center !important;
@@ -143,35 +136,71 @@ html, body {
   color: #16223b !important;
   background: #f5f7f9 !important;
   border-radius: 10px !important;
+  cursor: pointer !important;
   transition: background .15s !important;
 }
+.filters .slider-wrapper.sz-open > h4,
+.filters .param-filter-top.filter-section.sz-open > h4,
 #category-filter-hover .filter-section.sz-open > h4 {
   background: #eef4f6 !important;
   border-radius: 10px 10px 0 0 !important;
 }
+.filters .slider-wrapper > h4:hover,
+.filters .param-filter-top.filter-section > h4:hover,
 #category-filter-hover .filter-section > h4:hover {
   background: #eaeef2 !important;
 }
-#category-filter-hover .filter-section > h4 span { order: 1 !important; color: #16223b !important; }
-#category-filter-hover .filter-section > h4::before {
-  order: 2 !important;
-  margin-left: 8px !important;
-  color: #174A61 !important;
+
+/* skrýt nativní šipky a dát JEDNU vlastní (vpravo, CSS, nezávislá na fontu) */
+.filters .slider-wrapper > h4::before,
+.filters .param-filter-top.filter-section > h4::before,
+#category-filter-hover .filter-section > h4::before { content: none !important; }
+.filters .slider-wrapper > h4::after,
+.filters .param-filter-top.filter-section > h4::after,
+#category-filter-hover .filter-section > h4::after {
+  content: "" !important;
+  flex: 0 0 auto !important;
+  width: 9px !important;
+  height: 9px !important;
+  margin-left: 10px !important;
+  border: solid #174A61 !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) !important;
+  transition: transform .15s !important;
 }
-/* obsah otevřené sekce – checkboxy */
-#category-filter-hover .filter-section.sz-open fieldset {
+/* otevřené → šipka nahoru */
+.filters .slider-wrapper.sz-open > h4::after,
+.filters .param-filter-top.filter-section.sz-open > h4::after,
+#category-filter-hover .filter-section.sz-open > h4::after {
+  transform: rotate(-135deg) !important;
+}
+
+/* OBSAH: zavřeno = skryté, .sz-open = zobrazené */
+#category-filter-hover .filter-section > form,
+.filters .param-filter-top.filter-section > form,
+.filters .slider-wrapper > .slider-content,
+.filters .slider-wrapper > .slider-header { display: none !important; }
+#category-filter-hover .filter-section.sz-open > form,
+.filters .param-filter-top.filter-section.sz-open > form,
+.filters .slider-wrapper.sz-open > .slider-content,
+.filters .slider-wrapper.sz-open > .slider-header { display: block !important; }
+
+/* checkboxy v otevřené sekci */
+#category-filter-hover .filter-section.sz-open fieldset,
+.filters .param-filter-top.filter-section.sz-open fieldset {
+  display: block !important;
+  max-height: 320px !important;
+  overflow-y: auto !important;
   padding: 8px 14px 12px !important;
 }
-#category-filter-hover .fieldsetinner > div { padding: 4px 0 !important; }
-#category-filter-hover .filter-label {
+.filters .fieldsetinner > div { padding: 4px 0 !important; }
+.filters .filter-label {
   cursor: pointer !important;
   color: #2c3a4f !important;
   font-size: 14px !important;
 }
-#category-filter-hover .filter-label .filter-count {
-  color: #9aa3ad !important;
-  font-size: 13px !important;
-}
+.filters .filter-label .filter-count { color: #9aa3ad !important; font-size: 13px !important; }
+
 /* počítadlo "Položek k zobrazení" – bez rámečku */
 #category-filter-hover .filter-section-count {
   border: 0 !important;
@@ -179,9 +208,7 @@ html, body {
   margin: 0 !important;
 }
 /* prázdná boolean sekce schovat */
-#category-filter-hover .filter-section-boolean:empty {
-  display: none !important;
-}
+.filters .filter-section-boolean { display: none !important; }
 
 /* ---------------------------------------------------------
    Sticky header (desktop) – čistý position:sticky

@@ -142,10 +142,23 @@
      display:none (zavřeno); klik na hlavičku (h4) přepne třídu .sz-open,
      která form (a tím checkboxy) ukáže – viz CSS. */
   function initFilterToggle() {
+    /* Dle ceny (slider) a Dle štítku (priznak) převzít pod náš systém:
+       sundat nativní .otevreny a nastavit .sz-open (start otevřené,
+       slider se musí inicializovat viditelný). */
+    document.querySelectorAll('.filters .slider-wrapper, .filters .param-filter-top.filter-section')
+      .forEach(function (box) {
+        box.classList.remove('otevreny');
+        if (!box.classList.contains('sz-open')) box.classList.add('sz-open');
+      });
+
     if (window.__szFilterToggle) return;
     window.__szFilterToggle = true;
     document.addEventListener('click', function (e) {
-      var h4 = e.target.closest('#category-filter-hover .filter-section > h4');
+      var h4 = e.target.closest(
+        '#category-filter-hover .filter-section > h4,' +
+        '.filters .slider-wrapper > h4,' +
+        '.filters .param-filter-top.filter-section > h4'
+      );
       if (!h4) return;
       e.preventDefault();
       h4.parentElement.classList.toggle('sz-open');
@@ -186,11 +199,12 @@
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy
-  document.addEventListener('ShoptetDOMPageContentLoaded', initFilters);
-  document.addEventListener('ShoptetDOMPageMoreProductsLoaded', initFilters);
-  document.addEventListener('ShoptetDOMPageProductsLoaded', initFilters);
-  setTimeout(initFilters, 600);
-  setTimeout(initFilters, 1500);
+  function reinitFilters() { initFilters(); initFilterToggle(); }
+  document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
+  document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitFilters);
+  document.addEventListener('ShoptetDOMPageProductsLoaded', reinitFilters);
+  setTimeout(reinitFilters, 600);
+  setTimeout(reinitFilters, 1500);
   // karty se donačítají (carousely, lazy) – doplnit i pak
   document.addEventListener('ShoptetDOMPageContentLoaded', addOrigPrice);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', addOrigPrice);
