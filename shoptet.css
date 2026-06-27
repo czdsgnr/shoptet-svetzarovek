@@ -100,6 +100,12 @@ html, body {
    třídou .sz-open. ŽÁDNÝ overflow:hidden – ořezal by obsah!
    ========================================================= */
 
+/* flex řádky filtrů: zavřené karty se NESMÍ natahovat na výšku
+   otevřené (jinak prázdné vysoké kostky vedle rozbalené sekce) */
+#filters,
+#filters .filter-sections,
+#category-filter-hover { align-items: flex-start !important; }
+
 /* tři typy karet */
 #filters .filter-section-parametric,
 #filters .slider-wrapper,
