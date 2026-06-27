@@ -129,6 +129,15 @@ body.type-product .p-image .flags-extra,
 }
 
 /* ---------------------------------------------------------
+   Detail: blok alternativních/podobných produktů (#productsAlternative)
+   měl order:0 → lezl NAD produkt. Dáváme vysoký order → patří dolů.
+   --------------------------------------------------------- */
+.p-detail > .tab-pane,
+.p-detail > #productsAlternative {
+  order: 10 !important;
+}
+
+/* ---------------------------------------------------------
    Tlačítko Hledat – primární zelená (viditelná)
    Černá splývala s tmavým headerem → neviditelná. Dáváme brand
    zelenou #04a70f a rušíme zelený rámeček. Výška přesně dle inputu
