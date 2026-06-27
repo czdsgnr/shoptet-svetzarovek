@@ -112,10 +112,15 @@ html, body {
 .flag.flag-discount.flag-discount {
   background-color: #e30613 !important;
 }
-/* akční cena – výpis (.p se slevou) i detail (.p-final-price-wrapper se slevou) */
+/* akční cena – výpis (.p se slevou) i detail (.p-final-price-wrapper se slevou)
+   POZOR: na kartách je viditelná cena <strong> UVNITŘ .price-final a má
+   vlastní černou barvu → barvíme i potomky (.price-final *). */
 .p:has(.flag-discount) .price-final,
+.p:has(.flag-discount) .price-final *,
 .p:has(.price-save) .price-final,
-.p-final-price-wrapper:has(.price-save) .price-final {
+.p:has(.price-save) .price-final *,
+.p-final-price-wrapper:has(.price-save) .price-final,
+.p-final-price-wrapper:has(.price-save) .price-final * {
   color: #e30613 !important;
 }
 /* Detail produktu: slevový badge (.flags-extra) nahoru-vpravo na obrázek
