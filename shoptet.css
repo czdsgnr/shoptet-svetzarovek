@@ -185,14 +185,18 @@ html, body {
 .filters .slider-wrapper.sz-open > .slider-content,
 .filters .slider-wrapper.sz-open > .slider-header { display: block !important; }
 
-/* otevřený obsah udržet uvnitř karty (slider/priznak jinak přetéká) */
+/* KLÍČOVÉ: otevřený obsah = position:static, ať roztáhne kartu a posune
+   obsah dolů (nativně je dropdown position:absolute → plave přes produkty). */
+#category-filter-hover .filter-section.sz-open > form,
+.filters .param-filter-top.filter-section.sz-open > form,
 .filters .slider-wrapper.sz-open > .slider-content,
-.filters .slider-wrapper.sz-open > .slider-header,
-.filters .param-filter-top.filter-section.sz-open > form {
+.filters .slider-wrapper.sz-open > .slider-header {
   position: static !important;
   width: auto !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
+  box-shadow: none !important;
+  border: 0 !important;
   padding: 6px 16px 12px !important;
 }
 .filters .slider-wrapper.sz-open .slider-range,
@@ -202,9 +206,10 @@ html, body {
 #category-filter-hover .filter-section.sz-open fieldset,
 .filters .param-filter-top.filter-section.sz-open fieldset {
   display: block !important;
-  max-height: 320px !important;
+  position: static !important;
+  max-height: 280px !important;
   overflow-y: auto !important;
-  padding: 8px 14px 12px !important;
+  padding: 4px 14px 10px !important;
 }
 .filters .fieldsetinner > div { padding: 4px 0 !important; }
 .filters .filter-label {
