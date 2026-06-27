@@ -239,6 +239,16 @@ body.type-product .p-image .flags-extra,
   width: 100% !important;
   text-align: center !important;
 }
+/* nadpis i podtext na plnou šířku + střed (podtext byl úzký a sedl vlevo) */
+.benefitBanner__title,
+.benefitBanner__data {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+  text-align: center !important;
+}
 
 /* ---------------------------------------------------------
    3) Benefity registrace v přihlašovacím popupu (vpravo)
