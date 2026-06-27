@@ -7,6 +7,19 @@
    ========================================================= */
 
 /* ---------------------------------------------------------
+   0) Body-scroll fix (kořenová oprava)
+   Motiv/CSS dával <body> pevnou výšku (= výška okna) → stránka
+   scrollovala přes <body> místo přes okno. Tím se nespouštěl
+   window.scroll, na kterém visí lazy-load sekcí (související
+   produkty) i reveal efekty → prázdné mezery a rozbitý sticky.
+   Vrácením height:auto scrolluje zase okno = nativní chování.
+   --------------------------------------------------------- */
+html, body {
+  height: auto !important;
+  overflow-y: visible !important;
+}
+
+/* ---------------------------------------------------------
    1) Tmavý header – doplněk k dark-merkur.css
    dark-merkur.css (paxio) je vložený přímo v Shoptet <head>.
    Motiv ale nechává #header bílý (svítí jako postranní pruhy,
