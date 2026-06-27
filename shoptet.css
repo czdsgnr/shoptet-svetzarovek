@@ -70,6 +70,35 @@
 }
 
 /* ---------------------------------------------------------
+   Akční prvky červeně – badge slevy + cena v akci
+   Badge (.flag-discount) byl teal #216d8f → červená.
+   Akční cena: .price-final zčervená jen u karty se slevou
+   (.p obsahuje .flag-discount). Běžná cena zůstává tmavá.
+   --------------------------------------------------------- */
+.flag.flag-discount {
+  background-color: #e30613 !important;
+}
+.p:has(.flag-discount) .price-final,
+.p:has(.price-save) .price-final {
+  color: #e30613 !important;
+}
+
+/* ---------------------------------------------------------
+   Tlačítko Hledat – zpět na původní zelenou
+   dark-merkur ho přebarvil na černou (#000) a zůstal zelený
+   rámeček → divně. Vracíme původní zelené pozadí ze style.css.
+   --------------------------------------------------------- */
+#header .search-form .btn {
+  background-color: #04a70f !important;
+  border-color: #04a70f !important;
+  color: #fff !important;
+}
+#header .search-form .btn:hover {
+  background-color: #04880d !important;
+  border-color: #04880d !important;
+}
+
+/* ---------------------------------------------------------
    3) Benefity registrace v přihlašovacím popupu (vpravo)
    HTML vkládá shoptet.js (aside.login-benefits). Akcent = brand teal.
    --------------------------------------------------------- */
