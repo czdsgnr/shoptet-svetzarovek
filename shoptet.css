@@ -76,6 +76,48 @@ html, body {
 }
 
 /* ---------------------------------------------------------
+   Filtry na kategoriích – hezčí boxy (lepší UX)
+   Čisté bílé kartičky, šipka vpravo, hover highlight, mezery.
+   (Nesahá na funkci rozbalování – jen vzhled.)
+   --------------------------------------------------------- */
+#category-filter-hover .filter-section {
+  border: 1px solid #e2e6ea !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  margin-bottom: 8px !important;
+  background: #fff !important;
+  transition: box-shadow .15s, border-color .15s !important;
+}
+#category-filter-hover .filter-section:hover {
+  border-color: #174A61 !important;
+  box-shadow: 0 2px 8px rgba(23, 74, 97, .12) !important;
+}
+#category-filter-hover .filter-section h4 {
+  background: #f5f7f9 !important;
+  color: #16223b !important;
+  padding: 14px 16px !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin: 0 !important;
+  transition: background .15s !important;
+}
+#category-filter-hover .filter-section h4:hover {
+  background: #eaeef2 !important;
+}
+#category-filter-hover .filter-section h4 span {
+  order: 1 !important;
+  color: #16223b !important;
+}
+#category-filter-hover .filter-section h4::before {
+  order: 2 !important;
+  color: #174A61 !important;
+  margin-left: 8px !important;
+}
+
+/* ---------------------------------------------------------
    Sticky header (desktop) – čistý position:sticky
    Původní motiv řešil sticky JS hackem (body.fix-header +
    position:fixed). Ten se ale spouští na $(window).scroll, jenže
