@@ -1,3 +1,32 @@
-/* Shoptet úpravy – Svět žárovek
-   Custom CSS, hostováno na GitHub Pages.
-   Zatím prázdný scaffold – moduly se budou stavět. */
+/* =========================================================
+   Shoptet úpravy – Svět žárovek
+   Hostováno na GitHub Pages, viz README.
+   Načítá se jako poslední → přebíjí style.css i dark-merkur.css.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1) Tmavý header – doplněk k dark-merkur.css
+   dark-merkur.css (paxio) je vložený přímo v Shoptet <head>.
+   Sám nastaví #header na černou, ALE nechává fotku na pozadí
+   (#header > .container má header_background_v2_1.png), takže
+   bez tohoto by header tmavý nebyl. Tady fotku odstraníme.
+   --------------------------------------------------------- */
+#header > .container {
+  background-image: none !important;
+  background-color: #000 !important;
+}
+
+/* ---------------------------------------------------------
+   2) Otevírací doba v horní liště (vedle telefonu)
+   Stejný princip jako na protvoreni: ::before na kontakty.
+   TODO: potvrdit přesný čas s klientem (zatím placeholder).
+   --------------------------------------------------------- */
+.top-navigation-contacts::before {
+  content: "Po\2013P\00E1 8:00\201316:30";
+  margin-right: 16px;
+  padding-right: 16px;
+  border-right: 1px solid rgba(255, 255, 255, .2);
+  color: #fff;
+  font-size: 14px;
+  white-space: nowrap;
+}
