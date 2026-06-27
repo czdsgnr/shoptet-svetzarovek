@@ -23,18 +23,23 @@ html, body {
 }
 
 /* ---------------------------------------------------------
-   1) Tmavý header – doplněk k dark-merkur.css
-   dark-merkur.css (paxio) je vložený přímo v Shoptet <head>.
-   Motiv ale nechává #header bílý (svítí jako postranní pruhy,
-   protože .container je vycentrovaný) a na .container je fotka
-   header_background_v2_1.png. Tady oboje zčerníme na celou šířku.
+   1) Barvy headeru
+   Header (pod logem, logo+search) = modrá #174A61
+   Navigace (menu) = tmavší modrá #0d3d51
+   Horní lišta s kontakty zůstává černá.
+   Odstraňujeme i fotku na pozadí .container.
    --------------------------------------------------------- */
 #header {
-  background-color: #000 !important;
+  background-color: #174A61 !important;
 }
 #header > .container {
   background-image: none !important;
-  background-color: #000 !important;
+  background-color: #174A61 !important;
+}
+#navigation,
+.navigation-in,
+.navigation-in > ul > li {
+  background-color: #0d3d51 !important;
 }
 /* Mobil: .top-navigation-bar (cart+hamburger) byla bílá – původní
    style.css ji má v základu #fff a tmavé pravidlo jen ≥768px → zčerníme. */
@@ -253,6 +258,18 @@ body.type-product .p-image .flags-extra,
   margin-right: auto !important;
   float: none !important;
   text-align: center !important;
+}
+
+/* Nav hover – na modré navigaci ať není černý (dark-merkur) */
+.navigation-in > ul > li:hover > a,
+.navigation-in > ul > li.exp > a,
+.navigation-in > ul > li.exp > a::after {
+  background-color: #174A61 !important;
+}
+
+/* Přihlašovací popup překrýval sticky header (z-index:1000) → zvednout nad něj */
+#login {
+  z-index: 1100 !important;
 }
 
 /* ---------------------------------------------------------
