@@ -93,39 +93,38 @@ html, body {
 }
 
 /* =========================================================
-   FILTRY – jednotný vzhled + rozbalování pro VŠECHNY boxy:
-   parametrické (#category-filter-hover .filter-section),
-   "Dle ceny" (.slider-wrapper) i "Dle štítku" (.param-filter-top).
-   Toggle řídí náš shoptet.js třídou .sz-open (na init je u všech).
-   ŽÁDNÝ overflow:hidden – ořezal by rozbalený obsah!
+   FILTRY – jednotný vzhled + rozbalování. Selektory NAVÁZANÉ NA
+   STABILNÍ TŘÍDY (.filter-section-parametric, .slider-wrapper,
+   .param-filter-top), které drží i po AJAX překreslení – script.js,
+   co je dřív normalizoval, je smazaný. Otevírá náš shoptet.js
+   třídou .sz-open. ŽÁDNÝ overflow:hidden – ořezal by obsah!
    ========================================================= */
 
-/* společný selektor karet */
+/* tři typy karet */
+.filters .filter-section-parametric,
 .filters .slider-wrapper,
-.filters .param-filter-top.filter-section,
-#category-filter-hover .filter-section {
+.filters .param-filter-top {
   border: 1px solid #e2e6ea !important;
   border-radius: 10px !important;
   background: #fff !important;
   margin-bottom: 10px !important;
+  box-sizing: border-box !important;
   transition: border-color .15s, box-shadow .15s !important;
 }
+.filters .filter-section-parametric:hover,
 .filters .slider-wrapper:hover,
-.filters .param-filter-top.filter-section:hover,
-#category-filter-hover .filter-section:hover {
-  border-color: #174A61 !important;
-}
+.filters .param-filter-top:hover { border-color: #174A61 !important; }
+.filters .filter-section-parametric.sz-open,
 .filters .slider-wrapper.sz-open,
-.filters .param-filter-top.filter-section.sz-open,
-#category-filter-hover .filter-section.sz-open {
+.filters .param-filter-top.sz-open {
   border-color: #174A61 !important;
   box-shadow: 0 4px 14px rgba(23, 74, 97, .10) !important;
 }
 
 /* hlavička (klikací) – stejná všude */
+.filters .filter-section-parametric > h4,
 .filters .slider-wrapper > h4,
-.filters .param-filter-top.filter-section > h4,
-#category-filter-hover .filter-section > h4 {
+.filters .param-filter-top > h4 {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -139,25 +138,23 @@ html, body {
   cursor: pointer !important;
   transition: background .15s !important;
 }
+.filters .filter-section-parametric.sz-open > h4,
 .filters .slider-wrapper.sz-open > h4,
-.filters .param-filter-top.filter-section.sz-open > h4,
-#category-filter-hover .filter-section.sz-open > h4 {
+.filters .param-filter-top.sz-open > h4 {
   background: #eef4f6 !important;
   border-radius: 10px 10px 0 0 !important;
 }
+.filters .filter-section-parametric > h4:hover,
 .filters .slider-wrapper > h4:hover,
-.filters .param-filter-top.filter-section > h4:hover,
-#category-filter-hover .filter-section > h4:hover {
-  background: #eaeef2 !important;
-}
+.filters .param-filter-top > h4:hover { background: #eaeef2 !important; }
 
 /* skrýt nativní šipky a dát JEDNU vlastní (vpravo, CSS, nezávislá na fontu) */
+.filters .filter-section-parametric > h4::before,
 .filters .slider-wrapper > h4::before,
-.filters .param-filter-top.filter-section > h4::before,
-#category-filter-hover .filter-section > h4::before { content: none !important; }
+.filters .param-filter-top > h4::before { content: none !important; }
+.filters .filter-section-parametric > h4::after,
 .filters .slider-wrapper > h4::after,
-.filters .param-filter-top.filter-section > h4::after,
-#category-filter-hover .filter-section > h4::after {
+.filters .param-filter-top > h4::after {
   content: "" !important;
   flex: 0 0 auto !important;
   width: 9px !important;
@@ -169,28 +166,21 @@ html, body {
   transition: transform .15s !important;
 }
 /* otevřené → šipka nahoru */
+.filters .filter-section-parametric.sz-open > h4::after,
 .filters .slider-wrapper.sz-open > h4::after,
-.filters .param-filter-top.filter-section.sz-open > h4::after,
-#category-filter-hover .filter-section.sz-open > h4::after {
-  transform: rotate(-135deg) !important;
-}
+.filters .param-filter-top.sz-open > h4::after { transform: rotate(-135deg) !important; }
 
-/* OBSAH: zavřeno = skryté, .sz-open = zobrazené */
-#category-filter-hover .filter-section > form,
-.filters .param-filter-top.filter-section > form,
+/* OBSAH: zavřeno = skryté, .sz-open = zobrazené + position:static
+   (nativně je dropdown position:absolute → jinak plave přes produkty) */
+.filters .filter-section-parametric > form,
+.filters .param-filter-top > form,
 .filters .slider-wrapper > .slider-content,
 .filters .slider-wrapper > .slider-header { display: none !important; }
-#category-filter-hover .filter-section.sz-open > form,
-.filters .param-filter-top.filter-section.sz-open > form,
-.filters .slider-wrapper.sz-open > .slider-content,
-.filters .slider-wrapper.sz-open > .slider-header { display: block !important; }
-
-/* KLÍČOVÉ: otevřený obsah = position:static, ať roztáhne kartu a posune
-   obsah dolů (nativně je dropdown position:absolute → plave přes produkty). */
-#category-filter-hover .filter-section.sz-open > form,
-.filters .param-filter-top.filter-section.sz-open > form,
+.filters .filter-section-parametric.sz-open > form,
+.filters .param-filter-top.sz-open > form,
 .filters .slider-wrapper.sz-open > .slider-content,
 .filters .slider-wrapper.sz-open > .slider-header {
+  display: block !important;
   position: static !important;
   width: auto !important;
   max-width: 100% !important;
@@ -203,8 +193,8 @@ html, body {
 .filters .slider-wrapper.sz-open .ui-slider { max-width: 100% !important; }
 
 /* checkboxy v otevřené sekci */
-#category-filter-hover .filter-section.sz-open fieldset,
-.filters .param-filter-top.filter-section.sz-open fieldset {
+.filters .filter-section-parametric.sz-open fieldset,
+.filters .param-filter-top.sz-open fieldset {
   display: block !important;
   position: static !important;
   max-height: 280px !important;
@@ -220,13 +210,16 @@ html, body {
 .filters .filter-label .filter-count { color: #9aa3ad !important; font-size: 13px !important; }
 
 /* počítadlo "Položek k zobrazení" – bez rámečku */
-#category-filter-hover .filter-section-count {
+.filters .filter-section-count {
   border: 0 !important;
   background: transparent !important;
   margin: 0 !important;
 }
-/* prázdná boolean sekce schovat */
-.filters .filter-section-boolean { display: none !important; }
+/* PRÁZDNÉ / nezpracované boxy schovat (boolean, prázdný form bez hlavičky) –
+   jinak je můj card styl obarví jako prázdné bílé kostky. */
+.filters .filter-section-boolean,
+.filters > form:not([class]),
+#filters > form:not([class]) { display: none !important; }
 
 /* ---------------------------------------------------------
    Sticky header (desktop) – čistý position:sticky

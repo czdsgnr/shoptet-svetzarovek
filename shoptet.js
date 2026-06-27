@@ -141,25 +141,56 @@
      Nativní toggle filtrů na tomhle webu nefunguje. <form> v sekci má
      display:none (zavřeno); klik na hlavičku (h4) přepne třídu .sz-open,
      která form (a tím checkboxy) ukáže – viz CSS. */
+  /* Normalizace stavu filtrů (běží po každém AJAX překreslení):
+     - parametrické si nechají otevřený/aktivní stav (theme značí .otevreny)
+       převedením na náš .sz-open,
+     - Dle ceny (slider) + Dle štítku (priznak) = čistý ZAVŘENÝ default. */
+  function normalizeFilterState() {
+    document.querySelectorAll('.filters .filter-section-parametric').forEach(function (s) {
+      if (s.classList.contains('otevreny')) {
+        s.classList.remove('otevreny');
+        s.classList.add('sz-open');
+      }
+    });
+    document.querySelectorAll('.filters .slider-wrapper, .filters .param-filter-top').forEach(function (s) {
+      s.classList.remove('otevreny');
+    });
+  }
+
   function initFilterToggle() {
-    /* Dle ceny (slider) a Dle štítku (priznak) převzít pod náš systém:
-       sundat nativní .otevreny → startují ZAVŘENÉ jako parametrické
-       (čistá jednotná mřížka; jejich obsah jinak přetéká). */
-    document.querySelectorAll('.filters .slider-wrapper, .filters .param-filter-top.filter-section')
-      .forEach(function (box) { box.classList.remove('otevreny'); });
+    normalizeFilterState();
 
     if (window.__szFilterToggle) return;
     window.__szFilterToggle = true;
+
     document.addEventListener('click', function (e) {
       var h4 = e.target.closest(
-        '#category-filter-hover .filter-section > h4,' +
+        '.filters .filter-section-parametric > h4,' +
         '.filters .slider-wrapper > h4,' +
-        '.filters .param-filter-top.filter-section > h4'
+        '.filters .param-filter-top > h4'
       );
       if (!h4) return;
       e.preventDefault();
       h4.parentElement.classList.toggle('sz-open');
     });
+
+    /* Shoptet/dklab překresluje filtry přes AJAX (URL ?pvXX=…) a ne vždy
+       padne náš event → MutationObserver re-normalizuje po každé změně DOM.
+       Sleduje jen childList (ne atributy) → naše změny tříd ho neretriggrují. */
+    if (!window.__szFilterObserver) {
+      var host = document.querySelector('#content') ||
+                 (document.querySelector('#filters') || {}).parentNode ||
+                 document.body;
+      if (host) {
+        var t;
+        var obs = new MutationObserver(function () {
+          clearTimeout(t);
+          t = setTimeout(normalizeFilterState, 150);
+        });
+        obs.observe(host, { childList: true, subtree: true });
+        window.__szFilterObserver = obs;
+      }
+    }
   }
 
   /* === E) Karty ve výpisu: přeškrtnutá původní cena k akční ===========
