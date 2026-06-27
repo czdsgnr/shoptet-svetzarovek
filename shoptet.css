@@ -35,6 +35,27 @@
 }
 
 /* ---------------------------------------------------------
+   Sticky header (desktop) – čistý position:sticky
+   Původní motiv řešil sticky JS hackem (body.fix-header +
+   position:fixed). Ten se ale spouští na $(window).scroll, jenže
+   stránka scrolluje přes <body> → handler často nenaskočí správně,
+   header pak poskakoval, ořezával popisky a špatně odsazoval.
+   Nahrazujeme nativním position:sticky (funguje nezávisle na JS).
+   Mobil (<768) má vlastní sticky ve style.css → nesaháme na něj.
+   --------------------------------------------------------- */
+@media (min-width: 768px) {
+  #header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+  }
+  /* neutralizace zbytků fix-header hacku (kdyby třída naskočila) */
+  .fix-header .top-navigation-bar { position: static !important; top: auto !important; }
+  .fix-header .header-top { height: auto !important; }
+  .fix-header .user-action-in { display: block !important; }
+}
+
+/* ---------------------------------------------------------
    2) Otevírací doba v horní liště (vedle telefonu)
    Stejný princip jako na protvoreni: ::before na kontakty.
    --------------------------------------------------------- */
