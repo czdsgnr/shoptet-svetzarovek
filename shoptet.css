@@ -75,11 +75,14 @@
    Akční cena: .price-final zčervená jen u karty se slevou
    (.p obsahuje .flag-discount). Běžná cena zůstává tmavá.
    --------------------------------------------------------- */
-.flag.flag-discount {
+/* dvojitá třída = vyšší specificita, přebije i style.css (#216d8f !important) */
+.flag.flag-discount.flag-discount {
   background-color: #e30613 !important;
 }
+/* akční cena – výpis (.p se slevou) i detail (.p-final-price-wrapper se slevou) */
 .p:has(.flag-discount) .price-final,
-.p:has(.price-save) .price-final {
+.p:has(.price-save) .price-final,
+.p-final-price-wrapper:has(.price-save) .price-final {
   color: #e30613 !important;
 }
 
