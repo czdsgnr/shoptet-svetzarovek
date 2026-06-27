@@ -106,6 +106,9 @@
     document.querySelectorAll('.extended-description table.detail-parameters tr').forEach(function (tr) {
       if (/Centrální sklad/i.test(tr.textContent)) {
         tr.classList.add('centralniskald');
+        // relabel "Centrální sklad:" → "Centrální sklad ČR"
+        var csTh = tr.querySelector('th');
+        if (csTh) csTh.textContent = 'Centrální sklad ČR';
         tbody.appendChild(tr);
       }
     });

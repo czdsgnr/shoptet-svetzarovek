@@ -138,6 +138,47 @@ body.type-product .p-image .flags-extra,
 }
 
 /* ---------------------------------------------------------
+   Skladová tabulka – hezčí řádek "Centrální sklad ČR"
+   (label JS přepisuje v modulu C). Z parametr-řádku uděláme
+   čistý zelený box: ikona + label vlevo, dostupnost vpravo.
+   --------------------------------------------------------- */
+.p-info-wrapper .sklad {
+  margin-top: 12px;
+}
+.p-info-wrapper .sklad .centralniskald {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #eef6f1;
+  border: 1px solid #d7e8de;
+  border-radius: 8px;
+  padding: 11px 14px;
+  margin-top: 6px;
+}
+.p-info-wrapper .sklad .centralniskald th,
+.p-info-wrapper .sklad .centralniskald td {
+  display: inline !important;
+  background: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  font-size: 14px;
+}
+.p-info-wrapper .sklad .centralniskald th {
+  color: #16223b;
+  font-weight: 700;
+}
+.p-info-wrapper .sklad .centralniskald th::before {
+  content: "🚚";
+  margin-right: 8px;
+}
+.p-info-wrapper .sklad .centralniskald td {
+  color: #04a70f;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
    Tlačítko Hledat – primární zelená (viditelná)
    Černá splývala s tmavým headerem → neviditelná. Dáváme brand
    zelenou #04a70f a rušíme zelený rámeček. Výška přesně dle inputu
