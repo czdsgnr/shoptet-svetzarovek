@@ -120,6 +120,22 @@
 }
 
 /* ---------------------------------------------------------
+   Oprava: na detailu mizel název produktu, hodnocení a perex
+   Původní motiv (paxio style.css ř. 4571–4580) v režimu
+   one-column-body skrývá .p-detail-inner-header (název+kód),
+   .p-detail-info (vlajky+hodnocení) i .p-short-description (perex)
+   – počítá s jejich přesunem jinam, k čemuž tu nedochází → mizely.
+   Vracíme je do původních pozic. (Není to naše regrese.)
+   --------------------------------------------------------- */
+body:not(.multiple-columns-body) .p-detail-inner > .p-detail-inner-header,
+body:not(.multiple-columns-body) .product-top > div:not(.p-info-wrapper) .p-detail-info {
+  display: block !important;
+}
+body.type-product .p-short-description {
+  display: block !important;
+}
+
+/* ---------------------------------------------------------
    3) Benefity registrace v přihlašovacím popupu (vpravo)
    HTML vkládá shoptet.js (aside.login-benefits). Akcent = brand teal.
    --------------------------------------------------------- */
