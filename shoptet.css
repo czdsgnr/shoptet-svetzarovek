@@ -300,6 +300,10 @@ body.type-product .p-image .flags-extra,
    USP pruh (.benefitBanner) – ikony NAD nadpis+text a větší,
    vše vystředěné (původně ikona vlevo vedle textu).
    --------------------------------------------------------- */
+/* USP banner patří jen na homepage – na detailu lezl nad produkt → skrýt mimo homepage. */
+body:not(.in-index) .benefitBanner {
+  display: none !important;
+}
 .benefitBanner__item {
   flex-direction: column !important;
   align-items: center !important;
