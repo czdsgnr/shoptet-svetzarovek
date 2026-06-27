@@ -496,3 +496,60 @@ body.type-product .p-image .flags-extra,
   #login .lb-title { font-size: 19px !important; }
   #login .lb-cta { margin-top: 8px !important; }
 }
+
+/* ---------------------------------------------------------
+   Side banner "Potřebujete pomoc?" (vkládá se jako HTML do
+   kategorie – jen markup .sz-help, styl je tady).
+   --------------------------------------------------------- */
+.sz-help {
+  max-width: 340px;
+  margin: 0 auto;
+  border: 1px solid #e2e6ea;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(23, 74, 97, .08);
+}
+.sz-help__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: #eef4f6;
+  border-bottom: 1px solid #e2e6ea;
+}
+.sz-help__avatar {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #174A61;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sz-help__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #16223b;
+  line-height: 1.2;
+}
+.sz-help__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  color: #16223b;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  border-top: 1px solid #f0f3f5;
+  transition: background .15s, color .15s;
+  word-break: break-word;
+}
+.sz-help__row:first-of-type { border-top: 0; }
+.sz-help__row svg { flex: 0 0 auto; color: #174A61; }
+a.sz-help__row:hover { background: #eef4f6; color: #174A61; }
+a.sz-help__row:hover svg { color: #04a70f; }
+.sz-help__row--info { color: #5a6b7e; font-weight: 600; background: #fafbfc; }
