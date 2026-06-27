@@ -29,17 +29,32 @@ html, body {
    Horní lišta s kontakty zůstává černá.
    Odstraňujeme i fotku na pozadí .container.
    --------------------------------------------------------- */
+/* #header je jediný full-width prvek (logo/search/nav uvnitř jsou
+   vycentrované). Aby navigace nebyla „patchy" (na bocích prosvítal
+   světlejší header), barvíme #header gradientem: horní část #174A61,
+   spodních ~53px (navigace) #0d3d51. Vnitřky necháme transparentní. */
 #header {
-  background-color: #174A61 !important;
+  background: #174A61 !important; /* mobil / fallback */
+}
+@media (min-width: 768px) {
+  #header {
+    background: linear-gradient(
+      to bottom,
+      #174A61,
+      #174A61 calc(100% - 53px),
+      #0d3d51 calc(100% - 53px),
+      #0d3d51
+    ) !important;
+  }
 }
 #header > .container {
   background-image: none !important;
-  background-color: #174A61 !important;
+  background-color: transparent !important;
 }
 #navigation,
 .navigation-in,
 .navigation-in > ul > li {
-  background-color: #0d3d51 !important;
+  background-color: transparent !important;
 }
 /* Mobil: .top-navigation-bar (cart+hamburger) byla bílá – původní
    style.css ji má v základu #fff a tmavé pravidlo jen ≥768px → zčerníme. */
