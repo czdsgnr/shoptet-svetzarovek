@@ -92,9 +92,30 @@ html, body {
   border-color: transparent !important;
 }
 
-/* Pozn.: filtr box styling jsme odebrali – necháváme filtry plně nativní
-   (vlastní styling/JS kolidoval s rozbalováním). Až ověříme, že nativní
-   filtry fungují, můžeme přidat zpět jen bezpečné kosmetické úpravy. */
+/* ---------------------------------------------------------
+   Filtry – vlastní rozbalování (nativní toggle nefungoval).
+   <form> v sekci má display:none (zavřeno). Třídu .sz-open
+   přidává náš shoptet.js (klik na h4) → form se ukáže.
+   --------------------------------------------------------- */
+#category-filter-hover .filter-section > h4 {
+  cursor: pointer !important;
+}
+#category-filter-hover .filter-section > form {
+  display: none !important;
+}
+#category-filter-hover .filter-section.sz-open > form {
+  display: block !important;
+}
+#category-filter-hover .filter-section.sz-open fieldset {
+  display: block !important;
+  max-height: 320px !important;
+  overflow-y: auto !important;
+}
+/* šipka (chevron) v otevřené sekci otočit */
+#category-filter-hover .filter-section.sz-open > h4::before {
+  transform: rotate(180deg);
+  display: inline-block;
+}
 
 /* ---------------------------------------------------------
    Sticky header (desktop) – čistý position:sticky

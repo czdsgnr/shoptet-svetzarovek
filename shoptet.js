@@ -128,13 +128,28 @@
     if (alt && pd && pd.lastElementChild !== alt) pd.appendChild(alt);
   }
 
-  /* === D2) USP pruh (.benefitBanner) na detailu POD produkt ============
-     Na detailu lezl USP nad produkt – patří pod něj. Přesuneme za .p-detail. */
+  /* === D2) USP pruh (.benefitBanner) na detailu – pod .row.product-top,
+     NAD "Podobné produkty" (dle přání klienta). */
   function moveUspBelowProduct() {
     if (!document.body.classList.contains('type-product')) return;
     var usp = document.querySelector('.benefitBanner');
-    var pd = document.querySelector('.p-detail');
-    if (usp && pd && pd.nextElementSibling !== usp) pd.after(usp);
+    var anchor = document.querySelector('.row.product-top');
+    if (usp && anchor && anchor.nextElementSibling !== usp) anchor.after(usp);
+  }
+
+  /* === F) Vlastní rozbalování filtrů ==================================
+     Nativní toggle filtrů na tomhle webu nefunguje. <form> v sekci má
+     display:none (zavřeno); klik na hlavičku (h4) přepne třídu .sz-open,
+     která form (a tím checkboxy) ukáže – viz CSS. */
+  function initFilterToggle() {
+    if (window.__szFilterToggle) return;
+    window.__szFilterToggle = true;
+    document.addEventListener('click', function (e) {
+      var h4 = e.target.closest('#category-filter-hover .filter-section > h4');
+      if (!h4) return;
+      e.preventDefault();
+      h4.parentElement.classList.toggle('sz-open');
+    });
   }
 
   /* === E) Karty ve výpisu: přeškrtnutá původní cena k akční ===========
@@ -165,6 +180,7 @@
     moveAltToBottom();
     moveUspBelowProduct();
     addOrigPrice();
+    initFilterToggle();
   }
 
   if (document.readyState !== 'loading') initAll();
