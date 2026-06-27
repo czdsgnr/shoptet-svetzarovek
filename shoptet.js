@@ -77,10 +77,45 @@
     });
   }
 
+  /* === C) Skladová tabulka na detailu (přeneseno ze script.js) ======== */
+  function initDetailSklad() {
+    if (!document.querySelector('.type-detail, body.type-product')) return;
+    var params = document.querySelector('.p-info-wrapper .detail-parameters');
+    if (!params || params.querySelector('.sklad')) return; // idempotentně
+
+    // skrýt záložku "Diskuse"
+    document.querySelectorAll('#p-detail-tabs li').forEach(function (li) {
+      if (/Diskuse/i.test(li.textContent)) li.style.display = 'none';
+    });
+
+    // postavit tabulku "Litoměřice / expedice"
+    var sklad = document.createElement('div');
+    sklad.className = 'sklad';
+    sklad.innerHTML =
+      '<table><tbody><tr class="expedice"><th>Litoměřice / expedice</th><td></td></tr></tbody></table>';
+    params.appendChild(sklad);
+
+    // přesunout skladovost do buňky
+    var td = sklad.querySelector('.expedice td');
+    document.querySelectorAll('.availability-value').forEach(function (av) {
+      if (td) td.appendChild(av);
+    });
+
+    // přesunout řádky "Centrální sklad" z rozšířeného popisu
+    var tbody = sklad.querySelector('tbody');
+    document.querySelectorAll('.extended-description table.detail-parameters tr').forEach(function (tr) {
+      if (/Centrální sklad/i.test(tr.textContent)) {
+        tr.classList.add('centralniskald');
+        tbody.appendChild(tr);
+      }
+    });
+  }
+
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
     initFilters();
+    initDetailSklad();
   }
 
   if (document.readyState !== 'loading') initAll();
@@ -92,6 +127,10 @@
   document.addEventListener('ShoptetDOMPageProductsLoaded', initFilters);
   setTimeout(initFilters, 600);
   setTimeout(initFilters, 1500);
+  // detail – varianty/skladovost se renderují později
+  document.addEventListener('ShoptetDOMPageContentLoaded', initDetailSklad);
+  setTimeout(initDetailSklad, 600);
+  setTimeout(initDetailSklad, 1500);
   // popup se může donačíst – chytni i klik na "Přihlášení"
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-target="login"]')) {
