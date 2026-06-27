@@ -114,11 +114,22 @@
     });
   }
 
+  /* === D) Alternativní produkty (#productsAlternative) na konec detailu ==
+     Je to .tab-pane jako přímý potomek .p-detail – ve zdroji je brzo, takže
+     bez CSS order lezl nahoru nad produkt. CSS order:10 to řeší vizuálně,
+     tady navíc přesuneme element na konec DOM (žádný záblesk při načítání). */
+  function moveAltToBottom() {
+    var alt = document.getElementById('productsAlternative');
+    var pd = document.querySelector('.p-detail');
+    if (alt && pd && pd.lastElementChild !== alt) pd.appendChild(alt);
+  }
+
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
     initFilters();
     initDetailSklad();
+    moveAltToBottom();
   }
 
   if (document.readyState !== 'loading') initAll();
@@ -130,7 +141,11 @@
   document.addEventListener('ShoptetDOMPageProductsLoaded', initFilters);
   setTimeout(initFilters, 600);
   setTimeout(initFilters, 1500);
-  // detail – varianty/skladovost se renderují později
+  // detail – varianty/skladovost/slider se renderují později
+  document.addEventListener('ShoptetDOMPageContentLoaded', moveAltToBottom);
+  setTimeout(moveAltToBottom, 600);
+  setTimeout(moveAltToBottom, 1800);
+  window.addEventListener('load', moveAltToBottom);
   document.addEventListener('ShoptetDOMPageContentLoaded', initDetailSklad);
   setTimeout(initDetailSklad, 600);
   setTimeout(initDetailSklad, 1500);
