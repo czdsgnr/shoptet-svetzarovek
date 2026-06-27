@@ -51,10 +51,27 @@ html, body {
   background-image: none !important;
   background-color: transparent !important;
 }
-#navigation,
-.navigation-in,
-.navigation-in > ul > li {
-  background-color: transparent !important;
+/* Desktop: nav průhledná, barvu dává gradient na #header.
+   Mobil: NE – tam je menu samostatný overlay, který POTŘEBUJE
+   vlastní pozadí (jinak prosvítá stránka = rozbité). */
+@media (min-width: 768px) {
+  #navigation,
+  .navigation-in,
+  .navigation-in > ul > li {
+    background-color: transparent !important;
+  }
+}
+@media (max-width: 767px) {
+  #navigation,
+  .navigation-in {
+    background-color: #174A61 !important;
+  }
+  .navigation-in ul,
+  .navigation-in > ul > li,
+  .navigation-in ul li.ext.exp,
+  .navigation-in > ul > li.ext.exp ul {
+    background-color: #174A61 !important;
+  }
 }
 /* Mobil: .top-navigation-bar (cart+hamburger) byla bílá – původní
    style.css ji má v základu #fff a tmavé pravidlo jen ≥768px → zčerníme. */
