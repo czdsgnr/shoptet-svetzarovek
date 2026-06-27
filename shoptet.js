@@ -151,6 +151,49 @@
       '.filters .slider-wrapper,' +
       '.filters .param-filter-top'
     ).forEach(function (s) { s.classList.remove('otevreny'); });
+    markActiveFilters();
+  }
+
+  /* Označí AKTIVNÍ filtry (něco vybráno) – zvýraznění karty .sz-active +
+     odznak s počtem v hlavičce. Počet bere z URL (pvXX=540,336) i z
+     zaškrtnutých inputů, ať uživatel VIDÍ, co má vybrané, i když je zavřeno. */
+  function markActiveFilters() {
+    var counts = {};
+    try {
+      new URLSearchParams(window.location.search).forEach(function (v, k) {
+        var m = k.match(/^pv(\d+)$/);
+        if (m) counts['id-' + m[1]] = String(v).split(',').filter(Boolean).length;
+      });
+    } catch (e) {}
+
+    document.querySelectorAll(
+      '.filters .filter-section-parametric,' +
+      '.filters .slider-wrapper,' +
+      '.filters .param-filter-top'
+    ).forEach(function (s) {
+      var n = 0;
+      var idCls = [].slice.call(s.classList).filter(function (c) {
+        return /^filter-section-parametric-id-\d+$/.test(c);
+      })[0];
+      if (idCls) n = counts[idCls.replace('filter-section-parametric-', '')] || 0;
+      if (!n) n = s.querySelectorAll('input:checked').length;
+
+      s.classList.toggle('sz-active', n > 0);
+
+      var h4 = s.querySelector(':scope > h4');
+      if (!h4) return;
+      var badge = h4.querySelector('.sz-badge');
+      if (n > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'sz-badge';
+          h4.appendChild(badge);
+        }
+        if (badge.textContent !== String(n)) badge.textContent = n;
+      } else if (badge) {
+        badge.remove();
+      }
+    });
   }
 
   function initFilterToggle() {
