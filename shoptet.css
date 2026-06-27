@@ -129,23 +129,24 @@ body.type-product .p-image .flags-extra,
 }
 
 /* ---------------------------------------------------------
-   Tlačítko Hledat – zpět na původní zelenou
-   dark-merkur ho přebarvil na černou (#000) a zůstal zelený
-   rámeček → divně. Vracíme původní zelené pozadí ze style.css.
+   Tlačítko Hledat – černé jako v šabloně (dark-merkur)
+   Problém byl jen zelený rámeček ze style.css (.compact-form .btn
+   border #04a70f) → tlačítko černé, ale s zeleným okrajem = divně.
+   Necháváme černou (jako šablona) + rušíme zelený rámeček + plná výška.
+   Platí pro desktop i mobil.
    --------------------------------------------------------- */
 #header .search-form .btn {
-  background-color: #04a70f !important;
-  border-color: #04a70f !important;
+  background-color: #000 !important;
+  border-color: #000 !important;
   color: #fff !important;
-  /* tlačítko plavalo (top:5px, výška 48px v 61px baru) → roztáhnout
-     na plnou výšku, ať sedí flush jako v originále */
+  /* tlačítko plavalo (top:5px, výška 48px v 61px baru) → plná výška, flush */
   top: 0 !important;
   bottom: 0 !important;
   height: auto !important;
 }
 #header .search-form .btn:hover {
-  background-color: #04880d !important;
-  border-color: #04880d !important;
+  background-color: #1a1a1a !important;
+  border-color: #1a1a1a !important;
 }
 
 /* Pozn.: dřívější záplaty pro detail (opacity:1 na .p-info-wrapper a
