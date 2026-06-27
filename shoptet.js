@@ -124,12 +124,32 @@
     if (alt && pd && pd.lastElementChild !== alt) pd.appendChild(alt);
   }
 
+  /* === E) Karty ve výpisu: přeškrtnutá původní cena k akční ===========
+     Původní cena (.price-standard) je uvnitř slevového badge. Naklonujeme
+     ji k akční ceně do .prices (struck-through, viz CSS). Idempotentně. */
+  function addOrigPrice() {
+    document.querySelectorAll('.products-block .p').forEach(function (card) {
+      if (card.querySelector('.p-orig-price')) return;
+      var flag = card.querySelector('.flag-discount');
+      var std = flag ? flag.querySelector('.price-standard') : null;
+      var prices = card.querySelector('.prices');
+      var final = card.querySelector('.price-final');
+      if (std && prices && final) {
+        var orig = document.createElement('span');
+        orig.className = 'p-orig-price';
+        orig.textContent = std.textContent.replace(/\s+/g, ' ').trim();
+        prices.insertBefore(orig, final);
+      }
+    });
+  }
+
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
     initFilters();
     initDetailSklad();
     moveAltToBottom();
+    addOrigPrice();
   }
 
   if (document.readyState !== 'loading') initAll();
@@ -141,6 +161,12 @@
   document.addEventListener('ShoptetDOMPageProductsLoaded', initFilters);
   setTimeout(initFilters, 600);
   setTimeout(initFilters, 1500);
+  // karty se donačítají (carousely, lazy) – doplnit i pak
+  document.addEventListener('ShoptetDOMPageContentLoaded', addOrigPrice);
+  document.addEventListener('ShoptetDOMPageMoreProductsLoaded', addOrigPrice);
+  window.addEventListener('load', addOrigPrice);
+  setTimeout(addOrigPrice, 800);
+  setTimeout(addOrigPrice, 2000);
   // detail – varianty/skladovost/slider se renderují později
   document.addEventListener('ShoptetDOMPageContentLoaded', moveAltToBottom);
   setTimeout(moveAltToBottom, 600);

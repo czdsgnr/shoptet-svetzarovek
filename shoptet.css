@@ -107,6 +107,21 @@ html, body {
   margin-bottom: 4px !important;
 }
 
+/* Kód (obj.č.) na kartách byl 22px – moc poutavý, zmenšíme. */
+.products-block .p .p-code span {
+  font-size: 15px !important;
+}
+
+/* Přeškrtnutá původní cena nad akční cenou (přidává shoptet.js). */
+.products-block .p .p-orig-price {
+  display: block !important;
+  text-decoration: line-through !important;
+  color: #9aa3ad !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin-bottom: 2px !important;
+}
+
 /* ---------------------------------------------------------
    Akční prvky červeně – badge slevy + cena v akci
    Badge (.flag-discount) byl teal #216d8f → červená.
