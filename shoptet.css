@@ -219,8 +219,15 @@ body.type-product .p-image .flags-extra,
   flex-direction: column !important;
   align-items: center !important;
   text-align: center !important;
+  overflow: visible !important;
 }
+/* kontejner ikony na plnou šířku + vycentrovat ikonu (byl 40px → ikona vlevo/oříznutá) */
 .benefitBanner__picture {
+  width: 100% !important;
+  max-width: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
   margin: 0 0 12px 0 !important;
 }
 .benefitBanner__img {
@@ -229,6 +236,7 @@ body.type-product .p-image .flags-extra,
   max-width: none !important;
 }
 .benefitBanner__content {
+  width: 100% !important;
   text-align: center !important;
 }
 
