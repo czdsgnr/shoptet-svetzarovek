@@ -17,6 +17,9 @@
 html, body {
   height: auto !important;
   overflow-y: visible !important;
+  /* clip (ne hidden) zabrání vodorovnému přetečení, ale NEudělá z body
+     scroll kontejner → overflow-y zůstane visible a scrolluje okno */
+  overflow-x: clip !important;
 }
 
 /* ---------------------------------------------------------
