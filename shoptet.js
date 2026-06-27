@@ -143,13 +143,10 @@
      která form (a tím checkboxy) ukáže – viz CSS. */
   function initFilterToggle() {
     /* Dle ceny (slider) a Dle štítku (priznak) převzít pod náš systém:
-       sundat nativní .otevreny a nastavit .sz-open (start otevřené,
-       slider se musí inicializovat viditelný). */
+       sundat nativní .otevreny → startují ZAVŘENÉ jako parametrické
+       (čistá jednotná mřížka; jejich obsah jinak přetéká). */
     document.querySelectorAll('.filters .slider-wrapper, .filters .param-filter-top.filter-section')
-      .forEach(function (box) {
-        box.classList.remove('otevreny');
-        if (!box.classList.contains('sz-open')) box.classList.add('sz-open');
-      });
+      .forEach(function (box) { box.classList.remove('otevreny'); });
 
     if (window.__szFilterToggle) return;
     window.__szFilterToggle = true;

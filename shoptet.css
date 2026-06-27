@@ -185,6 +185,19 @@ html, body {
 .filters .slider-wrapper.sz-open > .slider-content,
 .filters .slider-wrapper.sz-open > .slider-header { display: block !important; }
 
+/* otevřený obsah udržet uvnitř karty (slider/priznak jinak přetéká) */
+.filters .slider-wrapper.sz-open > .slider-content,
+.filters .slider-wrapper.sz-open > .slider-header,
+.filters .param-filter-top.filter-section.sz-open > form {
+  position: static !important;
+  width: auto !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 6px 16px 12px !important;
+}
+.filters .slider-wrapper.sz-open .slider-range,
+.filters .slider-wrapper.sz-open .ui-slider { max-width: 100% !important; }
+
 /* checkboxy v otevřené sekci */
 #category-filter-hover .filter-section.sz-open fieldset,
 .filters .param-filter-top.filter-section.sz-open fieldset {
