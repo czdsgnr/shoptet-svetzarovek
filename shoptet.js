@@ -142,19 +142,15 @@
      display:none (zavřeno); klik na hlavičku (h4) přepne třídu .sz-open,
      která form (a tím checkboxy) ukáže – viz CSS. */
   /* Normalizace stavu filtrů (běží po každém AJAX překreslení):
-     - parametrické si nechají otevřený/aktivní stav (theme značí .otevreny)
-       převedením na náš .sz-open,
-     - Dle ceny (slider) + Dle štítku (priznak) = čistý ZAVŘENÝ default. */
+     sundá nativní .otevreny ze VŠECH boxů → po filtru čistý jednotný
+     ZAVŘENÝ stav (theme jinak po výběru samovolně rozbalí víc sekcí
+     = nepřehledné). Otevírání řídí jen náš toggle (.sz-open). */
   function normalizeFilterState() {
-    document.querySelectorAll('.filters .filter-section-parametric').forEach(function (s) {
-      if (s.classList.contains('otevreny')) {
-        s.classList.remove('otevreny');
-        s.classList.add('sz-open');
-      }
-    });
-    document.querySelectorAll('.filters .slider-wrapper, .filters .param-filter-top').forEach(function (s) {
-      s.classList.remove('otevreny');
-    });
+    document.querySelectorAll(
+      '.filters .filter-section-parametric,' +
+      '.filters .slider-wrapper,' +
+      '.filters .param-filter-top'
+    ).forEach(function (s) { s.classList.remove('otevreny'); });
   }
 
   function initFilterToggle() {
