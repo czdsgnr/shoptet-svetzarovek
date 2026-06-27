@@ -106,34 +106,10 @@
   border-color: #04880d !important;
 }
 
-/* ---------------------------------------------------------
-   Oprava: nákupní box na detailu byl neviditelný
-   Motiv má na .p-info-wrapper reveal efekt (opacity:0 →
-   transition na 1), který se ale nespouští (souvisí s tím, že
-   stránka scrolluje přes <body>, ne window). Box s cenou a
-   tlačítkem „Přidat do košíku" tak zůstával průhledný → nešlo
-   nakoupit. Natvrdo zviditelníme. (Není to naše regrese – děje
-   se to i bez našeho CSS.)
-   --------------------------------------------------------- */
-.p-info-wrapper {
-  opacity: 1 !important;
-}
-
-/* ---------------------------------------------------------
-   Oprava: na detailu mizel název produktu, hodnocení a perex
-   Původní motiv (paxio style.css ř. 4571–4580) v režimu
-   one-column-body skrývá .p-detail-inner-header (název+kód),
-   .p-detail-info (vlajky+hodnocení) i .p-short-description (perex)
-   – počítá s jejich přesunem jinam, k čemuž tu nedochází → mizely.
-   Vracíme je do původních pozic. (Není to naše regrese.)
-   --------------------------------------------------------- */
-body:not(.multiple-columns-body) .p-detail-inner > .p-detail-inner-header,
-body:not(.multiple-columns-body) .product-top > div:not(.p-info-wrapper) .p-detail-info {
-  display: block !important;
-}
-body.type-product .p-short-description {
-  display: block !important;
-}
+/* Pozn.: dřívější záplaty pro detail (opacity:1 na .p-info-wrapper a
+   un-hide názvu/hodnocení/perexu) jsme odebrali – příčinou byl
+   smazaný script.js, který rozbíjel nativní strukturu motivu.
+   Teď to motiv řeší sám, záplaty by dělaly duplicitní název. */
 
 /* ---------------------------------------------------------
    3) Benefity registrace v přihlašovacím popupu (vpravo)
