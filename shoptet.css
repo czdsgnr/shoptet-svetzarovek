@@ -117,6 +117,72 @@ html, body {
   display: inline-block;
 }
 
+/* --- Vzhled filtrů (toggle už funguje, jen styl; ŽÁDNÝ overflow:hidden!) --- */
+#category-filter-hover .filter-section {
+  border: 1px solid #e2e6ea !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  margin-bottom: 10px !important;
+  transition: border-color .15s, box-shadow .15s !important;
+}
+#category-filter-hover .filter-section:hover {
+  border-color: #174A61 !important;
+}
+#category-filter-hover .filter-section.sz-open {
+  border-color: #174A61 !important;
+  box-shadow: 0 4px 14px rgba(23, 74, 97, .10) !important;
+}
+#category-filter-hover .filter-section > h4 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin: 0 !important;
+  padding: 14px 16px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #16223b !important;
+  background: #f5f7f9 !important;
+  border-radius: 10px !important;
+  transition: background .15s !important;
+}
+#category-filter-hover .filter-section.sz-open > h4 {
+  background: #eef4f6 !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+#category-filter-hover .filter-section > h4:hover {
+  background: #eaeef2 !important;
+}
+#category-filter-hover .filter-section > h4 span { order: 1 !important; color: #16223b !important; }
+#category-filter-hover .filter-section > h4::before {
+  order: 2 !important;
+  margin-left: 8px !important;
+  color: #174A61 !important;
+}
+/* obsah otevřené sekce – checkboxy */
+#category-filter-hover .filter-section.sz-open fieldset {
+  padding: 8px 14px 12px !important;
+}
+#category-filter-hover .fieldsetinner > div { padding: 4px 0 !important; }
+#category-filter-hover .filter-label {
+  cursor: pointer !important;
+  color: #2c3a4f !important;
+  font-size: 14px !important;
+}
+#category-filter-hover .filter-label .filter-count {
+  color: #9aa3ad !important;
+  font-size: 13px !important;
+}
+/* počítadlo "Položek k zobrazení" – bez rámečku */
+#category-filter-hover .filter-section-count {
+  border: 0 !important;
+  background: transparent !important;
+  margin: 0 !important;
+}
+/* prázdná boolean sekce schovat */
+#category-filter-hover .filter-section-boolean:empty {
+  display: none !important;
+}
+
 /* ---------------------------------------------------------
    Sticky header (desktop) – čistý position:sticky
    Původní motiv řešil sticky JS hackem (body.fix-header +
