@@ -112,6 +112,10 @@
         tbody.appendChild(tr);
       }
     });
+
+    // "Možnosti doručení" přesunout pod celý zelený box
+    var ship = sklad.querySelector('.shipping-options');
+    if (ship) sklad.after(ship);
   }
 
   /* === D) Alternativní produkty (#productsAlternative) na konec detailu ==

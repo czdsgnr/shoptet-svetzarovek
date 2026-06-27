@@ -163,44 +163,68 @@ body.type-product .p-image .flags-extra,
 }
 
 /* ---------------------------------------------------------
-   Skladová tabulka – hezčí řádek "Centrální sklad ČR"
-   (label JS přepisuje v modulu C). Z parametr-řádku uděláme
-   čistý zelený box: ikona + label vlevo, dostupnost vpravo.
+   Skladový blok na detailu – celé do jednoho zeleného rámečku.
+   Každý řádek = label vlevo / hodnota vpravo. Centrální sklad ČR
+   s ikonou + zelenou dostupností. (Stavěno v shoptet.js, modul C.)
    --------------------------------------------------------- */
 .p-info-wrapper .sklad {
-  margin-top: 12px;
+  background: #eef6f1 !important;
+  border: 1px solid #d7e8de !important;
+  border-radius: 10px !important;
+  padding: 4px 16px !important;
+  margin-top: 14px !important;
 }
-.p-info-wrapper .sklad .centralniskald {
+.p-info-wrapper .sklad table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+}
+.p-info-wrapper .sklad tr {
   display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background: #eef6f1;
-  border: 1px solid #d7e8de;
-  border-radius: 8px;
-  padding: 11px 14px;
-  margin-top: 6px;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding: 9px 0 !important;
 }
-.p-info-wrapper .sklad .centralniskald th,
-.p-info-wrapper .sklad .centralniskald td {
+.p-info-wrapper .sklad tr + tr {
+  border-top: 1px solid #dceae2 !important;
+}
+.p-info-wrapper .sklad th,
+.p-info-wrapper .sklad td {
   display: inline !important;
   background: none !important;
   border: 0 !important;
   padding: 0 !important;
-  font-size: 14px;
+  font-size: 14px !important;
 }
-.p-info-wrapper .sklad .centralniskald th {
-  color: #16223b;
-  font-weight: 700;
+.p-info-wrapper .sklad th {
+  color: #16223b !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+}
+.p-info-wrapper .sklad td {
+  color: #16223b !important;
+  font-weight: 700 !important;
+  text-align: right !important;
+  white-space: nowrap !important;
 }
 .p-info-wrapper .sklad .centralniskald th::before {
-  content: "🚚";
-  margin-right: 8px;
+  content: "🚚 ";
 }
 .p-info-wrapper .sklad .centralniskald td {
-  color: #04a70f;
-  font-weight: 700;
-  white-space: nowrap;
+  color: #04a70f !important;
+}
+
+/* Cena na detailu výraznější */
+.p-final-price-wrapper .price-final {
+  font-size: 40px !important;
+}
+
+/* "Možnosti doručení" přesunuto (shoptet.js) pod zelený box */
+.p-info-wrapper .sklad + .shipping-options {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-top: 10px !important;
 }
 
 /* ---------------------------------------------------------
