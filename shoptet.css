@@ -351,6 +351,15 @@ body.type-product .p-image .flags-extra,
   bottom: auto !important;
   left: auto !important;
 }
+/* Badge na detailu: jen procenta (–10 %), původní cenu uvnitř kolečka skrýt. */
+body.type-product .p-image .flag-discount .price-standard { display: none !important; }
+
+/* Detail: přeškrtnutá původní cena v cenovém bloku = ČERNÁ (byla růžová). */
+.p-final-price-wrapper .price-standard,
+.p-final-price-wrapper .price-standard * {
+  color: #16223b !important;
+  text-decoration: line-through !important;
+}
 
 /* ---------------------------------------------------------
    Detail: blok alternativních/podobných produktů (#productsAlternative)
