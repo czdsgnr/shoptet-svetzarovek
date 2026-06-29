@@ -221,9 +221,28 @@
   function moveFilterToSidebar() {
     var box = document.querySelector('.box-filters');
     var sidebar = document.querySelector('aside.sidebar-left, .sidebar.sidebar-left, .sidebar-left');
-    if (!box || !sidebar) return;
-    if (sidebar.contains(box)) return; // už přesunuto
-    sidebar.insertBefore(box, sidebar.firstChild);
+    if (box && sidebar && !sidebar.contains(box)) {
+      sidebar.insertBefore(box, sidebar.firstChild);
+    }
+    /* Motiv po načtení kategorii překresluje obsah a přesun vrací zpět do
+       mainu → MutationObserver to hlídá a box vždy vrátí do sidebaru.
+       Guard (box už v sidebaru → nic) brání smyčce. */
+    if (window.__szFilterMoveObs) return;
+    var host = document.querySelector('.content-wrapper-in') || document.body;
+    var t;
+    var obs = new MutationObserver(function () {
+      var b = document.querySelector('.box-filters');
+      if (b && !b.closest('.sidebar-left')) {
+        clearTimeout(t);
+        t = setTimeout(function () {
+          var sb = document.querySelector('.sidebar-left');
+          var bb = document.querySelector('.box-filters');
+          if (sb && bb && !sb.contains(bb)) sb.insertBefore(bb, sb.firstChild);
+        }, 50);
+      }
+    });
+    obs.observe(host, { childList: true, subtree: true });
+    window.__szFilterMoveObs = obs;
   }
 
   /* === Reskin filtru: hlavička + patička (přídavně) ===================
