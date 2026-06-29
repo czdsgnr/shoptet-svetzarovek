@@ -822,15 +822,13 @@ body.type-product .p-image .flags-extra,
    kontakty) a seznam přetékal (330px > box). Srovnáme do čistého flow. */
 .sidebar-in-cart .contact-box,
 .cart-content .contact-box,
-.checkout-box-wrapper .contact-box,
-.box .contact-box {
+.checkout-box-wrapper .contact-box {
   position: relative !important;
   overflow: hidden !important;
 }
 .sidebar-in-cart .contact-box img,
 .cart-content .contact-box img,
-.checkout-box-wrapper .contact-box img,
-.box .contact-box img {
+.checkout-box-wrapper .contact-box img {
   position: static !important;
   float: left !important;
   width: 60px !important;
@@ -841,8 +839,7 @@ body.type-product .p-image .flags-extra,
 }
 .sidebar-in-cart .contact-box ul,
 .cart-content .contact-box ul,
-.checkout-box-wrapper .contact-box ul,
-.box .contact-box ul {
+.checkout-box-wrapper .contact-box ul {
   clear: both !important;
   width: 100% !important;
   max-width: 100% !important;
