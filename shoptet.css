@@ -881,9 +881,10 @@ body.type-product .p-image .flags-extra,
 .contact-box.no-image img { display: none !important; }
 .contact-box ul {
   list-style: none !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   padding: 0 !important;
   text-align: left !important;
+  max-width: 300px !important; /* aby se v širším footeru seznam necentroval rozplácle */
 }
 .contact-box ul li {
   margin: 0 !important;
