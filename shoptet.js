@@ -305,6 +305,22 @@
     box.classList.add('sz-ready');
   }
 
+  /* === Karta podpory „Potřebujete pomoc?" (.contact-box) ===============
+     FB odkaz → „Facebook" (místo dlouhé URL), telefon s mezerami.
+     Idempotentní – regexy nematchnou už upravený text. */
+  function styleContactCard() {
+    [].forEach.call(document.querySelectorAll('.contact-box'), function (cb) {
+      var fb = cb.querySelector('.facebook a');
+      if (fb && /facebook\.com/i.test(fb.textContent)) fb.textContent = 'Facebook';
+      [].forEach.call(cb.querySelectorAll('.tel a, .cellphone a'), function (a) {
+        var t = (a.textContent || '').trim();
+        if (/^\+\d{12}$/.test(t)) {
+          a.textContent = t.replace(/(\+\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+        }
+      });
+    });
+  }
+
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
@@ -317,6 +333,7 @@
     moveUspBelowProduct();
     addOrigPrice();
     moveBadgeToCard();
+    styleContactCard();
   }
 
   if (document.readyState !== 'loading') initAll();
@@ -337,6 +354,10 @@
   setTimeout(reinitCards, 800);
   setTimeout(reinitCards, 2000);
   setTimeout(reinitCards, 3500);
+  // karta podpory (košík/kontakt) – po načtení i případném překreslení
+  window.addEventListener('load', styleContactCard);
+  document.addEventListener('ShoptetDOMCartContentLoaded', styleContactCard);
+  setTimeout(styleContactCard, 1000);
   // detail – varianty/skladovost/slider se renderují později
   document.addEventListener('ShoptetDOMPageContentLoaded', moveAltToBottom);
   setTimeout(moveAltToBottom, 600);

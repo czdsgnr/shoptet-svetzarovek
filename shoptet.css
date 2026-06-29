@@ -847,37 +847,90 @@ body.type-product .p-image .flags-extra,
   display: none !important;
 }
 
-/* Košík – box „Potřebujete pomoc?": fotka byla position:absolute (překrývala
-   kontakty) a seznam přetékal (330px > box). Srovnáme do čistého flow. */
-.sidebar-in-cart .contact-box,
-.cart-content .contact-box,
-.checkout-box-wrapper .contact-box {
-  position: relative !important;
-  overflow: hidden !important;
-}
-.sidebar-in-cart .contact-box img,
-.cart-content .contact-box img,
-.checkout-box-wrapper .contact-box img {
+/* =========================================================
+   KARTA PODPORY „Potřebujete pomoc?" (.contact-box – košík, kontakt).
+   Nadpis teal + kulatá fotka se stínem + kontakty v řádcích s ikonou
+   v teal kolečku. FB text/telefon formátuje shoptet.js (styleContactCard).
+   Ikony theme jsou span::before (icon-font, position:absolute) → static.
+   ========================================================= */
+.contact-box {
+  text-align: center !important;
+  padding: 4px 2px 2px !important;
   position: static !important;
-  float: left !important;
-  width: 60px !important;
-  height: auto !important;
-  max-width: 60px !important;
-  margin: 0 14px 8px 0 !important;
-  border-radius: 8px !important;
+  overflow: visible !important;
 }
-.sidebar-in-cart .contact-box ul,
-.cart-content .contact-box ul,
-.checkout-box-wrapper .contact-box ul {
-  clear: both !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  padding-left: 0 !important;
-  margin: 0 !important;
+.contact-box h2,
+.contact-box .h4 {
+  color: #174A61 !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  margin: 0 0 16px !important;
+  text-align: center !important;
+}
+.contact-box img {
+  display: block !important;
+  float: none !important;
+  width: 92px !important;
+  max-width: 92px !important;
+  height: 92px !important;
+  object-fit: cover !important;
+  margin: 0 auto 18px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 18px rgba(23, 74, 97, .18) !important;
+}
+.contact-box.no-image img { display: none !important; }
+.contact-box ul {
   list-style: none !important;
-  word-break: break-word !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
 }
+.contact-box ul li {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  border-top: 1px solid #eef1f4 !important;
+}
+.contact-box ul li:first-child { border-top: 0 !important; }
+.contact-box ul li > span {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 2px !important;
+  width: 100% !important;
+  position: static !important;
+}
+.contact-box ul li > span::before {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  flex: 0 0 auto !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  line-height: 38px !important;
+  text-align: center !important;
+  background: #eaf3f5 !important;
+  color: #174A61 !important;
+  border-radius: 50% !important;
+  font-size: 17px !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.contact-box ul li a,
+.contact-box ul li .cellphone-inner {
+  color: #1f2937 !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  text-decoration: none !important;
+  word-break: break-word !important;
+  line-height: 1.3 !important;
+  display: inline !important;
+  padding: 0 !important;
+}
+.contact-box ul li a:hover { color: #174A61 !important; }
 
 /* ---------------------------------------------------------
    USP pruh (.benefitBanner) – ikony NAD nadpis+text a větší,
