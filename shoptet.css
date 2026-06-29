@@ -109,13 +109,12 @@ html, body {
   a[data-target="navigation"]::before {
     background-color: transparent !important;
   }
-  /* Menu nešlo zavřít – hamburger/křížek byl POD nav overlayem (z-index:1000).
-     Při otevřeném menu zvedneme header (s hamburgerem) NAD overlay. */
-  body.navigation-window-visible #header,
-  body.navigation-window-visible .top-navigation-bar,
-  body.navigation-window-visible .responsive-tools {
-    position: relative !important;
-    z-index: 1002 !important;
+  /* Menu nešlo zavřít: hamburger/křížek (v .top-navigation-bar, z:9) byl POD
+     nav overlayem (#navigation z:1000 uvnitř #header z:9). .top-navigation-bar
+     a #header jsou sourozenci → zvednutím .top-navigation-bar nad #header (1001)
+     se křížek dostane NAD overlay a jde kliknout. */
+  body.navigation-window-visible .top-navigation-bar {
+    z-index: 1001 !important;
   }
 }
 
