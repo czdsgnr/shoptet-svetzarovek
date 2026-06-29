@@ -109,6 +109,14 @@ html, body {
   a[data-target="navigation"]::before {
     background-color: transparent !important;
   }
+  /* Menu nešlo zavřít – hamburger/křížek byl POD nav overlayem (z-index:1000).
+     Při otevřeném menu zvedneme header (s hamburgerem) NAD overlay. */
+  body.navigation-window-visible #header,
+  body.navigation-window-visible .top-navigation-bar,
+  body.navigation-window-visible .responsive-tools {
+    position: relative !important;
+    z-index: 1002 !important;
+  }
 }
 
 /* Horní informační lišta (.site-msg) – modrá. */
@@ -477,6 +485,11 @@ body.type-product .p-image .flags-extra,
 .p-detail > #productsAlternative {
   order: 10 !important;
 }
+/* "Doporučujeme dokoupit" (#related.souvisejici-produkty) měl také order:0
+   → lezl NAD produkt (ten "nesmysl" nahoře). Dáme ho POD produkt/USP
+   (order 2), před popis/taby (3). */
+.p-detail > #related.souvisejici-produkty { order: 2 !important; }
+.p-detail > .shp-tabs-wrapper { order: 3 !important; }
 
 /* ---------------------------------------------------------
    Skladový blok na detailu – celé do jednoho zeleného rámečku.
