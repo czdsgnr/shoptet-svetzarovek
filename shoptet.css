@@ -964,6 +964,13 @@ body.type-product .p-image .flags-extra,
    (theme má descendant pravidla s vyšší specificitou).
    --------------------------------------------------------- */
 .contact-box.sz-help{text-align:left !important;padding:0 !important;background:#fff !important;border:1px solid #e3e8ea !important;border-radius:8px !important;overflow:hidden !important;box-shadow:0 6px 20px rgba(23,74,97,.10) !important;}
+/* Motiv po AJAX překreslení košíku vrací nativní <h2>/<ul>/<img> jako přímé děti
+   .contact-box → dvojitý nadpis. Skrýt tyhle nativní zbytky (náš obsah je
+   v .help__top/.help__intro/… – ty zůstanou). Timing-proof přes CSS. */
+.contact-box.sz-help > h2,
+.contact-box.sz-help > .h4,
+.contact-box.sz-help > ul,
+.contact-box.sz-help > img { display: none !important; }
 .contact-box.sz-help .help__top{display:flex !important;align-items:center !important;gap:9px !important;padding:13px 16px !important;background:#174A61 !important;color:#fff !important;}
 .contact-box.sz-help .help__top svg{width:18px !important;height:18px !important;flex:none !important;stroke:#fff !important;}
 .contact-box.sz-help .help__top h3{margin:0 !important;font-size:15px !important;font-weight:700 !important;color:#fff !important;text-align:left !important;}
