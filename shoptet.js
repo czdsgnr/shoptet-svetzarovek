@@ -358,6 +358,7 @@
       mobile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="11" y1="18" x2="13" y2="18"/></svg>',
       mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="m2 7 10 6 10-6"/></svg>',
       fb: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg>',
+      clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>',
       go: '<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
     };
     function clean(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
@@ -398,8 +399,6 @@
         }
       }
       var heading = clean((cb.querySelector('h2, .h4') || {}).textContent) || 'Potřebujete pomoc?';
-      var now = new Date(), day = now.getDay(), mins = now.getHours() * 60 + now.getMinutes();
-      var open = day >= 1 && day <= 5 && mins >= 480 && mins < 990; // Po–Pá 8:00–16:30
       cb.classList.add('sz-help');
       cb.innerHTML =
         '<div class="help__top">' + ico.help + '<h3>' + heading + '</h3></div>' +
@@ -407,8 +406,7 @@
           (imgSrc ? '<span class="avatar"><img src="' + imgSrc + '" alt="Poradce" loading="lazy"></span>' : '') +
           '<span class="who"><span class="lead">Rádi vám poradíme</span><span class="sub">S výběrem žárovky i parametry</span></span>' +
         '</div>' +
-        '<div class="hours' + (open ? ' open' : '') + '"><span class="dot"></span><span class="state">' +
-          (open ? 'Máme otevřeno' : 'Zavřeno') + '</span><span class="sep">·</span><span class="time">Po–Pá 8:00–16:30</span></div>' +
+        '<div class="hours"><span class="hico">' + ico.clock + '</span><span class="time">Po–Pá 8:00–16:30</span></div>' +
         '<div class="help__list">' +
           row('primary', tel, ico.phone, 'Zavolejte nám') +
           row('', cell, ico.mobile, 'Mobil') +

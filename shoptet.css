@@ -1006,7 +1006,9 @@ body.type-product .p-image .flags-extra,
 .contact-box.sz-help .hours .state{font-weight:700 !important;}
 .contact-box.sz-help .hours.open .state{color:#3f9a2e !important;}
 .contact-box.sz-help .hours .sep{color:#94a1a6 !important;}
-.contact-box.sz-help .hours .time{color:#5d6b70 !important;margin-left:auto !important;}
+.contact-box.sz-help .hours .hico{display:inline-flex !important;align-items:center !important;color:#174A61 !important;flex:none !important;}
+.contact-box.sz-help .hours .hico svg{width:15px !important;height:15px !important;}
+.contact-box.sz-help .hours .time{color:#5d6b70 !important;font-weight:600 !important;}
 .contact-box.sz-help .help__list{padding:8px !important;}
 .contact-box.sz-help .row{display:flex !important;align-items:center !important;gap:12px !important;padding:9px 10px !important;border:0 !important;border-radius:6px !important;text-decoration:none !important;color:#1d2b30 !important;}
 .contact-box.sz-help .row:hover{background:#f1f5f6 !important;}
