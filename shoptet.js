@@ -277,11 +277,17 @@
   if (document.readyState !== 'loading') initAll();
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
-  // Shoptet překresluje filtry/výpis – chyť i tyhle eventy
-  function reinitFilters() { initFilters(); initFilterToggle(); }
+  // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
+  // Eventy padnou DŘÍV, než dklab nastaví checked/URL aktivního filtru
+  // → markActiveFilters spouštíme i opakovaně se zpožděním po každém eventu.
+  function scheduleMarkActive() {
+    [0, 250, 600, 1200, 2500].forEach(function (ms) { setTimeout(markActiveFilters, ms); });
+  }
+  function reinitFilters() { initFilters(); initFilterToggle(); scheduleMarkActive(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageProductsLoaded', reinitFilters);
+  document.addEventListener('ShoptetDOMContentLoaded', scheduleMarkActive);
   setTimeout(reinitFilters, 600);
   setTimeout(reinitFilters, 1500);
   // karty se donačítají (carousely, lazy) – doplnit i pak
