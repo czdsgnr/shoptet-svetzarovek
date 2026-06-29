@@ -408,23 +408,23 @@ html, body {
   display: block !important;
 }
 
-/* MOBIL: slevový badge (–X %) nahoru-vpravo na obrázek (byl uprostřed). */
-@media (max-width: 767px) {
-  .products-block .p .image,
-  .products-block .p .p-image,
-  .products-related .p .image {
-    position: relative !important;
-  }
-  .products-block .p .flags-extra,
-  .products-related .p .flags-extra {
-    position: absolute !important;
-    top: 6px !important;
-    right: 6px !important;
-    left: auto !important;
-    bottom: auto !important;
-    z-index: 3 !important;
-    margin: 0 !important;
-  }
+/* Výpis (karty) – slevový badge (–X %) VŽDY do pravého horního rohu obrázku
+   (desktop i mobil; byl "divně" uprostřed). */
+.products-block .p .image,
+.products-block .p .p-image,
+.products-related .p .image,
+.products-related .p .p-image {
+  position: relative !important;
+}
+.products-block .p .flags-extra,
+.products-related .p .flags-extra {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 3 !important;
+  margin: 0 !important;
 }
 
 /* ---------------------------------------------------------
