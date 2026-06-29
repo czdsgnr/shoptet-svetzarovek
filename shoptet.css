@@ -231,32 +231,56 @@ html, body {
 .sidebar-left .sz-filter-foot .sz-ff-actions { flex-direction: column !important; }
 .sidebar-left .sz-filter-foot .sz-ff-show,
 .sidebar-left .sz-filter-foot .sz-ff-cancel { width: 100% !important; }
-/* Volby v sekci (checkbox | text | počet) – čistý řádek, ŽÁDNÝ překryv
-   (v úzkém sidebaru se to lámalo/překrývalo). */
+/* Volby v sekci – čistý řádek [checkbox] text … počet. Řeší PŘEKRYV:
+   parametrické mají .fieldsetinner, „Dle štítku" (priznak) má jen
+   fieldset>div (a dva formy) → volby se skládaly na sebe. */
+.sidebar-left #filters .param-filter-top fieldset,
+.sidebar-left #filters .param-filter-top form,
 .sidebar-left #filters .fieldsetinner {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 2px !important;
+  display: block !important;
+  width: 100% !important;
 }
-.sidebar-left #filters .fieldsetinner > div { width: 100% !important; position: static !important; }
-.sidebar-left #filters .filter-label {
+.sidebar-left #filters .param-filter-top fieldset > div,
+.sidebar-left #filters .fieldsetinner > div {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
   width: 100% !important;
-  padding: 7px 6px !important;
+  position: static !important;
+  float: none !important;
+  padding: 6px 6px !important;
   margin: 0 !important;
-  white-space: normal !important;
   border-radius: 8px !important;
-  line-height: 1.3 !important;
 }
-.sidebar-left #filters .filter-label:hover { background: #f4f6f8 !important; }
-.sidebar-left #filters .filter-label input {
-  flex: 0 0 auto !important;
+.sidebar-left #filters .param-filter-top fieldset > div:hover,
+.sidebar-left #filters .fieldsetinner > div:hover { background: #f4f6f8 !important; }
+.sidebar-left #filters input[type="checkbox"],
+.sidebar-left #filters input[type="radio"] {
+  position: static !important;
+  opacity: 1 !important;
   width: 18px !important;
   height: 18px !important;
+  min-width: 18px !important;
   margin: 0 !important;
+  flex: 0 0 auto !important;
+  pointer-events: auto !important;
+  accent-color: #174A61 !important;
 }
+.sidebar-left #filters .filter-label {
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  width: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  position: static !important;
+  line-height: 1.3 !important;
+  white-space: normal !important;
+  min-height: 0 !important;
+  cursor: pointer !important;
+}
+.sidebar-left #filters .filter-label::before,
+.sidebar-left #filters .filter-label::after { display: none !important; }
 .sidebar-left #filters .filter-label .filter-count {
   margin-left: auto !important;
   flex: 0 0 auto !important;
