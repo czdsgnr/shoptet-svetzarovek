@@ -133,7 +133,8 @@ badge · USP pruh · karta podpory `.contact-box` · mobil (`@media max-width:76
   (override theme #f6f6f6 → transparent). ③ **opravený duplicitní „Můžeme doručit do"**
   (skrytý orphan label, GOTCHA #2). ④ **karta podpory v KOŠÍKU → bohatší „help" karta**
   (`buildHelpCard` v shoptet.js + `.contact-box.sz-help` CSS): teal hlavička s ikonou,
-  intro s fotkou poradce, lišta otevírací doby se **živým stavem** (Po–Pá 8:00–16:30),
+  intro s fotkou poradce, lišta otevírací doby (hodinkový icon + Po–Pá 8:00–16:30;
+  POZN.: živý stav „Otevřeno/Zavřeno" klient nechtěl → odstraněn, commit `63a21ac`),
   řádky s ikonou+popiskem, patička. GOTCHA: mobil má v DOMu rozbitý vnořený odkaz
   (escapované `<a>` v href) → bereme jen `tel:+…` + sanitizace; fotka je v `data-src`
   (lazy-load dává do `src` 1×1 placeholder). Commity `91c563c`, `03d8d13`.
