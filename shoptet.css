@@ -46,6 +46,12 @@ html, body {
       #0d3d51
     ) !important;
   }
+  /* Košík / objednávka (blank-mode) NEMÁ navigaci → gradient by udělal
+     tmavý pruh dole = rozbité pozadí. Tam plná barva. */
+  body.ordering-process #header,
+  body.blank-mode #header {
+    background: #174A61 !important;
+  }
 }
 #header > .container {
   background-image: none !important;
@@ -105,6 +111,17 @@ html, body {
 #filters,
 #filters .filter-sections,
 #category-filter-hover { align-items: flex-start !important; }
+
+/* Horní řádek (Dle ceny + Dle štítku) = 50/50, ať vyplní šířku rovnoměrně.
+   Dle štítku měl nativně width:70% + padding-left:25px → obří karta s
+   obsahem vlevo a prázdnem ("border, ale obsah jinde"). Srovnáno. */
+#filters .slider-wrapper,
+#filters .param-filter-top {
+  width: 50% !important;
+  flex: 0 0 auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
 /* tři typy karet */
 #filters .filter-section-parametric,
@@ -351,8 +368,10 @@ body.type-product .p-image .flags-extra,
   bottom: auto !important;
   left: auto !important;
 }
-/* Badge na detailu: jen procenta (–10 %), původní cenu uvnitř kolečka skrýt. */
-body.type-product .p-image .flag-discount .price-standard { display: none !important; }
+/* Badge VŠUDE (detail i výpis): jen procenta (–10 %), původní cenu v
+   kolečku skrýt. Přeškrtnutá orig. cena na kartách je vlastní .p-orig-price
+   (shoptet.js modul E), takže tahle se neztratí. */
+.flag-discount .price-standard { display: none !important; }
 
 /* Detail: přeškrtnutá původní cena v cenovém bloku = ČERNÁ (byla růžová). */
 .p-final-price-wrapper .price-standard,
