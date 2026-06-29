@@ -388,7 +388,15 @@
       var tel = pickTel(cb, '.tel'), cell = pickTel(cb, '.cellphone'),
           mail = pickA(cb, '.mail'), fb = pickA(cb, '.facebook');
       var imgEl = cb.querySelector('img');
-      var imgSrc = imgEl ? safeHref(imgEl.getAttribute('src') || imgEl.getAttribute('data-src')) : '';
+      // POZOR: theme lazy-load dává do `src` 1×1 placeholder (data:image/svg…),
+      // skutečná URL je v `data-src` → preferovat data-src a přeskočit data: URI.
+      var imgSrc = '';
+      if (imgEl) {
+        var cands = [imgEl.getAttribute('data-src'), imgEl.getAttribute('src'), imgEl.currentSrc];
+        for (var ci = 0; ci < cands.length; ci++) {
+          if (cands[ci] && cands[ci].indexOf('data:') !== 0) { imgSrc = safeHref(cands[ci]); break; }
+        }
+      }
       var heading = clean((cb.querySelector('h2, .h4') || {}).textContent) || 'Potřebujete pomoc?';
       var now = new Date(), day = now.getDay(), mins = now.getHours() * 60 + now.getMinutes();
       var open = day >= 1 && day <= 5 && mins >= 480 && mins < 990; // Po–Pá 8:00–16:30
