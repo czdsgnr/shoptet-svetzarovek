@@ -39,9 +39,10 @@ Náš CSS+JS se načítá **STATICKY** (render-blocking → bez FOUC/blikání):
   aktuální soubor = dobré pro test; browser uživatele drží cache dle `?v`.)
 - **Dev-loader** (JS injektoval CSS s `?t=Date.now()`) cache obchází vždy, ALE
   **blikalo to** (FOUC) a JS běžel pozdě „náhodou až po motivu" → nepoužívat.
-- **Stav verze k handoffu: uživatel má v hlavě cachované `?v=7` (staré, bez dnešních
-  oprav). HEAD `03d8d13` je SPRÁVNÝ a celý deployed → uživatel musí nasadit `?v=8`
-  (oba tagy) a tvrdý reload, aby dnešní opravy + košíkovou kartu viděl naživo.**
+- **Stav verze k handoffu: HEAD `031ec19`, celé deployed → uživatel nasadit `?v=10`
+  (oba tagy) + tvrdý reload. POZOR: během session se verze měnila 7→8→9→10, protože
+  každý další push do stejného souboru zneplatní dříve cachnuté číslo. Pro nový chat
+  začni rovnou vyšším číslem (≥10) a po každé úpravě nové.**
 
 ## 4. Mapa souborů
 ### shoptet.js — `initAll()` volá v pořadí:
@@ -136,6 +137,13 @@ badge · USP pruh · karta podpory `.contact-box` · mobil (`@media max-width:76
   řádky s ikonou+popiskem, patička. GOTCHA: mobil má v DOMu rozbitý vnořený odkaz
   (escapované `<a>` v href) → bereme jen `tel:+…` + sanitizace; fotka je v `data-src`
   (lazy-load dává do `src` 1×1 placeholder). Commity `91c563c`, `03d8d13`.
+  ⑤ **Košík: vypnuté theme dekorace boxů** (border, šedé #f6f6f6, padding na
+  `.checkout-box-wrapper/.summary-wrapper/.checkout-box` ap.) → karta i souhrn čistě
+  na bílé (`4d4ea1e`). ⑥ **oprava dvojitého nadpisu** help karty: motiv po AJAX vrací
+  nativní `<h2>` jako přímé dítě `.contact-box` → skryto CSS `.sz-help > h2,.h4,ul,img
+  {display:none}` (timing-proof, `a6adfb8`). ⑦ **mobil: „Filtrovat" toggle = výrazné
+  teal tlačítko** (`.filtrovat` v `@media max-width:767px`, trychtýř ::before + chevron
+  ::after bílý; `031ec19`).
 
 **⚠️ NUTNÉ HNED V DALŠÍM CHATU:**
 1. **Uživatel nasadí `?v=8`** (oba tagy) a **tvrdý reload** → ověřit naživo:
@@ -168,8 +176,9 @@ badge · USP pruh · karta podpory `.contact-box` · mobil (`@media max-width:76
 
 ## 9. První kroky v novém chatu
 1. Přečíst **tenhle CLAUDE.md** + paměť (`MEMORY.md`, `shoptet-svetzarovek-cdn-setup.md`).
-2. `git log --oneline -20` (dnešní práce: `a53af3d` detailReady, `97c5f23` filtr bg,
-   `237f57a` oprava duplicit. sklad textu, `91c563c` košík help karta, `03d8d13` fix fotky).
+2. `git log --oneline -25` (dnešní práce: `a53af3d` detailReady, `97c5f23` filtr bg,
+   `237f57a` duplicit. sklad text, `91c563c`+`03d8d13` košík help karta+fotka,
+   `4d4ea1e` čisté košík boxy, `a6adfb8` fix dvojitý nadpis, `031ec19` mobil Filtrovat tlačítko).
 3. **Vyřídit „NUTNÉ HNED" ze sekce 7** — říct uživateli ať nasadí `?v=8` a ověřit
    naživo v prohlížeči (detail pravá strana + skladový text).
 4. Pak pokračovat **pořadím sekcí filtru** (sekce 7, přání klienta) nebo Fází B.
