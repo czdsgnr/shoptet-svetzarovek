@@ -357,24 +357,44 @@ html, body {
     flex: 0 0 auto !important;
     order: 0 !important;
   }
-  /* Tlačítko "Filtrovat" (mobilní toggle) – bylo úzké a chevron přes text.
-     Plná šířka + chevron vpravo, ne přes text. */
+  /* Tlačítko "Filtrovat" (mobilní toggle filtru) → výrazné TEAL tlačítko,
+     ať je dobře vidět (přání klienta): trychtýř vlevo + chevron vpravo. */
   #filters .filtrovat,
   .filters .filtrovat {
     width: 100% !important;
     box-sizing: border-box !important;
-    padding: 13px 44px 13px 16px !important;
-    margin-bottom: 10px !important;
-    background: #f5f7f9 !important;
-    border: 1px solid #e2e6ea !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+    padding: 14px 44px 14px 18px !important;
+    margin-bottom: 12px !important;
+    background: #174A61 !important;
+    border: 0 !important;
     border-radius: 10px !important;
     font-weight: 700 !important;
-    color: #16223b !important;
+    font-size: 15px !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(23, 74, 97, .25) !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent;
   }
+  /* trychtýř (filter ikona) vlevo */
+  #filters .filtrovat::before,
+  .filters .filtrovat::before {
+    content: "" !important;
+    width: 18px !important;
+    height: 18px !important;
+    flex: none !important;
+    background: #fff !important;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'/%3E%3C/svg%3E") center/contain no-repeat !important;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'/%3E%3C/svg%3E") center/contain no-repeat !important;
+  }
+  /* chevron motivu (icon-font ::after) vpravo + bílý */
   #filters .filtrovat::after,
   .filters .filtrovat::after {
     left: auto !important;
-    right: 16px !important;
+    right: 18px !important;
+    color: #fff !important;
   }
 }
 
