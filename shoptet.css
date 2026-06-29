@@ -85,20 +85,19 @@ html, body {
   background-color: #000 !important;
 }
 /* MOBIL: header NEMÁ být černý – stejná modrá jako pod hledáním (#174A61),
-   ikony (vč. černé MENU/hamburger) bílé. */
+   ikony bílé. DŮLEŽITÉ: bílou dáváme jen když je menu/popup ZAVŘENÝ –
+   v otevřeném stavu řídí barvu (křížek) theme, jinak by byl neviditelný
+   a menu by "nešlo zavřít". */
 @media (max-width: 767px) {
   #header,
   .top-navigation-bar {
     background-color: #174A61 !important;
   }
-  .responsive-tools > a,
-  .responsive-tools > a::before,
-  .responsive-tools > a[data-target="navigation"],
-  .responsive-tools > a[data-target="navigation"]::before,
-  .menu-helper,
-  .menu-helper::after,
-  .navigation-buttons > a,
-  .navigation-buttons > a::before {
+  body:not(.navigation-window-visible):not(.cart-window-visible):not(.login-window-visible):not(.search-window-visible) .responsive-tools > a,
+  body:not(.navigation-window-visible):not(.cart-window-visible):not(.login-window-visible):not(.search-window-visible) .responsive-tools > a::before,
+  body:not(.navigation-window-visible) .responsive-tools > a[data-target="navigation"],
+  body:not(.navigation-window-visible) .responsive-tools > a[data-target="navigation"]::before,
+  body:not(.navigation-window-visible) .menu-helper {
     color: #fff !important;
   }
 }
@@ -150,6 +149,25 @@ html, body {
     max-width: none !important;
     flex: 0 0 auto !important;
     order: 0 !important;
+  }
+  /* Tlačítko "Filtrovat" (mobilní toggle) – bylo úzké a chevron přes text.
+     Plná šířka + chevron vpravo, ne přes text. */
+  #filters .filtrovat,
+  .filters .filtrovat {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 13px 44px 13px 16px !important;
+    margin-bottom: 10px !important;
+    background: #f5f7f9 !important;
+    border: 1px solid #e2e6ea !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    color: #16223b !important;
+  }
+  #filters .filtrovat::after,
+  .filters .filtrovat::after {
+    left: auto !important;
+    right: 16px !important;
   }
 }
 
@@ -366,6 +384,33 @@ html, body {
   font-size: 14px !important;
   font-weight: 600 !important;
   margin-bottom: 2px !important;
+}
+
+/* Karty výpisu: rezervovat místo pro hodnocení (hvězdičky), ať jsou karty
+   s hodnocením i bez něj ZAROVNANÉ (názvy/ceny ve stejné výšce). */
+.products-block .p .ratings-wrapper,
+.products-related .p .ratings-wrapper {
+  min-height: 22px !important;
+  display: block !important;
+}
+
+/* MOBIL: slevový badge (–X %) nahoru-vpravo na obrázek (byl uprostřed). */
+@media (max-width: 767px) {
+  .products-block .p .image,
+  .products-block .p .p-image,
+  .products-related .p .image {
+    position: relative !important;
+  }
+  .products-block .p .flags-extra,
+  .products-related .p .flags-extra {
+    position: absolute !important;
+    top: 6px !important;
+    right: 6px !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 3 !important;
+    margin: 0 !important;
+  }
 }
 
 /* ---------------------------------------------------------
