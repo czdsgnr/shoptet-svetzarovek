@@ -620,10 +620,15 @@ body.type-product .p-image .flags-extra,
   border-color: #04880d !important;
 }
 
-/* Pozn.: dřívější záplaty pro detail (opacity:1 na .p-info-wrapper a
-   un-hide názvu/hodnocení/perexu) jsme odebrali – příčinou byl
-   smazaný script.js, který rozbíjel nativní strukturu motivu.
-   Teď to motiv řeší sám, záplaty by dělaly duplicitní název. */
+/* Detail – pravý sloupec (.p-info-wrapper = cena, dostupnost, KOŠÍK).
+   Motiv ho má opacity:0 a odhaluje přidáním třídy .visible-element (JS reveal).
+   Ten reveal je ale NESPOLEHLIVÝ (občas .visible-element nepřidá – hlavně při
+   render-blocking načtení) → buy box je pak NEVIDITELNÝ. Forcujeme opacity:1,
+   ať je košík vždy vidět. (script.js, co dělal duplicitní název, je smazaný,
+   takže to nic nerozbije.) */
+.p-detail .p-info-wrapper {
+  opacity: 1 !important;
+}
 
 /* ---------------------------------------------------------
    Skrytí starého benefit pruhu .kn_benefits (vkládá inline JS
