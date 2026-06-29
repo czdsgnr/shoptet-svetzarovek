@@ -8,6 +8,23 @@
 (function () {
   'use strict';
 
+  /* === Detail "ready" strážce =========================================
+     Merkur motiv staví pravý sloupec detailu (nadpis .p-detail-inner-header,
+     skladovost .detail-parameters, štítky Akce/Výprodej) až PO DOMContentLoaded
+     vlastním JS. Když do toho náš JS sáhne dřív (a <script defer> běží právě na
+     DOMContentLoaded), motivu to rozhodí přesun a pravý sloupec se nedostaví.
+     Proto naše detailové funkce nic nedělají, dokud motiv pravý sloupec
+     nedostaví. Signál hotova: nadpis je už v .p-info-wrapper. Pojistka: po
+     window 'load' je motiv hotový tak jako tak. (Na nedetailových stránkách
+     vrací rovnou true → výpis/kategorie běží bez čekání.) */
+  var __szLoaded = false;
+  window.addEventListener('load', function () { __szLoaded = true; });
+  function detailReady() {
+    if (!document.body || !document.body.classList.contains('type-product')) return true;
+    if (document.querySelector('.p-info-wrapper .p-detail-inner-header')) return true;
+    return __szLoaded;
+  }
+
   /* === A) Login popup s benefity (registrace vpravo) ================== */
   function buildLoginExtras() {
     var popup = document.getElementById('login');
@@ -79,6 +96,7 @@
 
   /* === C) Skladová tabulka na detailu (přeneseno ze script.js) ======== */
   function initDetailSklad() {
+    if (!detailReady()) return; // počkat, až motiv dostaví pravý sloupec
     if (!document.querySelector('.type-detail, body.type-product')) return;
     var params = document.querySelector('.p-info-wrapper .detail-parameters');
     if (!params || params.querySelector('.sklad')) return; // idempotentně
@@ -123,6 +141,7 @@
      bez CSS order lezl nahoru nad produkt. CSS order:10 to řeší vizuálně,
      tady navíc přesuneme element na konec DOM (žádný záblesk při načítání). */
   function moveAltToBottom() {
+    if (!detailReady()) return;
     var alt = document.getElementById('productsAlternative');
     var pd = document.querySelector('.p-detail');
     if (alt && pd && pd.lastElementChild !== alt) pd.appendChild(alt);
@@ -131,6 +150,7 @@
   /* === D2) USP pruh (.benefitBanner) na detailu – pod .row.product-top,
      NAD "Podobné produkty" (dle přání klienta). */
   function moveUspBelowProduct() {
+    if (!detailReady()) return;
     if (!document.body.classList.contains('type-product')) return;
     var usp = document.querySelector('.benefitBanner');
     var anchor = document.querySelector('.row.product-top');
@@ -183,6 +203,7 @@
      Původní cena (.price-standard) je uvnitř slevového badge. Naklonujeme
      ji k akční ceně do .prices (struck-through, viz CSS). Idempotentně. */
   function addOrigPrice() {
+    if (!detailReady()) return; // na výpisu vrací true hned; na detailu počká
     document.querySelectorAll('.products-block .p').forEach(function (card) {
       if (card.querySelector('.p-orig-price')) return;
       var flag = card.querySelector('.flag-discount');
@@ -204,6 +225,7 @@
      potomka .p (karta je position:relative) → sedí v pravém horním rohu
      karty, zarovnaný s Akce. CSS dá pozici. Idempotentní. */
   function moveBadgeToCard() {
+    if (!detailReady()) return; // na výpisu vrací true hned; na detailu počká
     /* jen výpis/carousel karty – NE hlavní produkt na detailu (ten má badge
        v .p-image s vlastní pozicí top:0). */
     document.querySelectorAll(
@@ -378,4 +400,19 @@
       setTimeout(buildLoginExtras, 300);
     }
   });
+
+  /* === Detail: spustit naše úpravy AŽ motiv dostaví pravý sloupec ======
+     Strážce detailReady() drží detailové funkce v klidu, dokud motiv pravý
+     sloupec nedostaví (jinak mu rozhodíme přesun nadpisu/skladovosti/štítků).
+     Tenhle poller je hlídá a jakmile je hotovo, spustí je jednou. */
+  if (document.body && document.body.classList.contains('type-product')) {
+    var __szTries = 0;
+    var __szIv = setInterval(function () {
+      if (detailReady()) {
+        clearInterval(__szIv);
+        initDetailSklad(); moveAltToBottom(); moveUspBelowProduct();
+        moveBadgeToCard(); addOrigPrice();
+      } else if (++__szTries > 100) { clearInterval(__szIv); } // ~10s pojistka
+    }, 100);
+  }
 })();
