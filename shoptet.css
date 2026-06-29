@@ -143,6 +143,21 @@ html, body {
    Zrušit filtry / Zobrazit produkty). Chrome staví shoptet.js
    (buildFilterChrome), tady je styl. Barvy v naší #174A61.
    ========================================================= */
+
+/* ANTI-FLASH (filtr „blikal"): theme renderuje filtr vlevo hned, ale chrome
+   (hlavička/patička) doplní JS až po načtení → probliknutí. Proto filtr
+   držíme skrytý (opacity:0), dokud mu JS nepřidá .sz-ready (chrome hotové),
+   pak ho jemně ukážeme. Failsafe: i kdyby JS selhal, ukáže se po 1.2 s. */
+.sidebar-left .box-filters:not(.sz-ready) {
+  opacity: 0;
+  animation: szFilterReveal 0.01s linear 1.2s forwards;
+}
+.sidebar-left .box-filters.sz-ready {
+  opacity: 1;
+  transition: opacity 0.18s ease;
+}
+@keyframes szFilterReveal { to { opacity: 1; } }
+
 .box-filters.sz-filter-card {
   background: #fff !important;
   border: 1px solid #e2e6ea !important;

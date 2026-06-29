@@ -258,7 +258,7 @@
       var t = (el.textContent || '').trim();
       if (/^.{0,2}\s*Zrušit filtr/i.test(t) && t.length < 20) el.style.display = 'none';
     });
-    if (box.querySelector('.sz-filter-head')) return; // chrome už postaven
+    if (!box.querySelector('.sz-filter-head')) { // chrome stavíme jen jednou
     box.classList.add('sz-filter-card');
 
     // počet produktů (z "X položek celkem")
@@ -299,6 +299,10 @@
       var list = document.querySelector('.products-block, #products, .product-list');
       if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+    } // konec budování chrome (jen jednou)
+
+    // Anti-flash: filtr byl skrytý (opacity:0), teď má chrome → odkrýt (fade).
+    box.classList.add('sz-ready');
   }
 
   /* === Init =========================================================== */
