@@ -228,40 +228,28 @@ html, body {
 #filters .slider-wrapper.sz-open > h4::after,
 #filters .param-filter-top.sz-open > h4::after { transform: rotate(-135deg) !important; }
 
-/* === AKTIVNÍ filtr: zvýraznění karty + odznak s počtem vybraných ===
-   .sz-active dává JS; navíc :has(:checked) = OKAMŽITÉ zvýraznění čistě
-   přes CSS (nezávislé na timingu JS – řeší "nevidím že jsem vybral"). */
-#filters .filter-section-parametric.sz-active,
-#filters .param-filter-top.sz-active,
-#filters .slider-wrapper.sz-active,
+/* === AKTIVNÍ filtr (něco vybráno) – VÝRAZNÉ, čistě přes CSS :has(:checked).
+   Žádný JS → okamžité (žádné obnovování), nebojuje s dklab. Filtr je přitom
+   ZAVŘENÝ (uživatel nechce mít otevřené pořád). Plná modrá hlavička + ✓. === */
 #filters .filter-section-parametric:has(input:checked),
 #filters .param-filter-top:has(input:checked) {
   border-color: #174A61 !important;
-  box-shadow: inset 0 0 0 1px #174A61 !important;
+  box-shadow: inset 0 0 0 2px #174A61 !important;
 }
-#filters .sz-active > h4,
 #filters .filter-section-parametric:has(input:checked) > h4,
 #filters .param-filter-top:has(input:checked) > h4 {
-  background: #e3eef2 !important;
-  color: #174A61 !important;
-}
-#filters .sz-active > h4 > span:first-child,
-#filters .filter-section-parametric:has(input:checked) > h4 > span:first-child,
-#filters .param-filter-top:has(input:checked) > h4 > span:first-child { color: #174A61 !important; }
-#filters .sz-badge {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 22px !important;
-  height: 22px !important;
-  padding: 0 7px !important;
-  margin-left: 10px !important;
   background: #174A61 !important;
   color: #fff !important;
-  font-size: 12px !important;
+}
+#filters .filter-section-parametric:has(input:checked) > h4 > span:first-child,
+#filters .param-filter-top:has(input:checked) > h4 > span:first-child { color: #fff !important; }
+#filters .filter-section-parametric:has(input:checked) > h4::after,
+#filters .param-filter-top:has(input:checked) > h4::after { border-color: #fff !important; }
+/* ✓ za názvem aktivního filtru */
+#filters .filter-section-parametric:has(input:checked) > h4 > span:first-child::after,
+#filters .param-filter-top:has(input:checked) > h4 > span:first-child::after {
+  content: " ✓" !important;
   font-weight: 700 !important;
-  line-height: 1 !important;
-  border-radius: 11px !important;
 }
 /* vybraná volba uvnitř otevřené sekce zvýraznit */
 #filters .filter-label.checked,

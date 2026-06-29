@@ -145,61 +145,15 @@
      sundá nativní .otevreny ze VŠECH boxů → po filtru čistý jednotný
      ZAVŘENÝ stav (theme jinak po výběru samovolně rozbalí víc sekcí
      = nepřehledné). Otevírání řídí jen náš toggle (.sz-open). */
+  /* Normalizace: sundá nativní .otevreny → filtry startují/zůstávají zavřené
+     (čistá mřížka). Aktivní filtr (něco vybráno) se zvýrazní čistě přes CSS
+     `:has(input:checked)` – okamžitě, bez JS, nebojuje s dklab. */
   function normalizeFilterState() {
     document.querySelectorAll(
       '.filters .filter-section-parametric,' +
       '.filters .slider-wrapper,' +
       '.filters .param-filter-top'
-    ).forEach(function (s) {
-      s.classList.remove('otevreny');
-      /* Aktivní filtr (má zaškrtnutou hodnotu) necháme OTEVŘENÝ – uživatel
-         vidí výběr a může rovnou vybrat další hodnotu (multi-select).
-         Neaktivní zůstanou zavřené (čistá mřížka). */
-      if (s.querySelector('input:checked')) s.classList.add('sz-open');
-    });
-    markActiveFilters();
-  }
-
-  /* Označí AKTIVNÍ filtry (něco vybráno) – zvýraznění karty .sz-active +
-     odznak s počtem v hlavičce. Počet bere z URL (pvXX=540,336) i z
-     zaškrtnutých inputů, ať uživatel VIDÍ, co má vybrané, i když je zavřeno. */
-  function markActiveFilters() {
-    var counts = {};
-    try {
-      new URLSearchParams(window.location.search).forEach(function (v, k) {
-        var m = k.match(/^pv(\d+)$/);
-        if (m) counts['id-' + m[1]] = String(v).split(',').filter(Boolean).length;
-      });
-    } catch (e) {}
-
-    document.querySelectorAll(
-      '.filters .filter-section-parametric,' +
-      '.filters .slider-wrapper,' +
-      '.filters .param-filter-top'
-    ).forEach(function (s) {
-      var n = 0;
-      var idCls = [].slice.call(s.classList).filter(function (c) {
-        return /^filter-section-parametric-id-\d+$/.test(c);
-      })[0];
-      if (idCls) n = counts[idCls.replace('filter-section-parametric-', '')] || 0;
-      if (!n) n = s.querySelectorAll('input:checked').length;
-
-      s.classList.toggle('sz-active', n > 0);
-
-      var h4 = s.querySelector(':scope > h4');
-      if (!h4) return;
-      var badge = h4.querySelector('.sz-badge');
-      if (n > 0) {
-        if (!badge) {
-          badge = document.createElement('span');
-          badge.className = 'sz-badge';
-          h4.appendChild(badge);
-        }
-        if (badge.textContent !== String(n)) badge.textContent = n;
-      } else if (badge) {
-        badge.remove();
-      }
-    });
+    ).forEach(function (s) { s.classList.remove('otevreny'); });
   }
 
   function initFilterToggle() {
@@ -218,36 +172,6 @@
       e.preventDefault();
       h4.parentElement.classList.toggle('sz-open');
     });
-
-    /* Výběr hodnoty filtru (label/checkbox/cena) spustí AJAX překreslení.
-       Aktivní stav (badge + zvýraznění) se jinak ukáže až po obnovení –
-       proto markActiveFilters spustíme i opakovaně se zpožděním po kliknutí. */
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('.filters .filter-label, .filters .filter-section input, .filters .price-save, .filters fieldset')) return;
-      [150, 500, 1000, 2000, 3500].forEach(function (ms) { setTimeout(markActiveFilters, ms); });
-    });
-    document.addEventListener('change', function (e) {
-      if (!e.target.closest('.filters')) return;
-      [150, 500, 1000, 2000].forEach(function (ms) { setTimeout(markActiveFilters, ms); });
-    });
-
-    /* Shoptet/dklab překresluje filtry přes AJAX (URL ?pvXX=…) a ne vždy
-       padne náš event → MutationObserver re-normalizuje po každé změně DOM.
-       Sleduje jen childList (ne atributy) → naše změny tříd ho neretriggrují. */
-    if (!window.__szFilterObserver) {
-      var host = document.querySelector('#content') ||
-                 (document.querySelector('#filters') || {}).parentNode ||
-                 document.body;
-      if (host) {
-        var t;
-        var obs = new MutationObserver(function () {
-          clearTimeout(t);
-          t = setTimeout(normalizeFilterState, 150);
-        });
-        obs.observe(host, { childList: true, subtree: true });
-        window.__szFilterObserver = obs;
-      }
-    }
   }
 
   /* === E) Karty ve výpisu: přeškrtnutá původní cena k akční ===========
@@ -284,28 +208,12 @@
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
-  // Eventy padnou DŘÍV, než dklab nastaví checked/URL aktivního filtru
-  // → markActiveFilters spouštíme i opakovaně se zpožděním po každém eventu.
-  function scheduleMarkActive() {
-    // normalizeFilterState = otevře aktivní (checked) filtr + označí badge;
-    // opakovaně, protože dklab nastaví checked/URL až po eventu.
-    [0, 250, 600, 1200, 2500].forEach(function (ms) { setTimeout(normalizeFilterState, ms); });
-  }
-  function reinitFilters() { initFilters(); initFilterToggle(); scheduleMarkActive(); }
+  function reinitFilters() { initFilters(); initFilterToggle(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageProductsLoaded', reinitFilters);
-  document.addEventListener('ShoptetDOMContentLoaded', scheduleMarkActive);
   setTimeout(reinitFilters, 600);
   setTimeout(reinitFilters, 1500);
-  /* dklab překresluje filtry i několik sekund po výběru (a maže náš badge);
-     eventy/observer to nestíhají → lehký interval drží aktivní stav v sync.
-     markActiveFilters mění DOM jen když se stav změní (jinak no-op). */
-  if (!window.__szActiveInterval) {
-    window.__szActiveInterval = setInterval(function () {
-      if (document.querySelector('#filters')) markActiveFilters();
-    }, 700);
-  }
   // karty se donačítají (carousely, lazy) – doplnit i pak
   document.addEventListener('ShoptetDOMPageContentLoaded', addOrigPrice);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', addOrigPrice);
