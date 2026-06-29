@@ -290,6 +290,14 @@
   document.addEventListener('ShoptetDOMContentLoaded', scheduleMarkActive);
   setTimeout(reinitFilters, 600);
   setTimeout(reinitFilters, 1500);
+  /* dklab překresluje filtry i několik sekund po výběru (a maže náš badge);
+     eventy/observer to nestíhají → lehký interval drží aktivní stav v sync.
+     markActiveFilters mění DOM jen když se stav změní (jinak no-op). */
+  if (!window.__szActiveInterval) {
+    window.__szActiveInterval = setInterval(function () {
+      if (document.querySelector('#filters')) markActiveFilters();
+    }, 700);
+  }
   // karty se donačítají (carousely, lazy) – doplnit i pak
   document.addEventListener('ShoptetDOMPageContentLoaded', addOrigPrice);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', addOrigPrice);
