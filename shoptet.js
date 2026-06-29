@@ -162,6 +162,10 @@
     if (window.__szFilterToggle) return;
     window.__szFilterToggle = true;
 
+    /* CAPTURE fáze + stopPropagation: po AJAX dklab naváže na hlavičku vlastní
+       (rozbitý) handler, který přes stopPropagation zablokuje toggle v bubble
+       fázi → "na aktivní filtr nejde znovu kliknout". V capture proběhneme
+       PRVNÍ a dklab handler umlčíme → otevírání funguje vždy. */
     document.addEventListener('click', function (e) {
       var h4 = e.target.closest(
         '.filters .filter-section-parametric > h4,' +
@@ -170,8 +174,9 @@
       );
       if (!h4) return;
       e.preventDefault();
+      e.stopPropagation();
       h4.parentElement.classList.toggle('sz-open');
-    });
+    }, true);
   }
 
   /* === E) Karty ve výpisu: přeškrtnutá původní cena k akční ===========
