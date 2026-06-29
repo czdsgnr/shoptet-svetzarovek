@@ -84,6 +84,24 @@ html, body {
 .top-navigation-bar {
   background-color: #000 !important;
 }
+/* MOBIL: header NEMÁ být černý – stejná modrá jako pod hledáním (#174A61),
+   ikony (vč. černé MENU/hamburger) bílé. */
+@media (max-width: 767px) {
+  #header,
+  .top-navigation-bar {
+    background-color: #174A61 !important;
+  }
+  .responsive-tools > a,
+  .responsive-tools > a::before,
+  .responsive-tools > a[data-target="navigation"],
+  .responsive-tools > a[data-target="navigation"]::before,
+  .menu-helper,
+  .menu-helper::after,
+  .navigation-buttons > a,
+  .navigation-buttons > a::before {
+    color: #fff !important;
+  }
+}
 
 /* Modré/šedé linky kolem nav menu z původního style.css
    (.navigation-in border-top #1977b5, #navigation border-bottom #e4e4e4)
@@ -210,15 +228,26 @@ html, body {
 #filters .slider-wrapper.sz-open > h4::after,
 #filters .param-filter-top.sz-open > h4::after { transform: rotate(-135deg) !important; }
 
-/* === AKTIVNÍ filtr: zvýraznění karty + odznak s počtem vybraných === */
+/* === AKTIVNÍ filtr: zvýraznění karty + odznak s počtem vybraných ===
+   .sz-active dává JS; navíc :has(:checked) = OKAMŽITÉ zvýraznění čistě
+   přes CSS (nezávislé na timingu JS – řeší "nevidím že jsem vybral"). */
 #filters .filter-section-parametric.sz-active,
 #filters .param-filter-top.sz-active,
-#filters .slider-wrapper.sz-active {
+#filters .slider-wrapper.sz-active,
+#filters .filter-section-parametric:has(input:checked),
+#filters .param-filter-top:has(input:checked) {
   border-color: #174A61 !important;
   box-shadow: inset 0 0 0 1px #174A61 !important;
 }
-#filters .sz-active > h4 { background: #e3eef2 !important; color: #174A61 !important; }
-#filters .sz-active > h4 > span:first-child { color: #174A61 !important; }
+#filters .sz-active > h4,
+#filters .filter-section-parametric:has(input:checked) > h4,
+#filters .param-filter-top:has(input:checked) > h4 {
+  background: #e3eef2 !important;
+  color: #174A61 !important;
+}
+#filters .sz-active > h4 > span:first-child,
+#filters .filter-section-parametric:has(input:checked) > h4 > span:first-child,
+#filters .param-filter-top:has(input:checked) > h4 > span:first-child { color: #174A61 !important; }
 #filters .sz-badge {
   display: inline-flex !important;
   align-items: center !important;
@@ -453,6 +482,21 @@ body.type-product .p-image .flags-extra,
 }
 .p-info-wrapper .sklad .centralniskald td {
   color: #04a70f !important;
+}
+/* MOBIL: řádky pod sebe (label nad hodnotou), zalomení, ať pravá strana
+   nepřetéká z obrazovky a "Litoměřice / expedice" se nezalamuje divně. */
+@media (max-width: 767px) {
+  .p-info-wrapper .sklad tr {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+  }
+  .p-info-wrapper .sklad th,
+  .p-info-wrapper .sklad td {
+    width: 100% !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
 }
 
 /* Cena na detailu výraznější */

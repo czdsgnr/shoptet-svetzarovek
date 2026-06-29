@@ -150,7 +150,13 @@
       '.filters .filter-section-parametric,' +
       '.filters .slider-wrapper,' +
       '.filters .param-filter-top'
-    ).forEach(function (s) { s.classList.remove('otevreny'); });
+    ).forEach(function (s) {
+      s.classList.remove('otevreny');
+      /* Aktivní filtr (má zaškrtnutou hodnotu) necháme OTEVŘENÝ – uživatel
+         vidí výběr a může rovnou vybrat další hodnotu (multi-select).
+         Neaktivní zůstanou zavřené (čistá mřížka). */
+      if (s.querySelector('input:checked')) s.classList.add('sz-open');
+    });
     markActiveFilters();
   }
 
