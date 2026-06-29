@@ -640,6 +640,12 @@ html, body {
 .p-final-price-wrapper:has(.price-save) .price-final * {
   color: #e30613 !important;
 }
+/* Detail produktu: NÁZEV produktu byl SKRYTÝ! pkUpravy.css (stará agentura)
+   má .p-detail-inner-header{display:none} – patřilo ke smazanému pkUpravy.js,
+   který název přesouval jinam. JS je pryč, CSS zůstalo → název+kód zmizely.
+   Vracíme zobrazení hlavičky (H1 název + kód). */
+.p-detail-inner-header { display: block !important; }
+
 /* Detail produktu: slevový badge (.flags-extra) úplně do pravého horního
    rohu (top:0/right:0) – zarovnaný k vrchu se štítky Akce/Výprodej vlevo. */
 body.type-product .p-image .flags-extra,
