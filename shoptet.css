@@ -794,15 +794,39 @@ body.type-product .p-image .flags-extra,
   display: none !important;
 }
 
-/* Košík – fotka v boxu „Potřebujete pomoc?" přetékala z obsahu.
-   Omezit na šířku boxu. */
+/* Košík – box „Potřebujete pomoc?": fotka byla position:absolute (překrývala
+   kontakty) a seznam přetékal (330px > box). Srovnáme do čistého flow. */
+.sidebar-in-cart .contact-box,
+.cart-content .contact-box,
+.checkout-box-wrapper .contact-box,
+.box .contact-box {
+  position: relative !important;
+  overflow: hidden !important;
+}
 .sidebar-in-cart .contact-box img,
 .cart-content .contact-box img,
 .checkout-box-wrapper .contact-box img,
 .box .contact-box img {
-  max-width: 100% !important;
+  position: static !important;
+  float: left !important;
+  width: 60px !important;
   height: auto !important;
-  display: block !important;
+  max-width: 60px !important;
+  margin: 0 14px 8px 0 !important;
+  border-radius: 8px !important;
+}
+.sidebar-in-cart .contact-box ul,
+.cart-content .contact-box ul,
+.checkout-box-wrapper .contact-box ul,
+.box .contact-box ul {
+  clear: both !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+  word-break: break-word !important;
 }
 
 /* ---------------------------------------------------------
