@@ -430,8 +430,8 @@ html, body {
 .product .p > .flags-extra,
 .slick-slider .p > .flags-extra {
   position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
+  top: -28px !important;      /* zarovnat s vrškem štítku Akce (top:-28px) */
+  right: -8px !important;     /* zrcadlo Akce (left:-8px) */
   left: auto !important;
   bottom: auto !important;
   z-index: 3 !important;
