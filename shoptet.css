@@ -987,7 +987,10 @@ body.type-product .p-image .flags-extra,
 /* Motiv po AJAX překreslení košíku vrací nativní <h2>/<ul>/<img> jako přímé děti
    .contact-box → dvojitý nadpis. Skrýt tyhle nativní zbytky (náš obsah je
    v .help__top/.help__intro/… – ty zůstanou). Timing-proof přes CSS. */
+.contact-box.sz-help > h1,
 .contact-box.sz-help > h2,
+.contact-box.sz-help > h3,
+.contact-box.sz-help > h4,
 .contact-box.sz-help > .h4,
 .contact-box.sz-help > ul,
 .contact-box.sz-help > img { display: none !important; }
