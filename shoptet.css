@@ -761,6 +761,17 @@ body.type-product .p-image .flags-extra,
   display: none !important;
 }
 
+/* Košík – fotka v boxu „Potřebujete pomoc?" přetékala z obsahu.
+   Omezit na šířku boxu. */
+.sidebar-in-cart .contact-box img,
+.cart-content .contact-box img,
+.checkout-box-wrapper .contact-box img,
+.box .contact-box img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
 /* ---------------------------------------------------------
    USP pruh (.benefitBanner) – ikony NAD nadpis+text a větší,
    vše vystředěné (původně ikona vlevo vedle textu).

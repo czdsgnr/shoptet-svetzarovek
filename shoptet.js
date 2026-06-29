@@ -251,7 +251,14 @@
      patička s počtem + „Zrušit filtry" / „Zobrazit produkty". Idempotentní. */
   function buildFilterChrome() {
     var box = document.querySelector('.box-filters');
-    if (!box || box.querySelector('.sz-filter-head')) return;
+    if (!box) return;
+    // VŽDY (i po AJAX) schovat nativní „× Zrušit filtry" – máme vlastní v patičce.
+    [].forEach.call(box.querySelectorAll('a, button, span'), function (el) {
+      if (el.closest('.sz-filter-head') || el.closest('.sz-filter-foot')) return;
+      var t = (el.textContent || '').trim();
+      if (/^.{0,2}\s*Zrušit filtr/i.test(t) && t.length < 20) el.style.display = 'none';
+    });
+    if (box.querySelector('.sz-filter-head')) return; // chrome už postaven
     box.classList.add('sz-filter-card');
 
     // počet produktů (z "X položek celkem")
@@ -270,8 +277,7 @@
       '<div class="sz-fh-left">' +
         '<span class="sz-fh-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
         '<div><div class="sz-fh-title">Filtrovat produkty</div><div class="sz-fh-sub">Vyberte parametry a rychle zúžte nabídku.</div></div>' +
-      '</div>' +
-      '<button type="button" class="sz-fh-clear">Vymazat vše</button>';
+      '</div>';
 
     var foot = document.createElement('div');
     foot.className = 'sz-filter-foot';
@@ -285,15 +291,7 @@
     box.insertBefore(head, box.firstChild);
     box.appendChild(foot);
 
-    // schovat nativní „× Zrušit filtry" (máme vlastní v patičce/hlavičce)
-    [].forEach.call(box.querySelectorAll('a, button, span'), function (el) {
-      if (el.closest('.sz-filter-head') || el.closest('.sz-filter-foot')) return;
-      var t = (el.textContent || '').trim();
-      if (/^.{0,2}\s*Zrušit filtr/i.test(t) && t.length < 20) el.style.display = 'none';
-    });
-
     function clearAll() { window.location.href = window.location.pathname; } // odebere ?pvXX=…
-    head.querySelector('.sz-fh-clear').addEventListener('click', clearAll);
     foot.querySelector('.sz-ff-cancel').addEventListener('click', clearAll);
     foot.querySelector('.sz-ff-show').addEventListener('click', function () {
       // zavři otevřené sekce + sjeď na výpis
