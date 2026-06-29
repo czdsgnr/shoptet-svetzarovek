@@ -198,6 +198,22 @@
     });
   }
 
+  /* === Slevový badge (-X %) do rohu KARTY ============================
+     Nativně je .flags-extra uvnitř .image, který je posunutý dolů (štítky
+     Akce/Výprodej nad ním) → badge "v půlce". Přesuneme ho jako přímého
+     potomka .p (karta je position:relative) → sedí v pravém horním rohu
+     karty, zarovnaný s Akce. CSS dá pozici. Idempotentní. */
+  function moveBadgeToCard() {
+    /* jen výpis/carousel karty – NE hlavní produkt na detailu (ten má badge
+       v .p-image s vlastní pozicí top:0). */
+    document.querySelectorAll(
+      '.products-block .p, .products-related .p, .product .p, .slick-slider .p'
+    ).forEach(function (card) {
+      var fe = card.querySelector('.flags-extra');
+      if (fe && fe.parentElement !== card) card.appendChild(fe);
+    });
+  }
+
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
@@ -207,6 +223,7 @@
     moveAltToBottom();
     moveUspBelowProduct();
     addOrigPrice();
+    moveBadgeToCard();
   }
 
   if (document.readyState !== 'loading') initAll();
@@ -220,11 +237,13 @@
   setTimeout(reinitFilters, 600);
   setTimeout(reinitFilters, 1500);
   // karty se donačítají (carousely, lazy) – doplnit i pak
-  document.addEventListener('ShoptetDOMPageContentLoaded', addOrigPrice);
-  document.addEventListener('ShoptetDOMPageMoreProductsLoaded', addOrigPrice);
-  window.addEventListener('load', addOrigPrice);
-  setTimeout(addOrigPrice, 800);
-  setTimeout(addOrigPrice, 2000);
+  function reinitCards() { addOrigPrice(); moveBadgeToCard(); }
+  document.addEventListener('ShoptetDOMPageContentLoaded', reinitCards);
+  document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitCards);
+  window.addEventListener('load', reinitCards);
+  setTimeout(reinitCards, 800);
+  setTimeout(reinitCards, 2000);
+  setTimeout(reinitCards, 3500);
   // detail – varianty/skladovost/slider se renderují později
   document.addEventListener('ShoptetDOMPageContentLoaded', moveAltToBottom);
   setTimeout(moveAltToBottom, 600);

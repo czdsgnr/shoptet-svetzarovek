@@ -416,19 +416,22 @@ html, body {
   display: block !important;
 }
 
-/* Výpis (karty) – slevový badge (–X %) VŽDY do pravého horního rohu obrázku
-   (desktop i mobil; byl "divně" uprostřed). */
-.products-block .p .image,
-.products-block .p .p-image,
-.products-related .p .image,
-.products-related .p .p-image {
-  position: relative !important;
-}
-.products-block .p .flags-extra,
-.products-related .p .flags-extra {
+/* Výpis/carousel karty – slevový badge (–X %) do pravého horního rohu KARTY.
+   shoptet.js (moveBadgeToCard) přesune .flags-extra jako přímého potomka .p
+   (karta je position:relative), takže `.p > .flags-extra` kotví k rohu karty
+   = zarovnané se štítky Akce/Výprodej vlevo nahoře. Hlavní produkt na detailu
+   má badge v .p-image (ne přímý potomek .p) → tohle se ho netýká. */
+.products-block .p,
+.products-related .p,
+.product .p,
+.slick-slider .p { position: relative !important; }
+.products-block .p > .flags-extra,
+.products-related .p > .flags-extra,
+.product .p > .flags-extra,
+.slick-slider .p > .flags-extra {
   position: absolute !important;
-  top: 6px !important;
-  right: 6px !important;
+  top: 8px !important;
+  right: 8px !important;
   left: auto !important;
   bottom: auto !important;
   z-index: 3 !important;
