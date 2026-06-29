@@ -640,11 +640,16 @@ html, body {
 .p-final-price-wrapper:has(.price-save) .price-final * {
   color: #e30613 !important;
 }
-/* Detail produktu: NÁZEV produktu byl SKRYTÝ! pkUpravy.css (stará agentura)
-   má .p-detail-inner-header{display:none} – patřilo ke smazanému pkUpravy.js,
-   který název přesouval jinam. JS je pryč, CSS zůstalo → název+kód zmizely.
-   Vracíme zobrazení hlavičky (H1 název + kód). */
-.p-detail-inner-header { display: block !important; }
+/* Detail produktu: theme renderuje název 2× – jednou full-width nahoře
+   (.p-detail-inner > .p-detail-inner-header) a jednou v pravém sloupci
+   (.p-info-wrapper .p-detail-inner-header). Skrýt horní DUPLIKÁT, ALE JEN
+   když název existuje i v pravém sloupci (`:has`) – jinak by u produktů, co
+   mají jen horní hlavičku, název zmizel úplně. (Můj dřívější display:block
+   omylem ukázal oba = duplicita.) */
+.p-detail-inner:has(.p-info-wrapper .p-detail-inner-header) > .p-detail-inner-header {
+  display: none !important;
+}
+.p-info-wrapper .p-detail-inner-header { display: block !important; }
 
 /* Detail produktu: slevový badge (.flags-extra) úplně do pravého horního
    rohu (top:0/right:0) – zarovnaný k vrchu se štítky Akce/Výprodej vlevo. */
