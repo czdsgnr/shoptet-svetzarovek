@@ -214,6 +214,18 @@
     });
   }
 
+  /* === Přesun filtru do levého sidebaru (nad podporu) =================
+     Layout: .content-wrapper-in > aside.sidebar-left (TOP10+podpora) + main#content.
+     Přesuneme .box-filters na začátek sidebaru. Idempotentní. Filtr (data
+     i AJAX) zůstává #filters – jen jiná pozice v DOM. */
+  function moveFilterToSidebar() {
+    var box = document.querySelector('.box-filters');
+    var sidebar = document.querySelector('aside.sidebar-left, .sidebar.sidebar-left, .sidebar-left');
+    if (!box || !sidebar) return;
+    if (sidebar.contains(box)) return; // už přesunuto
+    sidebar.insertBefore(box, sidebar.firstChild);
+  }
+
   /* === Reskin filtru: hlavička + patička (přídavně) ===================
      Nativní filtr (data + filtrování) necháme být, jen kolem něj postavíme
      hezký „card" chrome dle návrhu: hlavička s ikonou/titulkem + „Vymazat vše",
@@ -268,7 +280,8 @@
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
-    initFilters();        // vodorovné filtry NAD obsahem (ne sidebar)
+    moveFilterToSidebar(); // filtr do levého sidebaru (nad podporu)
+    initFilters();        // úpravy filtrů
     initFilterToggle();   // + vlastní rozbalování (klik na hlavičku)
     buildFilterChrome();  // hlavička + patička filtru (reskin)
     initDetailSklad();
@@ -282,7 +295,7 @@
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
-  function reinitFilters() { initFilters(); initFilterToggle(); buildFilterChrome(); }
+  function reinitFilters() { moveFilterToSidebar(); initFilters(); initFilterToggle(); buildFilterChrome(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageProductsLoaded', reinitFilters);

@@ -200,6 +200,38 @@ html, body {
 .sz-filter-card .filters-cancel,
 .sz-filter-card a[class*="cancel"] { display: none !important; }
 
+/* --- Filtr V SIDEBARU = svislý (sekce pod sebou, plná šířka) --- */
+.sidebar-left .box-filters.sz-filter-card { width: 100% !important; margin-bottom: 20px !important; }
+.sidebar-left #filters {
+  display: block !important;
+  padding: 14px 16px 18px !important;
+}
+.sidebar-left #filters .filter-sections,
+.sidebar-left #filters #category-filter-hover {
+  display: block !important;
+  width: 100% !important;
+}
+.sidebar-left #filters .filter-section-parametric,
+.sidebar-left #filters .slider-wrapper,
+.sidebar-left #filters .param-filter-top {
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  margin: 0 0 8px !important;
+}
+.sidebar-left .sz-filter-head { padding: 18px 16px 14px !important; }
+.sidebar-left .sz-filter-head .sz-fh-title { font-size: 19px !important; }
+.sidebar-left .sz-filter-head .sz-fh-icon { display: none !important; }
+.sidebar-left .sz-filter-foot {
+  padding: 14px 16px !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+}
+.sidebar-left .sz-filter-foot .sz-ff-actions { flex-direction: column !important; }
+.sidebar-left .sz-filter-foot .sz-ff-show,
+.sidebar-left .sz-filter-foot .sz-ff-cancel { width: 100% !important; }
+
 /* =========================================================
    FILTRY – jednotný vzhled + rozbalování. Selektory NAVÁZANÉ NA
    STABILNÍ TŘÍDY (.filter-section-parametric, .slider-wrapper,
