@@ -231,6 +231,39 @@ html, body {
 .sidebar-left .sz-filter-foot .sz-ff-actions { flex-direction: column !important; }
 .sidebar-left .sz-filter-foot .sz-ff-show,
 .sidebar-left .sz-filter-foot .sz-ff-cancel { width: 100% !important; }
+/* Volby v sekci (checkbox | text | počet) – čistý řádek, ŽÁDNÝ překryv
+   (v úzkém sidebaru se to lámalo/překrývalo). */
+.sidebar-left #filters .fieldsetinner {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+.sidebar-left #filters .fieldsetinner > div { width: 100% !important; position: static !important; }
+.sidebar-left #filters .filter-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  padding: 7px 6px !important;
+  margin: 0 !important;
+  white-space: normal !important;
+  border-radius: 8px !important;
+  line-height: 1.3 !important;
+}
+.sidebar-left #filters .filter-label:hover { background: #f4f6f8 !important; }
+.sidebar-left #filters .filter-label input {
+  flex: 0 0 auto !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+}
+.sidebar-left #filters .filter-label .filter-count {
+  margin-left: auto !important;
+  flex: 0 0 auto !important;
+  color: #667085 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
 
 /* =========================================================
    FILTRY – jednotný vzhled + rozbalování. Selektory NAVÁZANÉ NA
