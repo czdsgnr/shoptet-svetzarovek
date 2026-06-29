@@ -626,7 +626,7 @@ body.type-product .p-image .flags-extra,
    render-blocking načtení) → buy box je pak NEVIDITELNÝ. Forcujeme opacity:1,
    ať je košík vždy vidět. (script.js, co dělal duplicitní název, je smazaný,
    takže to nic nerozbije.) */
-.p-detail .p-info-wrapper {
+.p-info-wrapper {
   opacity: 1 !important;
 }
 
