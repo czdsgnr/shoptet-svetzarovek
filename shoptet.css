@@ -102,6 +102,11 @@ html, body {
   }
 }
 
+/* Horní informační lišta (.site-msg) – modrá. */
+.site-msg {
+  background-color: #2550b2 !important;
+}
+
 /* Modré/šedé linky kolem nav menu z původního style.css
    (.navigation-in border-top #1977b5, #navigation border-bottom #e4e4e4)
    – na tmavém headeru ruší, sjednotíme do tmava. */
