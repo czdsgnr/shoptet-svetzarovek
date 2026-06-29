@@ -213,6 +213,18 @@
       h4.parentElement.classList.toggle('sz-open');
     });
 
+    /* Výběr hodnoty filtru (label/checkbox/cena) spustí AJAX překreslení.
+       Aktivní stav (badge + zvýraznění) se jinak ukáže až po obnovení –
+       proto markActiveFilters spustíme i opakovaně se zpožděním po kliknutí. */
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.filters .filter-label, .filters .filter-section input, .filters .price-save, .filters fieldset')) return;
+      [150, 500, 1000, 2000, 3500].forEach(function (ms) { setTimeout(markActiveFilters, ms); });
+    });
+    document.addEventListener('change', function (e) {
+      if (!e.target.closest('.filters')) return;
+      [150, 500, 1000, 2000].forEach(function (ms) { setTimeout(markActiveFilters, ms); });
+    });
+
     /* Shoptet/dklab překresluje filtry přes AJAX (URL ?pvXX=…) a ne vždy
        padne náš event → MutationObserver re-normalizuje po každé změně DOM.
        Sleduje jen childList (ne atributy) → naše změny tříd ho neretriggrují. */

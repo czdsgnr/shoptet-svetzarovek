@@ -112,16 +112,27 @@ html, body {
 #filters .filter-sections,
 #category-filter-hover { align-items: flex-start !important; }
 
-/* Horní řádek (Dle ceny + Dle štítku) = 50/50, ať vyplní šířku rovnoměrně.
-   Dle štítku měl nativně width:70% + padding-left:25px → obří karta s
-   obsahem vlevo a prázdnem ("border, ale obsah jinde"). Srovnáno. */
-#filters .slider-wrapper,
-#filters .param-filter-top {
-  width: 50% !important;
-  max-width: none !important;
-  flex: 0 0 auto !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+/* DESKTOP horní řádek (Dle ceny + Dle štítku) = 50/50. Dle štítku měl
+   nativně width:70% + padding → obří karta s obsahem vlevo. Srovnáno. */
+@media (min-width: 768px) {
+  #filters .slider-wrapper,
+  #filters .param-filter-top {
+    width: 50% !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+  }
+}
+/* MOBIL: filtry na celou šířku pod sebou (50% je rozbíjelo / překrývalo
+   tlačítko Filtrovat a část nebyla vidět). */
+@media (max-width: 767px) {
+  #filters .filter-section-parametric,
+  #filters .slider-wrapper,
+  #filters .param-filter-top {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+    order: 0 !important;
+  }
 }
 
 /* tři typy karet */
@@ -132,6 +143,7 @@ html, body {
   border-radius: 10px !important;
   background: #fff !important;
   margin-bottom: 10px !important;
+  padding: 0 !important;          /* nativní padding:0 4px dělal rámeček kolem hlavičky */
   box-sizing: border-box !important;
   transition: border-color .15s, box-shadow .15s !important;
 }
