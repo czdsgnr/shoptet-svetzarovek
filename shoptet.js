@@ -214,11 +214,63 @@
     });
   }
 
+  /* === Reskin filtru: hlavička + patička (přídavně) ===================
+     Nativní filtr (data + filtrování) necháme být, jen kolem něj postavíme
+     hezký „card" chrome dle návrhu: hlavička s ikonou/titulkem + „Vymazat vše",
+     patička s počtem + „Zrušit filtry" / „Zobrazit produkty". Idempotentní. */
+  function buildFilterChrome() {
+    var box = document.querySelector('.box-filters');
+    if (!box || box.querySelector('.sz-filter-head')) return;
+    box.classList.add('sz-filter-card');
+
+    // počet produktů (z "X položek celkem")
+    var cntText = '';
+    var nodes = document.querySelectorAll('main span, main p, main div, .content span, .content p');
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].children.length === 0 && /\d[\d\s]*\s*položek\s+celkem/i.test(nodes[i].textContent)) {
+        cntText = nodes[i].textContent.trim().replace(/položek\s+celkem/i, 'produktů odpovídá výběru');
+        break;
+      }
+    }
+
+    var head = document.createElement('div');
+    head.className = 'sz-filter-head';
+    head.innerHTML =
+      '<div class="sz-fh-left">' +
+        '<span class="sz-fh-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
+        '<div><div class="sz-fh-title">Filtrovat produkty</div><div class="sz-fh-sub">Vyberte parametry a rychle zúžte nabídku.</div></div>' +
+      '</div>' +
+      '<button type="button" class="sz-fh-clear">Vymazat vše</button>';
+
+    var foot = document.createElement('div');
+    foot.className = 'sz-filter-foot';
+    foot.innerHTML =
+      '<div class="sz-ff-count">' + (cntText || '') + '</div>' +
+      '<div class="sz-ff-actions">' +
+        '<button type="button" class="sz-ff-cancel">Zrušit filtry</button>' +
+        '<button type="button" class="sz-ff-show">Zobrazit produkty</button>' +
+      '</div>';
+
+    box.insertBefore(head, box.firstChild);
+    box.appendChild(foot);
+
+    function clearAll() { window.location.href = window.location.pathname; } // odebere ?pvXX=…
+    head.querySelector('.sz-fh-clear').addEventListener('click', clearAll);
+    foot.querySelector('.sz-ff-cancel').addEventListener('click', clearAll);
+    foot.querySelector('.sz-ff-show').addEventListener('click', function () {
+      // zavři otevřené sekce + sjeď na výpis
+      document.querySelectorAll('#filters .sz-open').forEach(function (s) { s.classList.remove('sz-open'); });
+      var list = document.querySelector('.products-block, #products, .product-list');
+      if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
     initFilters();        // vodorovné filtry NAD obsahem (ne sidebar)
     initFilterToggle();   // + vlastní rozbalování (klik na hlavičku)
+    buildFilterChrome();  // hlavička + patička filtru (reskin)
     initDetailSklad();
     moveAltToBottom();
     moveUspBelowProduct();
@@ -230,7 +282,7 @@
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
-  function reinitFilters() { initFilters(); initFilterToggle(); }
+  function reinitFilters() { initFilters(); initFilterToggle(); buildFilterChrome(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageProductsLoaded', reinitFilters);
