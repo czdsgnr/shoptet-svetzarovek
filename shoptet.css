@@ -456,12 +456,12 @@ html, body {
 .p-final-price-wrapper:has(.price-save) .price-final * {
   color: #e30613 !important;
 }
-/* Detail produktu: slevový badge (.flags-extra) nahoru-vpravo na obrázek
-   (byl dole) – jen na detailu, karty ve výpisu nech být. */
+/* Detail produktu: slevový badge (.flags-extra) úplně do pravého horního
+   rohu (top:0/right:0) – zarovnaný k vrchu se štítky Akce/Výprodej vlevo. */
 body.type-product .p-image .flags-extra,
 .p-detail-inner .p-image .flags-extra {
-  top: 12px !important;
-  right: 12px !important;
+  top: 0 !important;
+  right: 0 !important;
   bottom: auto !important;
   left: auto !important;
 }
@@ -544,18 +544,25 @@ body.type-product .p-image .flags-extra,
   color: #04a70f !important;
 }
 /* MOBIL: řádky pod sebe (label nad hodnotou), zalomení, ať pravá strana
-   nepřetéká z obrazovky a "Litoměřice / expedice" se nezalamuje divně. */
+   nepřetéká. KOMPAKTNĚ – bylo to roztahané (menší padding/font/mezery). */
 @media (max-width: 767px) {
+  .p-info-wrapper .sklad {
+    padding: 2px 12px !important;
+    margin-top: 10px !important;
+  }
   .p-info-wrapper .sklad tr {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 2px !important;
+    gap: 0 !important;
+    padding: 7px 0 !important;
   }
   .p-info-wrapper .sklad th,
   .p-info-wrapper .sklad td {
     width: 100% !important;
     text-align: left !important;
     white-space: normal !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
   }
 }
 
