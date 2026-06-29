@@ -343,6 +343,74 @@
     });
   }
 
+  /* === Karta podpory v KOŠÍKU → bohatší „help" karta (návrh klienta) ====
+     Přestaví nativní .contact-box v košíku na kartu: hlavička s ikonou, intro
+     s fotkou poradce, lišta otevírací doby (živý stav Po–Pá 8:00–16:30), řádky
+     s ikonou+popiskem, patička. Data (tel/mobil/mail/FB/foto/nadpis) bere
+     z původního DOMu. CSS = `.contact-box.sz-help …`. Idempotentní (guard
+     `.sz-help`); po AJAX překreslení košíku se původní vrátí → přestaví znovu.
+     POZOR: mobil má v nativním DOMu rozbitý vnořený odkaz (escapované <a> v href)
+     → bereme JEN čistý `tel:+…` odkaz a href sanitizujeme (jinak rozbije markup). */
+  function buildHelpCard() {
+    var ico = {
+      help: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>',
+      phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>',
+      mobile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="11" y1="18" x2="13" y2="18"/></svg>',
+      mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="m2 7 10 6 10-6"/></svg>',
+      fb: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg>',
+      go: '<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
+    };
+    function clean(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
+    function safeHref(h) { return (h || '').replace(/[<>"\s]/g, '').trim(); }
+    function pickTel(cb, scope) {
+      var a = cb.querySelector(scope + ' a[href^="tel:+"]') || cb.querySelector(scope + ' a[href^="tel:"]');
+      if (!a) return null;
+      var text = clean(a.textContent);
+      var href = safeHref(a.getAttribute('href'));
+      if (!/^tel:\+?\d{6,}$/.test(href)) href = 'tel:' + text.replace(/[^\d+]/g, '');
+      return { href: href, text: text };
+    }
+    function pickA(cb, scope) {
+      var a = cb.querySelector(scope + ' a');
+      if (!a) return null;
+      return { href: safeHref(a.getAttribute('href')), text: clean(a.textContent) };
+    }
+    function row(cls, d, svg, k, v) {
+      if (!d || !d.href) return '';
+      var target = /^https?:/.test(d.href) ? ' target="_blank" rel="noopener"' : '';
+      return '<a class="row ' + cls + '" href="' + d.href + '"' + target + '>' +
+        '<span class="ico">' + svg + '</span>' +
+        '<span class="rbody"><span class="k">' + k + '</span><span class="v">' + (v || d.text) + '</span></span>' +
+        ico.go + '</a>';
+    }
+    [].forEach.call(document.querySelectorAll('.cart-content .contact-box, .sidebar-in-cart .contact-box'), function (cb) {
+      if (cb.classList.contains('sz-help')) return;
+      var tel = pickTel(cb, '.tel'), cell = pickTel(cb, '.cellphone'),
+          mail = pickA(cb, '.mail'), fb = pickA(cb, '.facebook');
+      var imgEl = cb.querySelector('img');
+      var imgSrc = imgEl ? safeHref(imgEl.getAttribute('src') || imgEl.getAttribute('data-src')) : '';
+      var heading = clean((cb.querySelector('h2, .h4') || {}).textContent) || 'Potřebujete pomoc?';
+      var now = new Date(), day = now.getDay(), mins = now.getHours() * 60 + now.getMinutes();
+      var open = day >= 1 && day <= 5 && mins >= 480 && mins < 990; // Po–Pá 8:00–16:30
+      cb.classList.add('sz-help');
+      cb.innerHTML =
+        '<div class="help__top">' + ico.help + '<h3>' + heading + '</h3></div>' +
+        '<div class="help__intro">' +
+          (imgSrc ? '<span class="avatar"><img src="' + imgSrc + '" alt="Poradce" loading="lazy"></span>' : '') +
+          '<span class="who"><span class="lead">Rádi vám poradíme</span><span class="sub">S výběrem žárovky i parametry</span></span>' +
+        '</div>' +
+        '<div class="hours' + (open ? ' open' : '') + '"><span class="dot"></span><span class="state">' +
+          (open ? 'Máme otevřeno' : 'Zavřeno') + '</span><span class="sep">·</span><span class="time">Po–Pá 8:00–16:30</span></div>' +
+        '<div class="help__list">' +
+          row('primary', tel, ico.phone, 'Zavolejte nám') +
+          row('', cell, ico.mobile, 'Mobil') +
+          row('', mail, ico.mail, 'Napište nám') +
+          row('', fb, ico.fb, 'Sledujte nás', 'Facebook') +
+        '</div>' +
+        '<div class="help__foot">Obvykle odpovídáme do několika hodin</div>';
+    });
+  }
+
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
@@ -356,6 +424,7 @@
     addOrigPrice();
     moveBadgeToCard();
     styleContactCard();
+    buildHelpCard();
   }
 
   if (document.readyState !== 'loading') initAll();
@@ -380,6 +449,12 @@
   window.addEventListener('load', styleContactCard);
   document.addEventListener('ShoptetDOMCartContentLoaded', styleContactCard);
   setTimeout(styleContactCard, 1000);
+  // karta podpory v košíku – po načtení i po AJAX překreslení košíku
+  function reinitHelp() { styleContactCard(); buildHelpCard(); }
+  window.addEventListener('load', reinitHelp);
+  document.addEventListener('ShoptetDOMCartContentLoaded', reinitHelp);
+  setTimeout(reinitHelp, 800);
+  setTimeout(reinitHelp, 2000);
   // detail – varianty/skladovost/slider se renderují později
   document.addEventListener('ShoptetDOMPageContentLoaded', moveAltToBottom);
   setTimeout(moveAltToBottom, 600);
