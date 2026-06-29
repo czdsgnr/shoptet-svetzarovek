@@ -100,6 +100,15 @@ html, body {
   body:not(.navigation-window-visible) .menu-helper {
     color: #fff !important;
   }
+  /* Košík: ikona (::before) byla vybledlá (#3C7781) → bílá. */
+  body:not(.cart-window-visible):not(.empty-cart-hover-visible) a[data-target="cart"]::before {
+    color: #fff !important;
+  }
+  /* Burger: pryč barevné pozadí (box #216D8F) za čárami – čáry zůstanou. */
+  .responsive-tools > a[data-target="navigation"]::before,
+  a[data-target="navigation"]::before {
+    background-color: transparent !important;
+  }
 }
 
 /* Horní informační lišta (.site-msg) – modrá. */
