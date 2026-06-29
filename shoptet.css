@@ -332,6 +332,10 @@ html, body {
 #filters .filter-sections,
 #category-filter-hover { align-items: flex-start !important; }
 
+/* Filtr: pryč šedé pozadí .filter-sections (#f6f6f6 z theme style.css) */
+#filters .filter-sections,
+.sidebar-left #filters .filter-sections { background-color: transparent !important; }
+
 /* DESKTOP horní řádek (Dle ceny + Dle štítku) = 50/50. Dle štítku měl
    nativně width:70% + padding → obří karta s obsahem vlevo. Srovnáno. */
 @media (min-width: 768px) {
