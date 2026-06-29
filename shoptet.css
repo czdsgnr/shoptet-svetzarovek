@@ -118,6 +118,7 @@ html, body {
 #filters .slider-wrapper,
 #filters .param-filter-top {
   width: 50% !important;
+  max-width: none !important;
   flex: 0 0 auto !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
