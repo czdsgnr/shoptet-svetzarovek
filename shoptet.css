@@ -114,7 +114,8 @@ html, body {
      a #header jsou sourozenci → zvednutím .top-navigation-bar nad #header (1001)
      se křížek dostane NAD overlay a jde kliknout. */
   body.navigation-window-visible .top-navigation-bar {
-    z-index: 1001 !important;
+    position: relative !important;
+    z-index: 1100 !important;
   }
 }
 
