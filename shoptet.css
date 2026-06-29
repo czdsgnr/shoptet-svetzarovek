@@ -994,6 +994,27 @@ body.type-product .p-image .flags-extra,
 .contact-box.sz-help .row:hover .go{opacity:1;}
 .contact-box.sz-help .help__foot{padding:10px 16px 14px !important;border-top:1px solid #e3e8ea !important;font-size:11.5px !important;color:#94a1a6 !important;text-align:center !important;}
 
+/* Košík: VYPNOUT theme dekorace boxů (border, šedé pozadí #f6f6f6, padding) –
+   přání klienta. Karta podpory (.sz-help) i souhrn pak stojí čistě na bílé. */
+.cart-content.checkout-box-wrapper,
+.cart-content.summary-wrapper,
+.checkout-box,
+.order-summary-item.price,
+#checkoutSidebar .next-step,
+#checkoutSidebar .order-summary-inner,
+#checkoutSidebar .form-group.consents,
+.ucet,
+.radio-wrapper,
+.payment-logo,
+.contact-box img {
+  background: transparent !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+}
+.cart-content.checkout-box-wrapper,
+.cart-content.summary-wrapper,
+.checkout-box { padding: 0 !important; }
+
 /* ---------------------------------------------------------
    USP pruh (.benefitBanner) – ikony NAD nadpis+text a větší,
    vše vystředěné (původně ikona vlevo vedle textu).
