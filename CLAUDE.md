@@ -39,8 +39,9 @@ Náš CSS+JS se načítá **STATICKY** (render-blocking → bez FOUC/blikání):
   aktuální soubor = dobré pro test; browser uživatele drží cache dle `?v`.)
 - **Dev-loader** (JS injektoval CSS s `?t=Date.now()`) cache obchází vždy, ALE
   **blikalo to** (FOUC) a JS běžel pozdě „náhodou až po motivu" → nepoužívat.
-- **Stav verze k handoffu: live je `?v=7` = commit `3826560` (CHYBNÝ, jumbled sklad
-  text). HEAD `237f57a` je SPRÁVNÝ → uživatel musí nasadit `?v=8` a ověřit.**
+- **Stav verze k handoffu: uživatel má v hlavě cachované `?v=7` (staré, bez dnešních
+  oprav). HEAD `03d8d13` je SPRÁVNÝ a celý deployed → uživatel musí nasadit `?v=8`
+  (oba tagy) a tvrdý reload, aby dnešní opravy + košíkovou kartu viděl naživo.**
 
 ## 4. Mapa souborů
 ### shoptet.js — `initAll()` volá v pořadí:
@@ -129,13 +130,21 @@ badge · USP pruh · karta podpory `.contact-box` · mobil (`@media max-width:76
 - **NOVÉ dnes:** ① `detailReady()` strážce → **opravená rozbitá pravá strana detailu**
   při statickém `<script defer>` (GOTCHA #1). ② `.filter-sections` **bez šedého pozadí**
   (override theme #f6f6f6 → transparent). ③ **opravený duplicitní „Můžeme doručit do"**
-  (skrytý orphan label, GOTCHA #2).
+  (skrytý orphan label, GOTCHA #2). ④ **karta podpory v KOŠÍKU → bohatší „help" karta**
+  (`buildHelpCard` v shoptet.js + `.contact-box.sz-help` CSS): teal hlavička s ikonou,
+  intro s fotkou poradce, lišta otevírací doby se **živým stavem** (Po–Pá 8:00–16:30),
+  řádky s ikonou+popiskem, patička. GOTCHA: mobil má v DOMu rozbitý vnořený odkaz
+  (escapované `<a>` v href) → bereme jen `tel:+…` + sanitizace; fotka je v `data-src`
+  (lazy-load dává do `src` 1×1 placeholder). Commity `91c563c`, `03d8d13`.
 
 **⚠️ NUTNÉ HNED V DALŠÍM CHATU:**
 1. **Uživatel nasadí `?v=8`** (oba tagy) a **tvrdý reload** → ověřit naživo:
-   (a) pravá strana detailu kompletní (nadpis, hodnocení, sklad, štítky), bez blikání;
-   (b) sklad čte **„Skladem 1 ks, Můžeme doručit do 1.7.2026"** BEZ druhého „Můžeme
-   doručit do" na konci. (Live `?v=7` je ještě chybný — viz sekce 3.)
+   (a) detail: pravá strana kompletní (nadpis, hodnocení, sklad, štítky), bez blikání;
+   (b) detail sklad čte **„Skladem 1 ks, Můžeme doručit do 1.7.2026"** BEZ druhého
+   „Můžeme doručit do" na konci;
+   (c) **košík `/kosik/`: nová karta podpory** (teal hlavička, FOTKA poradce, otevírací
+   doba, řádky tel/mobil/mail/FB) — jen JEDEN nadpis, fotka načtená.
+   (Vše ověřeno přes injektnuté deployed soubory; live `?v=7` to ještě nemá — viz sekce 3.)
 
 **ROZDĚLÁNO / DALŠÍ:**
 - **🆕 Pořadí sekcí filtru v kategorii (přání klienta).** Klient: „přehazovalo se to —
@@ -159,8 +168,8 @@ badge · USP pruh · karta podpory `.contact-box` · mobil (`@media max-width:76
 
 ## 9. První kroky v novém chatu
 1. Přečíst **tenhle CLAUDE.md** + paměť (`MEMORY.md`, `shoptet-svetzarovek-cdn-setup.md`).
-2. `git log --oneline -20` (poslední práce dnes: `a53af3d` detailReady, `97c5f23`
-   filtr bg, `3826560` chybný flex, `237f57a` oprava duplicit. textu).
+2. `git log --oneline -20` (dnešní práce: `a53af3d` detailReady, `97c5f23` filtr bg,
+   `237f57a` oprava duplicit. sklad textu, `91c563c` košík help karta, `03d8d13` fix fotky).
 3. **Vyřídit „NUTNÉ HNED" ze sekce 7** — říct uživateli ať nasadí `?v=8` a ověřit
    naživo v prohlížeči (detail pravá strana + skladový text).
 4. Pak pokračovat **pořadím sekcí filtru** (sekce 7, přání klienta) nebo Fází B.
