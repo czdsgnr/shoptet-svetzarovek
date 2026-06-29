@@ -287,7 +287,9 @@
   // Eventy padnou DŘÍV, než dklab nastaví checked/URL aktivního filtru
   // → markActiveFilters spouštíme i opakovaně se zpožděním po každém eventu.
   function scheduleMarkActive() {
-    [0, 250, 600, 1200, 2500].forEach(function (ms) { setTimeout(markActiveFilters, ms); });
+    // normalizeFilterState = otevře aktivní (checked) filtr + označí badge;
+    // opakovaně, protože dklab nastaví checked/URL až po eventu.
+    [0, 250, 600, 1200, 2500].forEach(function (ms) { setTimeout(normalizeFilterState, ms); });
   }
   function reinitFilters() { initFilters(); initFilterToggle(); scheduleMarkActive(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
