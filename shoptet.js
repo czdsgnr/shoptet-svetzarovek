@@ -285,6 +285,13 @@
     box.insertBefore(head, box.firstChild);
     box.appendChild(foot);
 
+    // schovat nativní „× Zrušit filtry" (máme vlastní v patičce/hlavičce)
+    [].forEach.call(box.querySelectorAll('a, button, span'), function (el) {
+      if (el.closest('.sz-filter-head') || el.closest('.sz-filter-foot')) return;
+      var t = (el.textContent || '').trim();
+      if (/^.{0,2}\s*Zrušit filtr/i.test(t) && t.length < 20) el.style.display = 'none';
+    });
+
     function clearAll() { window.location.href = window.location.pathname; } // odebere ?pvXX=…
     head.querySelector('.sz-fh-clear').addEventListener('click', clearAll);
     foot.querySelector('.sz-ff-cancel').addEventListener('click', clearAll);
