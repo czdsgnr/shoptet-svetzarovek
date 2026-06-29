@@ -546,24 +546,34 @@ body.type-product .p-image .flags-extra,
 .p-info-wrapper .sklad .centralniskald td {
   color: #04a70f !important;
 }
-/* Skladovost kompaktně a na jeden řádek (desktop i mobil) – ať řádek není
-   vysoký a hodnota je svisle ZAROVNANÁ s labelem (align-items:center na řádku
-   pak sedí). Theme má line-height:30px/font:17px → bylo to roztažené nahoru. */
-.p-info-wrapper .sklad .availability-value,
-.p-info-wrapper .sklad .availability-value * {
+/* Skladovost kompaktně na jeden řádek (desktop i mobil) – ať řádek není
+   vysoký a hodnota je svisle ZAROVNANÁ/vycentrovaná s labelem.
+   Vyšší specificita přes "td" (theme má line-height:30px/font:17px s vyšší
+   specificitou, nižší selektor prohrával). */
+.p-info-wrapper .sklad td .availability-value,
+.p-info-wrapper .sklad td .availability-value .availability-label,
+.p-info-wrapper .sklad td .availability-value .availability-amount,
+.p-info-wrapper .sklad td .availability-value .delivery-time,
+.p-info-wrapper .sklad td .availability-value .delivery-in-detail,
+.p-info-wrapper .sklad td .availability-value .delivery-in-detail *,
+.p-info-wrapper .sklad td .availability-value .delivery-time-label {
   line-height: 1.35 !important;
   font-size: 14px !important;
   margin: 0 !important;
   padding: 0 !important;
   min-height: 0 !important;
+  height: auto !important;
 }
-.p-info-wrapper .sklad .availability-value .availability-label,
-.p-info-wrapper .sklad .availability-value .availability-amount,
-.p-info-wrapper .sklad .availability-value .delivery-time,
-.p-info-wrapper .sklad .availability-value .delivery-in-detail,
-.p-info-wrapper .sklad .availability-value .delivery-time-label {
+.p-info-wrapper .sklad td .availability-value .availability-label,
+.p-info-wrapper .sklad td .availability-value .availability-amount,
+.p-info-wrapper .sklad td .availability-value .delivery-time,
+.p-info-wrapper .sklad td .availability-value .delivery-in-detail,
+.p-info-wrapper .sklad td .availability-value .delivery-time-label {
   display: inline !important;
 }
+/* pojistka: i kdyby hodnota byla vyšší, zarovnat řádek k vrchu, ať label
+   sedí s prvním řádkem hodnoty (ne pod ním). */
+.p-info-wrapper .sklad tr { align-items: flex-start !important; }
 /* MOBIL: řádky pod sebe (label nad hodnotou), zalomení, ať pravá strana
    nepřetéká. KOMPAKTNĚ – bylo to roztahané (menší padding/font/mezery). */
 @media (max-width: 767px) {
