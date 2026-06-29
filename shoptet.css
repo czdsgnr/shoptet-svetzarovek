@@ -767,6 +767,20 @@ body.type-product .p-image .flags-extra,
 .p-info-wrapper .sklad td .availability-value .delivery-time-label {
   display: inline !important;
 }
+/* Pořadí v buňce má číst "2 dny, Můžeme doručit do <datum>". Nativně stojí
+   popisek .delivery-in-detail ("Můžeme doručit do") AŽ ZA datem (.delivery-time)
+   → flex order ho přehodí PŘED datum (žádný JS, drží i po AJAX). Čárka jen když
+   datum existuje (:has), ať není u produktů bez data osamocená. */
+.p-info-wrapper .sklad td .availability-value {
+  display: inline-flex !important;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 5px;
+}
+.p-info-wrapper .sklad td .availability-value .availability-label { order: 1 !important; }
+.p-info-wrapper .sklad td .availability-value .delivery-in-detail { order: 2 !important; }
+.p-info-wrapper .sklad td .availability-value .delivery-time { order: 3 !important; }
+.p-info-wrapper .sklad td .availability-value:has(.delivery-in-detail) .availability-label::after { content: ","; }
 /* pojistka: i kdyby hodnota byla vyšší, zarovnat řádek k vrchu, ať label
    sedí s prvním řádkem hodnoty (ne pod ním). */
 .p-info-wrapper .sklad tr { align-items: flex-start !important; }
