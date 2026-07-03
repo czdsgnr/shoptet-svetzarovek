@@ -325,6 +325,10 @@
 
     // Anti-flash: filtr byl skrytý (opacity:0), teď má chrome → odkrýt (fade).
     box.classList.add('sz-ready');
+    // STICKY odhalení: třída na STABILNÍM rodiči → po prvním zobrazení už se
+    // filtr neschová ani když motiv .box-filters překreslí (jinak blikání).
+    var cw = document.querySelector('.content-wrapper-in');
+    if (cw) cw.classList.add('sz-filters-shown');
   }
 
   /* === Karta podpory „Potřebujete pomoc?" (.contact-box) ===============

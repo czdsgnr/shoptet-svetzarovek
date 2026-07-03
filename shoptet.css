@@ -148,11 +148,15 @@ html, body {
    (hlavička/patička) doplní JS až po načtení → probliknutí. Proto filtr
    držíme skrytý (opacity:0), dokud mu JS nepřidá .sz-ready (chrome hotové),
    pak ho jemně ukážeme. Failsafe: i kdyby JS selhal, ukáže se po 1.2 s. */
-.sidebar-left .box-filters:not(.sz-ready) {
+/* STICKY přes třídu na STABILNÍM rodiči (.content-wrapper-in): motiv při AJAX
+   načtení dat filtru .box-filters PŘEKRESLÍ (nový element bez .sz-ready) → dřív
+   to znovu spadlo na opacity:0 a probliklo. Třída na rodiči se po prvním
+   zobrazení už nesundá → filtr zůstane vidět i po překreslení = žádné blikání. */
+.content-wrapper-in:not(.sz-filters-shown) .sidebar-left .box-filters {
   opacity: 0;
-  animation: szFilterReveal 0.01s linear 1.2s forwards;
+  animation: szFilterReveal 0.01s linear 1.2s forwards; /* failsafe kdyby JS selhal */
 }
-.sidebar-left .box-filters.sz-ready {
+.content-wrapper-in.sz-filters-shown .sidebar-left .box-filters {
   opacity: 1;
   transition: opacity 0.18s ease;
 }
@@ -633,6 +637,22 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
 .products-block .p .p-code span {
   font-size: 15px !important;
 }
+
+/* Kód produktu → vycentrovaný POD fotku (dřív vpravo dole; přání klienta).
+   Karta = flex sloupec: fotka → kód → zbytek (hvězdy/název/cena/koš).
+   Badge .flags-extra je position:absolute → flex se ho netýká. */
+.products-block .p { display: flex !important; flex-direction: column !important; }
+.products-block .p > .image { order: 1 !important; }
+.products-block .p > .p-code {
+  order: 2 !important;
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  margin: 8px 0 4px !important;
+  inset: auto !important;
+}
+.products-block .p > .p-in { order: 3 !important; }
 
 /* Přeškrtnutá původní cena nad akční cenou (přidává shoptet.js). */
 .products-block .p .p-orig-price {
