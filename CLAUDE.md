@@ -101,6 +101,14 @@ badge · USP pruh · karta podpory `.contact-box` · mobil (`@media max-width:76
   světle teal pozadí ikon #eaf3f5.
 
 ## 6. GOTCHAS (sem koukni, než něco „opravíš"!)
+0. **BLIKÁNÍ KATEGORIE = přesouvací válka (vyřešeno 2026-07-03, commit `560597e`).**
+   `moveFilterToSidebar` měl MutationObserver, který vracel `.box-filters` do
+   sidebaru při KAŽDÉM překreslení. Motiv dnes drží filtr v sidebaru sám
+   (`data-filters-default-position="left"`), takže observer se s ním jen pral o
+   pozici → box POSKAKOVAL nahoru/dolů = blikání. **Observer ODSTRANĚN**, přesun
+   řídí jen jednorázová volání na eventech. NEVRACET observer! (Diagnóza: rychlé
+   snímky během loadu ukázaly sidebar střídat 2 stavy; disconnect observeru →
+   okamžitě stabilní.)
 1. **❗ TIMING RACE — motiv staví pravý sloupec detailu AŽ po DOMContentLoaded.**
    `<script defer>` spustí náš JS PRÁVĚ na DOMContentLoaded → běžel **dřív** než motiv
    přesune do `.p-info-wrapper` nadpis/hodnocení/skladovost/štítky → náš DOM zásah
