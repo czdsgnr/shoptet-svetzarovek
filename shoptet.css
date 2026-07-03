@@ -398,6 +398,37 @@ html, body {
   }
 }
 
+/* === POŘADÍ SEKCÍ FILTRU (přání klienta) ============================
+   Shora: Příznaky → Patice → Příkon → Barva světla → Barevná teplota →
+   Odstín → Délka (mm) → Světelný tok → (ostatní parametry) → Dle ceny.
+   Řadí se přes flex `order`. Kontejnery musí být flex – theme je má `block`
+   s vysokou specificitou, proto SILNÉ selektory (html body #content-wrapper …).
+   `order` cílí na třídy, které přidává initFilters (shoptet.js) z nadpisů h4
+   (diakritika se strhává: Příkon→pkon, Odstín→odstn, Barva světla→barvasvtla…).
+   Číslo produktu/param se liší dle kategorie – řadíme podle názvu, ne id. */
+html body #content-wrapper #filters.filters.visible {
+  display: flex !important;
+  flex-direction: column !important;
+}
+html body #content-wrapper #filters.filters.visible > .filtrovat { order: -100 !important; } /* mobil toggle nahoře */
+html body #content-wrapper #filters.filters.visible > .param-filter-top { order: 1 !important; } /* Příznaky nahoře */
+html body #content-wrapper #filters.filters.visible > .filter-sections { order: 2 !important; }
+html body #content-wrapper #filters .filter-sections .visible.visible {
+  display: flex !important;
+  flex-direction: column !important;
+}
+html body #content-wrapper #filters .filter-sections .visible > .param-filter-top { order: 0 !important; } /* Příznaky i kdyby bylo uvnitř */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section { order: 20 !important; } /* default pro neuvedené parametry */
+html body #content-wrapper #filters .filter-sections .visible > .slider-wrapper { order: 100 !important; } /* Dle ceny dole */
+html body #content-wrapper #filters .filter-sections .visible > .patice { order: 2 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .pkon { order: 3 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .barvasvtla { order: 4 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .barevnteplota { order: 5 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .odstn { order: 6 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .dlkamm { order: 7 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .svtelntok { order: 8 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9 !important; }
+
 /* tři typy karet */
 #filters .filter-section-parametric,
 #filters .slider-wrapper,
