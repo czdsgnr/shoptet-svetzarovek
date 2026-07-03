@@ -622,6 +622,32 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
 }
 
 /* ---------------------------------------------------------
+   Telefon + otevírací doba VEDLE VYHLEDÁVÁNÍ (přání klienta).
+   JS `buildHeaderPhone` vloží .sz-header-phone do .navigation-buttons.
+   Původní telefon+doba v horní černé liště se skryje (duplicita).
+   --------------------------------------------------------- */
+.top-navigation-bar .top-navigation-contacts { display: none !important; }
+
+.navigation-buttons { display: flex !important; align-items: center !important; }
+.sz-header-phone {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  text-decoration: none !important;
+  color: #fff !important;
+  margin-right: 18px !important;
+  white-space: nowrap;
+}
+.sz-header-phone .szp-ico { flex: none !important; display: inline-flex !important; }
+.sz-header-phone .szp-ico svg { width: 26px !important; height: 26px !important; color: #fff !important; }
+.sz-header-phone .szp-body { display: flex !important; flex-direction: column !important; line-height: 1.15 !important; }
+.sz-header-phone .szp-num { font-size: 17px !important; font-weight: 800 !important; letter-spacing: .2px !important; }
+.sz-header-phone .szp-hrs { font-size: 11px !important; opacity: .75 !important; font-weight: 400 !important; }
+.sz-header-phone:hover .szp-num { text-decoration: underline !important; }
+/* mobil: blok schovat (těsno); theme má vlastní telefon v .responsive-tools */
+@media (max-width: 991px) { .sz-header-phone { display: none !important; } }
+
+/* ---------------------------------------------------------
    Hvězdičky na kartách překrývaly kód (obj.č.)
    .stars-wrapper měl position:absolute; top:-22px → plaval přes
    .p-code. Vracíme do normálního toku → kód nahoře, hvězdičky pod.
