@@ -39,10 +39,20 @@ Náš CSS+JS se načítá **STATICKY** (render-blocking → bez FOUC/blikání):
   aktuální soubor = dobré pro test; browser uživatele drží cache dle `?v`.)
 - **Dev-loader** (JS injektoval CSS s `?t=Date.now()`) cache obchází vždy, ALE
   **blikalo to** (FOUC) a JS běžel pozdě „náhodou až po motivu" → nepoužívat.
-- **Stav verze k handoffu: HEAD `031ec19`, celé deployed → uživatel nasadit `?v=10`
-  (oba tagy) + tvrdý reload. POZOR: během session se verze měnila 7→8→9→10, protože
-  každý další push do stejného souboru zneplatní dříve cachnuté číslo. Pro nový chat
-  začni rovnou vyšším číslem (≥10) a po každé úpravě nové.**
+- **Stav verze k handoffu: HEAD `c8be9b6`, celé deployed → uživatel nasadit `?v=14`
+  (oba tagy) + tvrdý reload. POZOR: verze se během session měnila 7→…→14, protože
+  každý push do stejného souboru zneplatní dříve cachnuté číslo. Vždy NOVÉ číslo.**
+- **GITHUB PAGES VÝPADEK (2026-07-03):** deploy job spadl (`Deployment failed, try
+  again later.`) + runy vázly 15+ min „queued" (build OK, deploy ne) = chyba GitHubu,
+  ne kódu. Když se úprava „neprojevuje", ZKONTROLUJ `gh run list`! Fix: `gh run rerun
+  <id> --failed` nebo pushnout znovu (nový push nakonec prošel).
+- **Dnes navíc (commity `2f8834e`,`c8be9b6`):** ⑧ **pořadí sekcí filtru** (Příznaky
+  nahoře → params → Dle ceny dole; flex `order` na `#filters`/.visible, silné
+  selektory `html body #content-wrapper …` protože theme má kontejnery block). ⑨ **kód
+  produktu vycentrovaný pod fotku** na kartách (`.products-block .p` flex-sloupec,
+  order image→p-code→p-in). ⑩ **sticky anti-flash filtru** (třída `sz-filters-shown`
+  na `.content-wrapper-in` → filtr se po 1. zobrazení neschová při AJAX překreslení
+  = konec blikání).
 
 ## 4. Mapa souborů
 ### shoptet.js — `initAll()` volá v pořadí:
