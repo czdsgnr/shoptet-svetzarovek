@@ -670,16 +670,6 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
   box-shadow: 0 0 0 3px rgba(55, 214, 122, .25) !important;
 }
 .sz-header-phone:hover .szp-num { text-decoration: underline !important; }
-
-/* Tlačítko HLEDAT ve vyhledávání bylo odsazené (theme: absolute top:5px right:4px,
-   h51 v boxu h56) → bílá mezera shora i z boku. Vyplnit celý pravý kraj boxu. */
-.header-top .search .search-form .btn-default,
-.header-top .search .search-form button.btn {
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  height: auto !important;
-}
 /* mobil: blok schovat (těsno); theme má vlastní telefon v .responsive-tools */
 @media (max-width: 991px) {
   .sz-header-phone { display: none !important; }
@@ -978,7 +968,8 @@ body.type-product .p-image .flags-extra,
   background-color: #04a70f !important;
   border-color: #04a70f !important;
   color: #fff !important;
-  top: 5px !important;
+  top: 0 !important;      /* bylo 5px → mezera nad tlačítkem; teď plná výška */
+  right: 0 !important;    /* bylo 4px → mezera z boku; teď u pravého kraje */
   bottom: 0 !important;
   height: auto !important;
 }
