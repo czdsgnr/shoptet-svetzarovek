@@ -629,6 +629,10 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
 .top-navigation-bar .top-navigation-contacts { display: none !important; }
 
 .navigation-buttons { display: flex !important; align-items: center !important; }
+/* menší vyhledávání + Přihlášení/košík u pravého kraje (ať vedle je místo na telefon) */
+.header-top { justify-content: space-between !important; }
+.header-top .search { flex: 0 1 460px !important; max-width: 460px !important; width: 460px !important; }
+.header-top .navigation-buttons { margin-left: auto !important; }
 .sz-header-phone {
   display: inline-flex !important;
   align-items: center !important;
@@ -640,12 +644,15 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
 }
 .sz-header-phone .szp-ico { flex: none !important; display: inline-flex !important; }
 .sz-header-phone .szp-ico svg { width: 26px !important; height: 26px !important; color: #fff !important; }
-.sz-header-phone .szp-body { display: flex !important; flex-direction: column !important; line-height: 1.15 !important; }
+.sz-header-phone .szp-body { display: flex !important; flex-direction: column !important; align-items: flex-start !important; line-height: 1.15 !important; }
 .sz-header-phone .szp-num { font-size: 17px !important; font-weight: 800 !important; letter-spacing: .2px !important; }
-.sz-header-phone .szp-hrs { font-size: 11px !important; opacity: .75 !important; font-weight: 400 !important; }
+.sz-header-phone .szp-hrs { font-size: 11px !important; opacity: .75 !important; font-weight: 400 !important; text-align: left !important; }
 .sz-header-phone:hover .szp-num { text-decoration: underline !important; }
 /* mobil: blok schovat (těsno); theme má vlastní telefon v .responsive-tools */
-@media (max-width: 991px) { .sz-header-phone { display: none !important; } }
+@media (max-width: 991px) {
+  .sz-header-phone { display: none !important; }
+  .header-top .search { flex: 1 1 auto !important; max-width: none !important; width: auto !important; }
+}
 
 /* ---------------------------------------------------------
    Hvězdičky na kartách překrývaly kód (obj.č.)
