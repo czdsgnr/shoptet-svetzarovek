@@ -246,25 +246,11 @@
     if (box && sidebar && !sidebar.contains(box)) {
       sidebar.insertBefore(box, sidebar.firstChild);
     }
-    /* Motiv po načtení kategorii překresluje obsah a přesun vrací zpět do
-       mainu → MutationObserver to hlídá a box vždy vrátí do sidebaru.
-       Guard (box už v sidebaru → nic) brání smyčce. */
-    if (window.__szFilterMoveObs) return;
-    var host = document.querySelector('.content-wrapper-in') || document.body;
-    var t;
-    var obs = new MutationObserver(function () {
-      var b = document.querySelector('.box-filters');
-      if (b && !b.closest('.sidebar-left')) {
-        clearTimeout(t);
-        t = setTimeout(function () {
-          var sb = document.querySelector('.sidebar-left');
-          var bb = document.querySelector('.box-filters');
-          if (sb && bb && !sb.contains(bb)) sb.insertBefore(bb, sb.firstChild);
-        }, 50);
-      }
-    });
-    obs.observe(host, { childList: true, subtree: true });
-    window.__szFilterMoveObs = obs;
+    /* POZN.: Dřív tu byl MutationObserver, který box vracel do sidebaru při
+       každém překreslení. Motiv dnes filtr v sidebaru drží SÁM
+       (data-filters-default-position="left"), takže observer byl zbytečný a
+       jen se s motivem pral o pozici → box POSKAKOVAL = blikání kategorie.
+       ODSTRANĚNO. Přesun řídí jen jednorázově volání výše (na eventech). */
   }
 
   /* === Reskin filtru: hlavička + patička (přídavně) ===================
