@@ -628,11 +628,19 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
    --------------------------------------------------------- */
 .top-navigation-bar .top-navigation-contacts { display: none !important; }
 
-.navigation-buttons { display: flex !important; align-items: center !important; }
-/* menší vyhledávání + Přihlášení/košík u pravého kraje (ať vedle je místo na telefon) */
-.header-top { justify-content: space-between !important; }
-.header-top .search { flex: 0 1 460px !important; max-width: 460px !important; width: 460px !important; }
-.header-top .navigation-buttons { margin-left: auto !important; }
+/* Robustní flex layout hlavičky (jen desktop ≥992px): logo (auto) |
+   vyhledávání (roste, max 480px) | telefon+Přihlášení+košík (auto, u pravého
+   kraje). Vejde se na jeden řádek na VŠECH šířkách, telefon je vždy hned za
+   vyhledáváním (dřív pevný bootstrap grid → na širokém monitoru se rozhodilo). */
+@media (min-width: 992px) {
+  .header-top { display: flex !important; align-items: center !important; flex-wrap: nowrap !important; gap: 18px !important; }
+  .header-top .site-name-wrapper { flex: 0 0 auto !important; width: auto !important; }
+  .header-top .search { flex: 1 1 auto !important; max-width: 480px !important; width: auto !important; min-width: 220px !important; }
+  .header-top .navigation-buttons {
+    flex: 0 0 auto !important; width: auto !important; margin-left: auto !important;
+    display: flex !important; align-items: center !important; flex-wrap: nowrap !important; gap: 14px !important;
+  }
+}
 .sz-header-phone {
   display: inline-flex !important;
   align-items: center !important;
