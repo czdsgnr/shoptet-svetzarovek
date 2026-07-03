@@ -649,6 +649,9 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
   color: #fff !important;
   margin-right: 18px !important;
   white-space: nowrap;
+  /* motiv dorenderuje Přihlášení AŽ po vložení telefonu → skočilo před něj;
+     order:-1 vynutí telefon jako první (vždy hned za vyhledáváním). */
+  order: -1 !important;
 }
 .sz-header-phone .szp-photo {
   flex: none !important; width: 44px !important; height: 44px !important;
