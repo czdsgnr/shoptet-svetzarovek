@@ -636,17 +636,28 @@ html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9
 .sz-header-phone {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 9px !important;
+  gap: 11px !important;
   text-decoration: none !important;
   color: #fff !important;
   margin-right: 18px !important;
   white-space: nowrap;
 }
-.sz-header-phone .szp-ico { flex: none !important; display: inline-flex !important; }
-.sz-header-phone .szp-ico svg { width: 26px !important; height: 26px !important; color: #fff !important; }
-.sz-header-phone .szp-body { display: flex !important; flex-direction: column !important; align-items: flex-start !important; line-height: 1.15 !important; }
-.sz-header-phone .szp-num { font-size: 17px !important; font-weight: 800 !important; letter-spacing: .2px !important; }
-.sz-header-phone .szp-hrs { font-size: 11px !important; opacity: .75 !important; font-weight: 400 !important; text-align: left !important; }
+.sz-header-phone .szp-photo {
+  flex: none !important; width: 44px !important; height: 44px !important;
+  border-radius: 50% !important; overflow: hidden !important;
+  border: 2px solid rgba(255, 255, 255, .35) !important;
+}
+.sz-header-phone .szp-photo img { width: 44px !important; height: 44px !important; object-fit: cover !important; display: block !important; }
+.sz-header-phone .szp-body { display: flex !important; flex-direction: column !important; align-items: flex-start !important; line-height: 1.2 !important; }
+.sz-header-phone .szp-num { font-size: 18px !important; font-weight: 800 !important; letter-spacing: .3px !important; }
+.sz-header-phone .szp-meta { display: inline-flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; }
+.sz-header-phone .szp-hrs { opacity: .8 !important; }
+.sz-header-phone .szp-online { color: #37d67a !important; font-weight: 700 !important; display: inline-flex !important; align-items: center !important; gap: 5px !important; }
+.sz-header-phone .szp-online::before {
+  content: "" !important; width: 8px !important; height: 8px !important;
+  border-radius: 50% !important; background: #37d67a !important;
+  box-shadow: 0 0 0 3px rgba(55, 214, 122, .25) !important;
+}
 .sz-header-phone:hover .szp-num { text-decoration: underline !important; }
 /* mobil: blok schovat (těsno); theme má vlastní telefon v .responsive-tools */
 @media (max-width: 991px) {
