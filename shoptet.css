@@ -978,9 +978,18 @@ body.type-product .p-image .flags-extra,
   border-color: #04880d !important;
 }
 
-/* Megamenu: svislé oddělovače mezi sloupci kategorií (přání klienta).
-   Čára před každým sloupcem kromě prvního v řádku. */
-.menu-level-2 > li + li { border-left: 1px solid rgba(0, 0, 0, .12) !important; }
+/* Megamenu: podkategorie ve sloupci oddělené svislou čárou │ místo čárek
+   (přání klienta). Nativní čárku (textový uzel za odkazem) skryjeme font-size:0,
+   odkaz vrátíme na 14px a mezi položky dáme svislou čáru přes ::after.
+   Čárka UVNITŘ názvu (např. „Ovladače, stmívače") zůstává. */
+.menu-level-3 > li { font-size: 0 !important; }
+.menu-level-3 > li > a { font-size: 14px !important; }
+.menu-level-3 > li:not(:last-child)::after {
+  content: "│" !important;
+  font-size: 13px !important;
+  color: rgba(0, 0, 0, .30) !important;
+  margin: 0 5px !important;
+}
 
 /* Detail – pravý sloupec (.p-info-wrapper = cena, dostupnost, KOŠÍK).
    Motiv ho má opacity:0 a odhaluje přidáním třídy .visible-element (JS reveal).
