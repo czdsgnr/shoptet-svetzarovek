@@ -986,7 +986,9 @@ body.type-product .p-image .flags-extra,
    („Ovladače, stmívače") zůstává. */
 .menu-level-3 { height: auto !important; max-height: none !important; overflow: visible !important; }
 .menu-level-3 .more-items-trigger { display: none !important; }
-.menu-level-3 > li { font-size: 0 !important; }
+/* display:inline → podkategorie plynou ZA SEBOU a zalamují se přirozeně
+   (některá menu je měla jako blok = každá na řádku); font-size:0 skryje čárku */
+.menu-level-3 > li { display: inline !important; font-size: 0 !important; }
 .menu-level-3 > li > a { font-size: 14px !important; }
 .menu-level-3 > li:not(:first-child)::before {
   content: "│" !important;
