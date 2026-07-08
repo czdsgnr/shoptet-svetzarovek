@@ -252,17 +252,18 @@
        Guard (box už v sidebaru → nic) brání smyčce. */
     if (window.__szFilterMoveObs) return;
     var host = document.querySelector('.content-wrapper-in') || document.body;
-    var t;
+    /* Přesun zpět do sidebaru HNED (synchronně), BEZ debounce. Dřív tu byl
+       clearTimeout+setTimeout(50): při vlně mutací (lazy-load obrázků, carousely)
+       se ten 50ms časovač pořád resetoval a nespustil klidně ~1 s → box byl celou
+       tu dobu mimo sidebar a nahoru vyskočil banner podpory = viditelné blikání /
+       poskakování. MutationObserver callback běží jako microtask PŘED vykreslením,
+       takže sync insertBefore vrátí box do rámce ještě než se stihne překreslit
+       (žádný záblesk). Guard `!sb.contains(bb)` brání smyčce (po vložení už je
+       uvnitř → další callback nic nedělá). */
     var obs = new MutationObserver(function () {
-      var b = document.querySelector('.box-filters');
-      if (b && !b.closest('.sidebar-left')) {
-        clearTimeout(t);
-        t = setTimeout(function () {
-          var sb = document.querySelector('.sidebar-left');
-          var bb = document.querySelector('.box-filters');
-          if (sb && bb && !sb.contains(bb)) sb.insertBefore(bb, sb.firstChild);
-        }, 50);
-      }
+      var sb = document.querySelector('.sidebar-left');
+      var bb = document.querySelector('.box-filters');
+      if (sb && bb && !sb.contains(bb)) sb.insertBefore(bb, sb.firstChild);
     });
     obs.observe(host, { childList: true, subtree: true });
     window.__szFilterMoveObs = obs;
