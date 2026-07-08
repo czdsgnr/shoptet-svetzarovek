@@ -978,6 +978,10 @@ body.type-product .p-image .flags-extra,
   border-color: #04880d !important;
 }
 
+/* Megamenu: svislé oddělovače mezi sloupci kategorií (přání klienta).
+   Čára před každým sloupcem kromě prvního v řádku. */
+.menu-level-2 > li + li { border-left: 1px solid rgba(0, 0, 0, .12) !important; }
+
 /* Detail – pravý sloupec (.p-info-wrapper = cena, dostupnost, KOŠÍK).
    Motiv ho má opacity:0 a odhaluje přidáním třídy .visible-element (JS reveal).
    Ten reveal je ale NESPOLEHLIVÝ (občas .visible-element nepřidá – hlavně při
