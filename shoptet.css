@@ -984,9 +984,10 @@ body.type-product .p-image .flags-extra,
    (textový uzel za odkazem) skryjeme font-size:0, odkaz vrátíme na 14px, čáru
    dáme ::before (před položku – nevisí za poslední). Čárka UVNITŘ názvu
    („Ovladače, stmívače") zůstává. */
-/* Sloupce megamenu zarovnat NAHORU (theme má align-items:center → kratší sloupce
-   plavaly uprostřed vedle vysokého; nadpisy teď všechny nahoře). */
-.menu-level-2 { align-items: flex-start !important; }
+/* Sloupce megamenu: zarovnat NAHORU (theme měl align-items:center → kratší sloupce
+   plavaly uprostřed vedle vysokého) + rozprostřít rovnoměrně přes šířku
+   (space-between → vpravo nezůstává prázdno). */
+.menu-level-2 { align-items: flex-start !important; justify-content: space-between !important; }
 .menu-level-3 { height: auto !important; max-height: none !important; overflow: visible !important; }
 .menu-level-3 .more-items-trigger { display: none !important; }
 /* display:inline → podkategorie plynou ZA SEBOU a zalamují se přirozeně
