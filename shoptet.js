@@ -467,21 +467,26 @@
     var mainBtn = document.querySelector('form.pr-action .add-to-cart-button.btn-conversion, .p-detail form .add-to-cart-button.btn-conversion, .p-info-wrapper .add-to-cart-button');
     if (!mainBtn) return;
     window.__szStickyBuy = true;
-    function priceNow() {
-      var p = document.querySelector('.p-final-price-wrapper .price-final, .p-info-wrapper .price-final, .price-final');
-      return p ? p.textContent.replace(/\s+/g, ' ').trim() : '';
+    function priceHtml() {
+      var f = document.querySelector('.p-final-price-wrapper .price-final, .p-info-wrapper .price-final, .price-final');
+      var s = document.querySelector('.p-final-price-wrapper .price-standard, .p-info-wrapper .price-standard, .price-standard');
+      var ftxt = f ? f.textContent.replace(/\s+/g, ' ').trim() : '';
+      var stxt = s ? s.textContent.replace(/\s+/g, ' ').trim() : '';
+      // původní přeškrtnutá cena jen když existuje (sleva) a liší se od akční
+      var orig = (stxt && stxt !== ftxt) ? '<span class="ssb-orig">' + stxt + '</span>' : '';
+      return orig + '<span class="ssb-final">' + ftxt + '</span>';
     }
     var cartIco = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
     var bar = document.createElement('div');
     bar.className = 'sz-sticky-buy';
-    bar.innerHTML = '<span class="ssb-price">' + priceNow() + '</span>' +
+    bar.innerHTML = '<span class="ssb-price">' + priceHtml() + '</span>' +
       '<button type="button" class="ssb-btn">' + cartIco + ' Do košíku</button>';
     document.body.appendChild(bar);
     bar.querySelector('.ssb-btn').addEventListener('click', function () { mainBtn.click(); });
     if (window.IntersectionObserver) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { document.body.classList.toggle('sz-sticky-on', !e.isIntersecting); });
-        var pe = bar.querySelector('.ssb-price'); if (pe) pe.textContent = priceNow();
+        var pe = bar.querySelector('.ssb-price'); if (pe) pe.innerHTML = priceHtml();
       }, { threshold: 0 });
       io.observe(mainBtn);
     }

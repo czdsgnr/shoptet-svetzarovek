@@ -1000,7 +1000,9 @@ body.type-product .p-image .flags-extra,
     transform: translateY(115%); transition: transform .25s ease;
   }
   body.sz-sticky-on .sz-sticky-buy { transform: translateY(0); }
-  .sz-sticky-buy .ssb-price { font-size: 22px; font-weight: 800; color: #e30613; white-space: nowrap; }
+  .sz-sticky-buy .ssb-price { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+  .sz-sticky-buy .ssb-orig { font-size: 14px; font-weight: 600; color: #9aa3ad; text-decoration: line-through; }
+  .sz-sticky-buy .ssb-final { font-size: 22px; font-weight: 800; color: #e30613; }
   .sz-sticky-buy .ssb-btn {
     margin-left: auto; display: inline-flex; align-items: center; gap: 8px;
     background: #2f6f76; color: #fff; border: 0; border-radius: 8px;
