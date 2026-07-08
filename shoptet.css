@@ -978,28 +978,8 @@ body.type-product .p-image .flags-extra,
   border-color: #04880d !important;
 }
 
-/* Megamenu (přání klienta): 1) zobrazit VŠECHNY podkategorie – theme je ořezával
-   pevnou výškou 56px + overflow:hidden a dával „..." přes .more-items-trigger.
-   2) oddělit podkategorie svislou čárou │ místo matoucích čárek. Nativní čárku
-   (textový uzel za odkazem) skryjeme font-size:0, odkaz vrátíme na 14px, čáru
-   dáme ::before (před položku – nevisí za poslední). Čárka UVNITŘ názvu
-   („Ovladače, stmívače") zůstává. */
-/* Sloupce megamenu: zarovnat NAHORU (theme měl align-items:center → kratší sloupce
-   plavaly uprostřed vedle vysokého) + rozprostřít rovnoměrně přes šířku
-   (space-between → vpravo nezůstává prázdno). */
-.menu-level-2 { align-items: flex-start !important; justify-content: space-between !important; }
-.menu-level-3 { height: auto !important; max-height: none !important; overflow: visible !important; }
-.menu-level-3 .more-items-trigger { display: none !important; }
-/* display:inline → podkategorie plynou ZA SEBOU a zalamují se přirozeně
-   (některá menu je měla jako blok = každá na řádku); font-size:0 skryje čárku */
-.menu-level-3 > li { display: inline !important; font-size: 0 !important; }
-.menu-level-3 > li > a { font-size: 14px !important; }
-.menu-level-3 > li:not(:first-child)::before {
-  content: "│" !important;
-  font-size: 13px !important;
-  color: rgba(0, 0, 0, .45) !important;
-  margin: 0 6px !important;
-}
+/* (Megamenu úpravy – oddělovače/rozložení – ODEBRÁNO na přání klienta,
+   vráceno na nativní vzhled motivu.) */
 
 /* Detail – pravý sloupec (.p-info-wrapper = cena, dostupnost, KOŠÍK).
    Motiv ho má opacity:0 a odhaluje přidáním třídy .visible-element (JS reveal).
