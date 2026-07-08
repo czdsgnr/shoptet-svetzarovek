@@ -978,8 +978,14 @@ body.type-product .p-image .flags-extra,
   border-color: #04880d !important;
 }
 
-/* (Megamenu úpravy – oddělovače/rozložení – ODEBRÁNO na přání klienta,
-   vráceno na nativní vzhled motivu.) */
+/* Megamenu (přání klienta): zobrazit VŠECHNY podkategorie – theme je ořezával
+   pevnou výškou 56px + overflow:hidden a dával „..." přes .more-items-trigger.
+   BEZ oddělovačů (ty klient nechtěl) – nativní čárky zůstávají. Sloupce nahoru
+   + podkategorie plynou za sebou (display:inline). */
+.menu-level-2 { align-items: flex-start !important; }
+.menu-level-3 { height: auto !important; max-height: none !important; overflow: visible !important; }
+.menu-level-3 .more-items-trigger { display: none !important; }
+.menu-level-3 > li { display: inline !important; }
 
 /* Sticky „Do košíku" lišta na MOBILU (přání klienta). Na desktopu skrytá.
    Na mobilu naskočí zespodu, když hlavní tlačítko „Vložit do košíku" sjede
