@@ -505,9 +505,14 @@
      Hledá element čerstvě, takže funguje i po překreslení hlavičky motivem. */
   function szSyncOnline() {
     var n = new Date(), d = n.getDay(), m = n.getHours() * 60 + n.getMinutes();
-    var open = d >= 1 && d <= 5 && m >= 480 && m < 990;
+    var open = d >= 1 && d <= 5 && m >= 480 && m < 990; // Po–Pá 8:00–16:30 (990 = 16:30)
     [].forEach.call(document.querySelectorAll('.szp-online'), function (el) {
-      el.style.display = open ? '' : 'none';
+      // CSS má na .szp-online `display:…!important` (hlavička i karta) → inline
+      // `display:none` BEZ important by prohrálo a indikátor by po 16:30 nezmizel.
+      // Zavřeno → inline `none !important` (přebije CSS); otevřeno → inline styl
+      // sundáme a necháme rozhodnout CSS (zobrazí zeleně).
+      if (open) el.style.removeProperty('display');
+      else el.style.setProperty('display', 'none', 'important');
     });
   }
 
