@@ -408,17 +408,17 @@
       cb.innerHTML =
         '<div class="help__top">' + ico.help + '<h3>' + heading + '</h3></div>' +
         '<div class="help__intro">' +
-          (imgSrc ? '<span class="avatar"><img src="' + imgSrc + '" alt="Poradce" loading="lazy"></span>' : '') +
-          '<span class="who"><span class="lead">Rádi vám poradíme</span><span class="sub">S výběrem žárovky i parametry</span></span>' +
+          (imgSrc ? '<span class="avatar"><img src="' + imgSrc + '" alt="Operátor" loading="lazy"></span>' : '') +
+          '<span class="who"><span class="lead">Nejste si jistí? Zavolejte!</span><span class="sub">Operátor Petr</span></span>' +
         '</div>' +
-        '<div class="hours"><span class="hico">' + ico.clock + '</span><span class="time">Po–Pá 8:00–16:30</span></div>' +
+        '<div class="hours"><span class="hico">' + ico.clock + '</span><span class="time">Po–Pá 8:00–16:30</span><span class="szp-online">online</span></div>' +
         '<div class="help__list">' +
           row('primary', tel, ico.phone, 'Zavolejte nám') +
           row('', cell, ico.mobile, 'Mobil') +
-          row('', mail, ico.mail, 'Napište nám') +
-          row('', fb, ico.fb, 'Sledujte nás', 'Facebook') +
         '</div>' +
-        '<div class="help__foot">Obvykle odpovídáme do několika hodin</div>';
+        (mail ? '<div class="help__mail">' + row('', mail, ico.mail, 'Napište nám') + '</div>' : '') +
+        '<div class="help__foot">Obvykle odpovídáme do 1 hodiny</div>';
+      szSyncOnline(); // nastav online stav i v kartě
     });
   }
 
@@ -461,8 +461,9 @@
   function szSyncOnline() {
     var n = new Date(), d = n.getDay(), m = n.getHours() * 60 + n.getMinutes();
     var open = d >= 1 && d <= 5 && m >= 480 && m < 990;
-    var el = document.querySelector('.sz-header-phone .szp-online');
-    if (el) el.style.display = open ? '' : 'none';
+    [].forEach.call(document.querySelectorAll('.szp-online'), function (el) {
+      el.style.display = open ? '' : 'none';
+    });
   }
 
   /* === Sticky „Do košíku" lišta na MOBILU (přání klienta) ==============
