@@ -113,9 +113,10 @@
       '<table><tbody><tr class="expedice"><th>Litoměřice / expedice</th><td></td></tr></tbody></table>';
     params.appendChild(sklad);
 
-    // přesunout skladovost do buňky
+    // přesunout skladovost do buňky (scope na buy-box – jinak by to sebralo
+    // .availability-value i z variant / podobných produktů na stránce)
     var td = sklad.querySelector('.expedice td');
-    document.querySelectorAll('.availability-value').forEach(function (av) {
+    document.querySelectorAll('.p-info-wrapper .availability-value').forEach(function (av) {
       if (td) td.appendChild(av);
     });
 
@@ -437,9 +438,6 @@
       var raw = (srcA.textContent || '').replace(/\s/g, '');
       if (/^\+420\d{9}$/.test(raw)) num = raw.replace(/(\+\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
     }
-    // "Jsme online" jen v otevírací době (Po–Pá 8:00–16:30), jinak skryté
-    var now = new Date(), d = now.getDay(), mins = now.getHours() * 60 + now.getMinutes();
-    var open = d >= 1 && d <= 5 && mins >= 480 && mins < 990;
     var photo = 'https://cdn.myshoptet.com/usr/www.svetzarovek.eu/user/merchant/callcentrum.jpg';
     var a = document.createElement('a');
     a.className = 'sz-header-phone';
@@ -450,10 +448,21 @@
       '<span class="szp-body">' +
         '<span class="szp-num">' + num + '</span>' +
         '<span class="szp-meta"><span class="szp-hrs">Po–Pá: 8:00–16:30</span>' +
-          (open ? '<span class="szp-online">Jsme online</span>' : '') +
+          '<span class="szp-online">Jsme online</span>' +
         '</span>' +
       '</span>';
     nav.insertBefore(a, nav.firstChild);
+    szSyncOnline(); // nastav aktuální stav (zeleně v otevírací době, jinak skryté)
+  }
+
+  /* „Jsme online" ukázat jen v otevírací době (Po–Pá 8:00–16:30), jinak skrýt.
+     Přepočítává se ŽIVĚ (interval) – aby po přejetí přes 16:30 nezůstalo zaseklé.
+     Hledá element čerstvě, takže funguje i po překreslení hlavičky motivem. */
+  function szSyncOnline() {
+    var n = new Date(), d = n.getDay(), m = n.getHours() * 60 + n.getMinutes();
+    var open = d >= 1 && d <= 5 && m >= 480 && m < 990;
+    var el = document.querySelector('.sz-header-phone .szp-online');
+    if (el) el.style.display = open ? '' : 'none';
   }
 
   /* === Sticky „Do košíku" lišta na MOBILU (přání klienta) ==============
@@ -482,7 +491,12 @@
     bar.innerHTML = '<span class="ssb-price">' + priceHtml() + '</span>' +
       '<button type="button" class="ssb-btn">' + cartIco + ' Do košíku</button>';
     document.body.appendChild(bar);
-    bar.querySelector('.ssb-btn').addEventListener('click', function () { mainBtn.click(); });
+    // najít tlačítko ŽIVĚ při kliknutí – po změně varianty Shoptet buy-box
+    // překreslí a původní mainBtn může být odpojený (klik by nic neudělal).
+    bar.querySelector('.ssb-btn').addEventListener('click', function () {
+      var live = document.querySelector('form.pr-action .add-to-cart-button.btn-conversion, .p-info-wrapper .add-to-cart-button');
+      (live || mainBtn).click();
+    });
     if (window.IntersectionObserver) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { document.body.classList.toggle('sz-sticky-on', !e.isIntersecting); });
@@ -521,6 +535,7 @@
   // telefon vedle vyhledávání – hlavička je brzy, ale pro jistotu i po load
   window.addEventListener('load', buildHeaderPhone);
   setTimeout(buildHeaderPhone, 800);
+  setInterval(szSyncOnline, 60000); // „Jsme online" přepočítávat živě (přejezd přes 16:30)
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
   function reinitFilters() { moveFilterToSidebar(); initFilters(); initFilterToggle(); buildFilterChrome(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
