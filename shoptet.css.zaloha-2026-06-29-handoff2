@@ -195,6 +195,30 @@ html, body {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+
+/* Štítky aktivních filtrů nad produkty (.sz-active-chips staví shoptet.js).
+   „chips" = odstranitelné pilulky s vybranou hodnotou + ×; „Zrušit vše". */
+.sz-active-chips {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin: 0 0 18px;
+}
+.sz-active-chips .sz-chips-label { font-size: 13px; font-weight: 700; color: #5d6b70; margin-right: 2px; }
+.sz-active-chips .sz-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 10px 6px 12px; border-radius: 999px;
+  background: #eef4f6; color: #174A61; border: 1px solid #d7e2e6;
+  font-size: 13px; font-weight: 600; text-decoration: none; line-height: 1;
+  transition: background .12s ease, border-color .12s ease;
+}
+.sz-active-chips .sz-chip:hover { background: #e0ebee; border-color: #b9ccd2; }
+.sz-active-chips .sz-chip svg { flex: none; opacity: .7; }
+.sz-active-chips .sz-chip:hover svg { opacity: 1; }
+.sz-active-chips .sz-chip-clear {
+  background: transparent; border-color: transparent; color: #b23b3b; font-weight: 700;
+  padding-left: 8px; padding-right: 8px;
+}
+.sz-active-chips .sz-chip-clear:hover { background: #fbeaea; border-color: transparent; }
+
 /* hlavička */
 .sz-filter-head {
   display: flex !important;

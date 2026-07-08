@@ -333,6 +333,50 @@
     if (cw) cw.classList.add('sz-filters-shown');
   }
 
+  /* === Štítky aktivních filtrů NAD produkty (přání klienta) ============
+     Když jsou zaškrtnuté filtry, ukážeme je nad výpisem jako odstranitelné
+     „chips". Klik na × jde na data-url zaškrtnutého políčka = URL BEZ té
+     jedné hodnoty (ostatní filtry zůstanou – ověřeno: pv165=7671,7674 →
+     data-url bílé = ?pv165=7674). „Zrušit vše" → čistá cesta bez params.
+     Vše je plná navigace, takže se lišta staví znovu při každém načtení.
+     Idempotentní (starou lištu přepíše/odebere). */
+  function buildFilterChips() {
+    var box = document.querySelector('.box-filters');
+    var anchor = document.querySelector('.products.products-page, .products-block');
+    var old = document.querySelector('.sz-active-chips');
+    var checked = box ? [].slice.call(box.querySelectorAll('input[type="checkbox"]:checked')) : [];
+    if (!box || !anchor || !checked.length) { if (old) old.remove(); return; }
+    var bar = old || document.createElement('div');
+    bar.className = 'sz-active-chips';
+    bar.innerHTML = '';
+    var xIco = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    var head = document.createElement('span');
+    head.className = 'sz-chips-label';
+    head.textContent = 'Vybráno:';
+    bar.appendChild(head);
+    checked.forEach(function (inp) {
+      var lbl = box.querySelector('label[for="' + inp.id + '"]');
+      var txt = '';
+      if (lbl) { var c = lbl.cloneNode(true); var fc = c.querySelector('.filter-count'); if (fc) fc.parentNode.removeChild(fc); txt = c.textContent; }
+      txt = (txt || inp.value || '').replace(/\s+/g, ' ').trim();
+      var url = inp.getAttribute('data-url');
+      var chip = document.createElement('a');
+      chip.className = 'sz-chip';
+      chip.href = url || '#';
+      chip.setAttribute('aria-label', 'Odebrat filtr ' + txt);
+      chip.innerHTML = '<span class="sz-chip-txt"></span>' + xIco;
+      chip.querySelector('.sz-chip-txt').textContent = txt;
+      if (!url) chip.addEventListener('click', function (e) { e.preventDefault(); inp.click(); });
+      bar.appendChild(chip);
+    });
+    var clr = document.createElement('a');
+    clr.className = 'sz-chip sz-chip-clear';
+    clr.href = window.location.pathname;
+    clr.textContent = 'Zrušit vše';
+    bar.appendChild(clr);
+    if (!bar.parentNode) anchor.parentNode.insertBefore(bar, anchor);
+  }
+
   /* === Karta podpory „Potřebujete pomoc?" (.contact-box) ===============
      FB odkaz → „Facebook" (místo dlouhé URL), telefon s mezerami.
      Idempotentní – regexy nematchnou už upravený text. */
@@ -556,6 +600,7 @@
     initFilters();        // úpravy filtrů
     initFilterToggle();   // + vlastní rozbalování (klik na hlavičku)
     buildFilterChrome();  // hlavička + patička filtru (reskin)
+    buildFilterChips();   // štítky aktivních filtrů nad produkty
     initDetailSklad();
     moveAltToBottom();
     moveUspBelowProduct();
@@ -586,7 +631,7 @@
   setTimeout(buildHeaderPhone, 800);
   setInterval(szSyncOnline, 60000); // „Jsme online" přepočítávat živě (přejezd přes 16:30)
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
-  function reinitFilters() { moveFilterToSidebar(); initFilters(); initFilterToggle(); buildFilterChrome(); }
+  function reinitFilters() { moveFilterToSidebar(); initFilters(); initFilterToggle(); buildFilterChrome(); buildFilterChips(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageProductsLoaded', reinitFilters);
