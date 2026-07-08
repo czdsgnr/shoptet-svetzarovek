@@ -981,6 +981,28 @@ body.type-product .p-image .flags-extra,
 /* (Megamenu úpravy – oddělovače/rozložení – ODEBRÁNO na přání klienta,
    vráceno na nativní vzhled motivu.) */
 
+/* Sticky „Do košíku" lišta na MOBILU (přání klienta). Na desktopu skrytá.
+   Na mobilu naskočí zespodu, když hlavní tlačítko „Vložit do košíku" sjede
+   z obrazovky (třídu sz-sticky-on přepíná JS přes IntersectionObserver). */
+.sz-sticky-buy { display: none; }
+@media (max-width: 991px) {
+  .sz-sticky-buy {
+    display: flex; align-items: center; gap: 12px;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 9998;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: #fff; box-shadow: 0 -4px 18px rgba(0, 0, 0, .14);
+    transform: translateY(115%); transition: transform .25s ease;
+  }
+  body.sz-sticky-on .sz-sticky-buy { transform: translateY(0); }
+  .sz-sticky-buy .ssb-price { font-size: 22px; font-weight: 800; color: #e30613; white-space: nowrap; }
+  .sz-sticky-buy .ssb-btn {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 8px;
+    background: #2f6f76; color: #fff; border: 0; border-radius: 8px;
+    padding: 13px 22px; font-size: 15px; font-weight: 800; cursor: pointer;
+  }
+  .sz-sticky-buy .ssb-btn:active { background: #245258; }
+}
+
 /* Detail – pravý sloupec (.p-info-wrapper = cena, dostupnost, KOŠÍK).
    Motiv ho má opacity:0 a odhaluje přidáním třídy .visible-element (JS reveal).
    Ten reveal je ale NESPOLEHLIVÝ (občas .visible-element nepřidá – hlavně při
