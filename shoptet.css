@@ -176,6 +176,12 @@ html, body {
 .box-filters::before,
 .sidebar-left .box-filters::before,
 #content-wrapper .box-filters::before { content: "" !important; display: none !important; }
+/* Štítek „Na skladě" (checkbox filtru) zeleně – ať vyskočí (přání klienta).
+   Cílíme přes for="stock" (unikátní), počet necháme šedý. */
+.box-filters label[for="stock"],
+#filters .box-filters label[for="stock"] { color: #3f9a2e !important; font-weight: 700 !important; }
+.box-filters label[for="stock"] .filter-count,
+#filters .box-filters label[for="stock"] .filter-count { color: #94a1a6 !important; font-weight: 400 !important; }
 /* hlavička */
 .sz-filter-head {
   display: flex !important;
