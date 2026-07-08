@@ -299,7 +299,7 @@
     head.innerHTML =
       '<div class="sz-fh-left">' +
         '<span class="sz-fh-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
-        '<div><div class="sz-fh-title">Filtrovat produkty</div><div class="sz-fh-sub">Vyberte parametry a rychle zúžte nabídku.</div></div>' +
+        '<div><div class="sz-fh-title">Filtry:</div></div>' +
       '</div>';
 
     var foot = document.createElement('div');

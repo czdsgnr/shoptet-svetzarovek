@@ -170,6 +170,12 @@ html, body {
   overflow: hidden !important;
   padding: 0 !important;
 }
+/* Motiv přidává na .box-filters ::before vlastní nadpis „Filtrovat" — máme
+   svou hlavičku (.sz-filter-head „Filtry:"), tak ten nativní schováme, ať to
+   není dvakrát. (Mobilní toggle je samostatný prvek .filtrovat, nedotčen.) */
+.box-filters::before,
+.sidebar-left .box-filters::before,
+#content-wrapper .box-filters::before { content: "" !important; display: none !important; }
 /* hlavička */
 .sz-filter-head {
   display: flex !important;
