@@ -1,0 +1,257 @@
+@charset "UTF-8";
+
+/* =========================================================
+   Shoptet úpravy – Svět žárovek
+   Hostováno na GitHub Pages, viz README.
+   Načítá se jako poslední → přebíjí style.css i dark-merkur.css.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   0) Body-scroll fix (kořenová oprava)
+   Motiv/CSS dával <body> pevnou výšku (= výška okna) → stránka
+   scrollovala přes <body> místo přes okno. Tím se nespouštěl
+   window.scroll, na kterém visí lazy-load sekcí (související
+   produkty) i reveal efekty → prázdné mezery a rozbitý sticky.
+   Vrácením height:auto scrolluje zase okno = nativní chování.
+   --------------------------------------------------------- */
+html, body {
+  height: auto !important;
+  overflow-y: visible !important;
+  /* clip (ne hidden) zabrání vodorovnému přetečení, ale NEudělá z body
+     scroll kontejner → overflow-y zůstane visible a scrolluje okno */
+  overflow-x: clip !important;
+}
+
+/* ---------------------------------------------------------
+   1) Tmavý header – doplněk k dark-merkur.css
+   dark-merkur.css (paxio) je vložený přímo v Shoptet <head>.
+   Motiv ale nechává #header bílý (svítí jako postranní pruhy,
+   protože .container je vycentrovaný) a na .container je fotka
+   header_background_v2_1.png. Tady oboje zčerníme na celou šířku.
+   --------------------------------------------------------- */
+#header {
+  background-color: #000 !important;
+}
+#header > .container {
+  background-image: none !important;
+  background-color: #000 !important;
+}
+
+/* Modré/šedé linky kolem nav menu z původního style.css
+   (.navigation-in border-top #1977b5, #navigation border-bottom #e4e4e4)
+   – na tmavém headeru ruší, sjednotíme do tmava. */
+.navigation-in {
+  border-top-color: transparent !important;
+}
+#navigation {
+  border-bottom-color: transparent !important;
+}
+.navigation-in > ul > li {
+  border-color: transparent !important;
+}
+
+/* ---------------------------------------------------------
+   Sticky header (desktop) – čistý position:sticky
+   Původní motiv řešil sticky JS hackem (body.fix-header +
+   position:fixed). Ten se ale spouští na $(window).scroll, jenže
+   stránka scrolluje přes <body> → handler často nenaskočí správně,
+   header pak poskakoval, ořezával popisky a špatně odsazoval.
+   Nahrazujeme nativním position:sticky (funguje nezávisle na JS).
+   Mobil (<768) má vlastní sticky ve style.css → nesaháme na něj.
+   --------------------------------------------------------- */
+@media (min-width: 768px) {
+  #header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+  }
+  /* neutralizace zbytků fix-header hacku (kdyby třída naskočila) */
+  .fix-header .top-navigation-bar { position: static !important; top: auto !important; }
+  .fix-header .header-top { height: auto !important; }
+  .fix-header .user-action-in { display: block !important; }
+}
+
+/* ---------------------------------------------------------
+   2) Otevírací doba v horní liště (vedle telefonu)
+   Stejný princip jako na protvoreni: ::before na kontakty.
+   --------------------------------------------------------- */
+.top-navigation-contacts::before {
+  content: "Po–Pá 8:00–16:30";
+  margin-right: 16px;
+  padding-right: 16px;
+  border-right: 1px solid rgba(255, 255, 255, .2);
+  color: #fff;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   Akční prvky červeně – badge slevy + cena v akci
+   Badge (.flag-discount) byl teal #216d8f → červená.
+   Akční cena: .price-final zčervená jen u karty se slevou
+   (.p obsahuje .flag-discount). Běžná cena zůstává tmavá.
+   --------------------------------------------------------- */
+/* dvojitá třída = vyšší specificita, přebije i style.css (#216d8f !important) */
+.flag.flag-discount.flag-discount {
+  background-color: #e30613 !important;
+}
+/* akční cena – výpis (.p se slevou) i detail (.p-final-price-wrapper se slevou) */
+.p:has(.flag-discount) .price-final,
+.p:has(.price-save) .price-final,
+.p-final-price-wrapper:has(.price-save) .price-final {
+  color: #e30613 !important;
+}
+
+/* ---------------------------------------------------------
+   Tlačítko Hledat – zpět na původní zelenou
+   dark-merkur ho přebarvil na černou (#000) a zůstal zelený
+   rámeček → divně. Vracíme původní zelené pozadí ze style.css.
+   --------------------------------------------------------- */
+#header .search-form .btn {
+  background-color: #04a70f !important;
+  border-color: #04a70f !important;
+  color: #fff !important;
+  /* tlačítko plavalo (top:5px, výška 48px v 61px baru) → roztáhnout
+     na plnou výšku, ať sedí flush jako v originále */
+  top: 0 !important;
+  bottom: 0 !important;
+  height: auto !important;
+}
+#header .search-form .btn:hover {
+  background-color: #04880d !important;
+  border-color: #04880d !important;
+}
+
+/* Pozn.: dřívější záplaty pro detail (opacity:1 na .p-info-wrapper a
+   un-hide názvu/hodnocení/perexu) jsme odebrali – příčinou byl
+   smazaný script.js, který rozbíjel nativní strukturu motivu.
+   Teď to motiv řeší sám, záplaty by dělaly duplicitní název. */
+
+/* ---------------------------------------------------------
+   3) Benefity registrace v přihlašovacím popupu (vpravo)
+   HTML vkládá shoptet.js (aside.login-benefits). Akcent = brand teal.
+   --------------------------------------------------------- */
+#login.has-benefits {
+  width: min(760px, 95vw) !important;
+  max-width: none !important;
+  right: 0 !important;
+  left: auto !important;
+}
+#login.has-benefits .popup-widget-inner {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: auto 1fr !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 60px rgba(16, 34, 59, .18) !important;
+}
+#login.has-benefits > .popup-widget-inner > h2 {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  margin: 0 !important;
+  padding: 40px 38px 18px !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #16223b !important;
+  background: 0 !important;
+}
+#login.has-benefits > .popup-widget-inner > #customerLogin {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  padding: 0 38px 40px !important;
+}
+#login.has-benefits .login-benefits {
+  grid-column: 2 !important;
+  grid-row: 1 / -1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 56px 56px 48px 48px !important;
+  background: linear-gradient(180deg, #f1f7f8, #e6f0f2) !important;
+  border-left: 1px solid #d8e6e9 !important;
+}
+#login .lb-title {
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #16223b !important;
+  background: 0 !important;
+  border: 0 !important;
+}
+#login .lb-sub {
+  margin: 0 0 22px !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #5a6b7e !important;
+}
+#login .lb-list {
+  list-style: none !important;
+  margin: 0 0 28px !important;
+  padding: 0 !important;
+}
+#login .lb-list li {
+  position: relative !important;
+  margin: 0 !important;
+  padding: 9px 0 9px 38px !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  color: #2c3a4f !important;
+}
+#login .lb-list li::before {
+  content: "✓" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 6px !important;
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  text-align: center !important;
+  border-radius: 50% !important;
+  background: #216d8f !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+#login .lb-cta {
+  display: block !important;
+  margin-top: auto !important;
+  padding: 15px 18px !important;
+  text-align: center !important;
+  background: #216d8f !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  text-decoration: none !important;
+  box-shadow: 0 6px 16px rgba(33, 109, 143, .28) !important;
+  transition: .15s;
+}
+#login .lb-cta:hover {
+  background: #18566f !important;
+  color: #fff !important;
+  box-shadow: 0 8px 20px rgba(33, 109, 143, .36) !important;
+}
+@media (min-width: 992px) {
+  #login.has-benefits { right: 120px !important; left: auto !important; }
+}
+@media (max-width: 767px) {
+  #login.has-benefits { width: min(440px, 96vw) !important; }
+  #login.has-benefits .popup-widget-inner {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    border-radius: 14px !important;
+  }
+  #login.has-benefits > .popup-widget-inner > h2 { padding: 28px 24px 14px !important; font-size: 20px !important; }
+  #login.has-benefits > .popup-widget-inner > #customerLogin { padding: 0 24px 26px !important; }
+  #login.has-benefits .login-benefits {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    padding: 28px 24px !important;
+    border-left: 0 !important;
+    border-top: 1px solid #d8e6e9 !important;
+  }
+  #login .lb-title { font-size: 19px !important; }
+  #login .lb-cta { margin-top: 8px !important; }
+}

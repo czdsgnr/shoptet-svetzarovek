@@ -8,23 +8,6 @@
 (function () {
   'use strict';
 
-  /* === Detail "ready" strážce =========================================
-     Merkur motiv staví pravý sloupec detailu (nadpis .p-detail-inner-header,
-     skladovost .detail-parameters, štítky Akce/Výprodej) až PO DOMContentLoaded
-     vlastním JS. Když do toho náš JS sáhne dřív (a <script defer> běží právě na
-     DOMContentLoaded), motivu to rozhodí přesun a pravý sloupec se nedostaví.
-     Proto naše detailové funkce nic nedělají, dokud motiv pravý sloupec
-     nedostaví. Signál hotova: nadpis je už v .p-info-wrapper. Pojistka: po
-     window 'load' je motiv hotový tak jako tak. (Na nedetailových stránkách
-     vrací rovnou true → výpis/kategorie běží bez čekání.) */
-  var __szLoaded = false;
-  window.addEventListener('load', function () { __szLoaded = true; });
-  function detailReady() {
-    if (!document.body || !document.body.classList.contains('type-product')) return true;
-    if (document.querySelector('.p-info-wrapper .p-detail-inner-header')) return true;
-    return __szLoaded;
-  }
-
   /* === A) Login popup s benefity (registrace vpravo) ================== */
   function buildLoginExtras() {
     var popup = document.getElementById('login');
@@ -96,7 +79,6 @@
 
   /* === C) Skladová tabulka na detailu (přeneseno ze script.js) ======== */
   function initDetailSklad() {
-    if (!detailReady()) return; // počkat, až motiv dostaví pravý sloupec
     if (!document.querySelector('.type-detail, body.type-product')) return;
     var params = document.querySelector('.p-info-wrapper .detail-parameters');
     if (!params || params.querySelector('.sklad')) return; // idempotentně
@@ -113,10 +95,9 @@
       '<table><tbody><tr class="expedice"><th>Litoměřice / expedice</th><td></td></tr></tbody></table>';
     params.appendChild(sklad);
 
-    // přesunout skladovost do buňky (scope na buy-box – jinak by to sebralo
-    // .availability-value i z variant / podobných produktů na stránce)
+    // přesunout skladovost do buňky
     var td = sklad.querySelector('.expedice td');
-    document.querySelectorAll('.p-info-wrapper .availability-value').forEach(function (av) {
+    document.querySelectorAll('.availability-value').forEach(function (av) {
       if (td) td.appendChild(av);
     });
 
@@ -142,7 +123,6 @@
      bez CSS order lezl nahoru nad produkt. CSS order:10 to řeší vizuálně,
      tady navíc přesuneme element na konec DOM (žádný záblesk při načítání). */
   function moveAltToBottom() {
-    if (!detailReady()) return;
     var alt = document.getElementById('productsAlternative');
     var pd = document.querySelector('.p-detail');
     if (alt && pd && pd.lastElementChild !== alt) pd.appendChild(alt);
@@ -151,7 +131,6 @@
   /* === D2) USP pruh (.benefitBanner) na detailu – pod .row.product-top,
      NAD "Podobné produkty" (dle přání klienta). */
   function moveUspBelowProduct() {
-    if (!detailReady()) return;
     if (!document.body.classList.contains('type-product')) return;
     var usp = document.querySelector('.benefitBanner');
     var anchor = document.querySelector('.row.product-top');
@@ -204,7 +183,6 @@
      Původní cena (.price-standard) je uvnitř slevového badge. Naklonujeme
      ji k akční ceně do .prices (struck-through, viz CSS). Idempotentně. */
   function addOrigPrice() {
-    if (!detailReady()) return; // na výpisu vrací true hned; na detailu počká
     document.querySelectorAll('.products-block .p').forEach(function (card) {
       if (card.querySelector('.p-orig-price')) return;
       var flag = card.querySelector('.flag-discount');
@@ -226,7 +204,6 @@
      potomka .p (karta je position:relative) → sedí v pravém horním rohu
      karty, zarovnaný s Akce. CSS dá pozici. Idempotentní. */
   function moveBadgeToCard() {
-    if (!detailReady()) return; // na výpisu vrací true hned; na detailu počká
     /* jen výpis/carousel karty – NE hlavní produkt na detailu (ten má badge
        v .p-image s vlastní pozicí top:0). */
     document.querySelectorAll(
@@ -326,10 +303,6 @@
 
     // Anti-flash: filtr byl skrytý (opacity:0), teď má chrome → odkrýt (fade).
     box.classList.add('sz-ready');
-    // STICKY odhalení: třída na STABILNÍM rodiči → po prvním zobrazení už se
-    // filtr neschová ani když motiv .box-filters překreslí (jinak blikání).
-    var cw = document.querySelector('.content-wrapper-in');
-    if (cw) cw.classList.add('sz-filters-shown');
   }
 
   /* === Karta podpory „Potřebujete pomoc?" (.contact-box) ===============
@@ -348,206 +321,6 @@
     });
   }
 
-  /* === Karta podpory v KOŠÍKU → bohatší „help" karta (návrh klienta) ====
-     Přestaví nativní .contact-box v košíku na kartu: hlavička s ikonou, intro
-     s fotkou poradce, lišta otevírací doby (živý stav Po–Pá 8:00–16:30), řádky
-     s ikonou+popiskem, patička. Data (tel/mobil/mail/FB/foto/nadpis) bere
-     z původního DOMu. CSS = `.contact-box.sz-help …`. Idempotentní (guard
-     `.sz-help`); po AJAX překreslení košíku se původní vrátí → přestaví znovu.
-     POZOR: mobil má v nativním DOMu rozbitý vnořený odkaz (escapované <a> v href)
-     → bereme JEN čistý `tel:+…` odkaz a href sanitizujeme (jinak rozbije markup). */
-  function buildHelpCard() {
-    var ico = {
-      help: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>',
-      phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>',
-      mobile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="11" y1="18" x2="13" y2="18"/></svg>',
-      mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="m2 7 10 6 10-6"/></svg>',
-      fb: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg>',
-      clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>',
-      go: '<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
-    };
-    function clean(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
-    function safeHref(h) { return (h || '').replace(/[<>"\s]/g, '').trim(); }
-    function pickTel(cb, scope) {
-      var a = cb.querySelector(scope + ' a[href^="tel:+"]') || cb.querySelector(scope + ' a[href^="tel:"]');
-      if (!a) return null;
-      var text = clean(a.textContent);
-      var href = safeHref(a.getAttribute('href'));
-      if (!/^tel:\+?\d{6,}$/.test(href)) href = 'tel:' + text.replace(/[^\d+]/g, '');
-      return { href: href, text: text };
-    }
-    function pickA(cb, scope) {
-      var a = cb.querySelector(scope + ' a');
-      if (!a) return null;
-      return { href: safeHref(a.getAttribute('href')), text: clean(a.textContent) };
-    }
-    function row(cls, d, svg, k, v) {
-      if (!d || !d.href) return '';
-      var target = /^https?:/.test(d.href) ? ' target="_blank" rel="noopener"' : '';
-      return '<a class="row ' + cls + '" href="' + d.href + '"' + target + '>' +
-        '<span class="ico">' + svg + '</span>' +
-        '<span class="rbody"><span class="k">' + k + '</span><span class="v">' + (v || d.text) + '</span></span>' +
-        ico.go + '</a>';
-    }
-    [].forEach.call(document.querySelectorAll('.cart-content .contact-box, .sidebar-in-cart .contact-box'), function (cb) {
-      if (cb.classList.contains('sz-help')) return;
-      var tel = pickTel(cb, '.tel'), cell = pickTel(cb, '.cellphone'),
-          mail = pickA(cb, '.mail'), fb = pickA(cb, '.facebook');
-      var imgEl = cb.querySelector('img');
-      // POZOR: theme lazy-load dává do `src` 1×1 placeholder (data:image/svg…),
-      // skutečná URL je v `data-src` → preferovat data-src a přeskočit data: URI.
-      var imgSrc = '';
-      if (imgEl) {
-        var cands = [imgEl.getAttribute('data-src'), imgEl.getAttribute('src'), imgEl.currentSrc];
-        for (var ci = 0; ci < cands.length; ci++) {
-          if (cands[ci] && cands[ci].indexOf('data:') !== 0) { imgSrc = safeHref(cands[ci]); break; }
-        }
-      }
-      var heading = clean((cb.querySelector('h2, .h4') || {}).textContent) || 'Potřebujete pomoc?';
-      cb.classList.add('sz-help');
-      cb.innerHTML =
-        '<div class="help__top">' + ico.help + '<h3>' + heading + '</h3></div>' +
-        '<div class="help__intro">' +
-          (imgSrc ? '<span class="avatar"><img src="' + imgSrc + '" alt="Operátor" loading="lazy"></span>' : '') +
-          '<span class="who"><span class="lead">Nejste si jistí? Zavolejte!</span><span class="sub">Operátor Petr</span></span>' +
-        '</div>' +
-        '<div class="hours"><span class="hico">' + ico.clock + '</span><span class="time">Po–Pá 8:00–16:30</span><span class="szp-online">online</span></div>' +
-        '<div class="help__list">' +
-          row('primary', tel, ico.phone, 'Zavolejte nám') +
-          row('', cell, ico.mobile, 'Mobil') +
-        '</div>' +
-        (mail ? '<div class="help__mail">' + row('', mail, ico.mail, 'Napište nám') + '</div>' : '') +
-        '<div class="help__foot">Obvykle odpovídáme do 1 hodiny</div>';
-      szSyncOnline(); // nastav online stav i v kartě
-    });
-  }
-
-  /* === Telefon + otevírací doba VEDLE VYHLEDÁVÁNÍ (přání klienta) =======
-     Do .navigation-buttons (řádek s Přihlášením/košíkem) vloží blok:
-     ikona + číslo (nahoře, tučně) + otevírací doba (pod, menší). Číslo bere
-     z horní lišty (.project-phone) a naformátuje. Duplicitní telefon+doba
-     v horní černé liště se skryje CSS (.top-navigation-contacts). Idempotentní. */
-  function buildHeaderPhone() {
-    var nav = document.querySelector('.navigation-buttons');
-    if (!nav || nav.querySelector('.sz-header-phone')) return;
-    var srcA = document.querySelector('.top-navigation-contacts .project-phone, .project-phone');
-    var href = srcA ? srcA.getAttribute('href') : 'tel:+420416731365';
-    if (!href || href.indexOf('tel:') !== 0) href = 'tel:+420416731365';
-    var num = '+420 416 731 365';
-    if (srcA) {
-      var raw = (srcA.textContent || '').replace(/\s/g, '');
-      if (/^\+420\d{9}$/.test(raw)) num = raw.replace(/(\+\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
-    }
-    var photo = 'https://cdn.myshoptet.com/usr/www.svetzarovek.eu/user/merchant/callcentrum.jpg';
-    var a = document.createElement('a');
-    a.className = 'sz-header-phone';
-    a.href = href;
-    a.setAttribute('aria-label', 'Zavolat ' + num);
-    a.innerHTML =
-      '<span class="szp-photo"><img src="' + photo + '" alt="Poradce" loading="lazy"></span>' +
-      '<span class="szp-body">' +
-        '<span class="szp-num">' + num + '</span>' +
-        '<span class="szp-meta"><span class="szp-hrs">Po–Pá: 8:00–16:30</span>' +
-          '<span class="szp-online">Jsme online</span>' +
-        '</span>' +
-      '</span>';
-    nav.insertBefore(a, nav.firstChild);
-    szSyncOnline(); // nastav aktuální stav (zeleně v otevírací době, jinak skryté)
-  }
-
-  /* „Jsme online" ukázat jen v otevírací době (Po–Pá 8:00–16:30), jinak skrýt.
-     Přepočítává se ŽIVĚ (interval) – aby po přejetí přes 16:30 nezůstalo zaseklé.
-     Hledá element čerstvě, takže funguje i po překreslení hlavičky motivem. */
-  function szSyncOnline() {
-    var n = new Date(), d = n.getDay(), m = n.getHours() * 60 + n.getMinutes();
-    var open = d >= 1 && d <= 5 && m >= 480 && m < 990;
-    [].forEach.call(document.querySelectorAll('.szp-online'), function (el) {
-      el.style.display = open ? '' : 'none';
-    });
-  }
-
-  /* === Sticky „Do košíku" lišta na MOBILU (přání klienta) ==============
-     Když hlavní tlačítko „Vložit do košíku" sjede z obrazovky, naskočí dole
-     fixní lišta s cenou + tlačítkem. Klik na ni klikne hlavní tlačítko (zachová
-     množství/variantu). Viditelnost řídí IntersectionObserver + třída na body;
-     zobrazení jen na mobilu řeší CSS (@media). Idempotentní. */
-  function buildStickyBuy() {
-    if (!document.body.classList.contains('type-product')) return;
-    if (window.__szStickyBuy) return;
-    var mainBtn = document.querySelector('form.pr-action .add-to-cart-button.btn-conversion, .p-detail form .add-to-cart-button.btn-conversion, .p-info-wrapper .add-to-cart-button');
-    if (!mainBtn) return;
-    window.__szStickyBuy = true;
-    function priceHtml() {
-      var f = document.querySelector('.p-final-price-wrapper .price-final, .p-info-wrapper .price-final, .price-final');
-      var s = document.querySelector('.p-final-price-wrapper .price-standard, .p-info-wrapper .price-standard, .price-standard');
-      var ftxt = f ? f.textContent.replace(/\s+/g, ' ').trim() : '';
-      var stxt = s ? s.textContent.replace(/\s+/g, ' ').trim() : '';
-      // původní přeškrtnutá cena jen když existuje (sleva) a liší se od akční
-      var orig = (stxt && stxt !== ftxt) ? '<span class="ssb-orig">' + stxt + '</span>' : '';
-      return orig + '<span class="ssb-final">' + ftxt + '</span>';
-    }
-    var cartIco = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
-    var bar = document.createElement('div');
-    bar.className = 'sz-sticky-buy';
-    bar.innerHTML = '<span class="ssb-price">' + priceHtml() + '</span>' +
-      '<button type="button" class="ssb-btn">' + cartIco + ' Do košíku</button>';
-    document.body.appendChild(bar);
-    // najít tlačítko ŽIVĚ při kliknutí – po změně varianty Shoptet buy-box
-    // překreslí a původní mainBtn může být odpojený (klik by nic neudělal).
-    bar.querySelector('.ssb-btn').addEventListener('click', function () {
-      var live = document.querySelector('form.pr-action .add-to-cart-button.btn-conversion, .p-info-wrapper .add-to-cart-button');
-      (live || mainBtn).click();
-    });
-    if (window.IntersectionObserver) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { document.body.classList.toggle('sz-sticky-on', !e.isIntersecting); });
-        var pe = bar.querySelector('.ssb-price'); if (pe) pe.innerHTML = priceHtml();
-      }, { threshold: 0 });
-      io.observe(mainBtn);
-    }
-  }
-
-  /* === Sticky „Pokračovat" lišta na MOBILU v košíku (přání klienta) ====
-     Když tlačítko Pokračovat (na konci souhrnu) sjede z obrazovky, naskočí
-     dole fixní lišta s celkovou cenou + tlačítkem na krok objednávky. Klik
-     spustí ŽIVĚ nalezené #continue-order-button (zachová chování motivu).
-     Zobrazení jen na mobilu řeší CSS (@media). Idempotentní. */
-  function buildCartSticky() {
-    var mainBtn = document.getElementById('continue-order-button');
-    if (!mainBtn) return;
-    if (window.__szCartSticky) return;
-    window.__szCartSticky = true;
-    function total() {
-      var p = document.querySelector('.summary-wrapper .price.price-primary, .price-wrapper .price.price-primary');
-      return p ? p.textContent.replace(/\s+/g, ' ').trim() : '';
-    }
-    var chevron = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
-    var bar = document.createElement('div');
-    bar.className = 'sz-cart-sticky';
-    bar.innerHTML =
-      '<span class="scs-price"><span class="scs-lbl">Celkem</span>' +
-      '<span class="scs-val">' + total() + '</span></span>' +
-      '<button type="button" class="scs-btn">Pokračovat' + chevron + '</button>';
-    document.body.appendChild(bar);
-    bar.querySelector('.scs-btn').addEventListener('click', function () {
-      var live = document.getElementById('continue-order-button');
-      if (live) live.click(); else location.href = mainBtn.getAttribute('href') || '/objednavka/krok-1/';
-    });
-    function syncPrice() { var v = bar.querySelector('.scs-val'); if (v) v.textContent = total(); }
-    if (window.IntersectionObserver) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { document.body.classList.toggle('sz-cart-sticky-on', !e.isIntersecting); });
-        syncPrice();
-      }, { threshold: 0 });
-      io.observe(mainBtn);
-    }
-    // cena se mění po úpravě množství (AJAX/reload souhrnu) → hlídat
-    var sw = document.querySelector('.summary-wrapper');
-    if (sw && window.MutationObserver) {
-      new MutationObserver(syncPrice).observe(sw, { childList: true, subtree: true, characterData: true });
-    }
-  }
-
   /* === Init =========================================================== */
   function initAll() {
     buildLoginExtras();
@@ -561,29 +334,11 @@
     addOrigPrice();
     moveBadgeToCard();
     styleContactCard();
-    buildHelpCard();
-    buildHeaderPhone();   // telefon+doba vedle vyhledávání
-    buildStickyBuy();     // sticky "Do košíku" lišta na mobilu (detail)
-    buildCartSticky();    // sticky "Pokračovat" lišta na mobilu (košík)
   }
-  // sticky buy – buy box se na detailu renderuje později
-  window.addEventListener('load', buildStickyBuy);
-  document.addEventListener('ShoptetDOMPageContentLoaded', buildStickyBuy);
-  setTimeout(buildStickyBuy, 800);
-  setTimeout(buildStickyBuy, 1800);
-  // sticky "Pokračovat" – souhrn košíku se může renderovat později
-  window.addEventListener('load', buildCartSticky);
-  document.addEventListener('ShoptetDOMPageContentLoaded', buildCartSticky);
-  setTimeout(buildCartSticky, 800);
-  setTimeout(buildCartSticky, 1800);
 
   if (document.readyState !== 'loading') initAll();
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
-  // telefon vedle vyhledávání – hlavička je brzy, ale pro jistotu i po load
-  window.addEventListener('load', buildHeaderPhone);
-  setTimeout(buildHeaderPhone, 800);
-  setInterval(szSyncOnline, 60000); // „Jsme online" přepočítávat živě (přejezd přes 16:30)
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
   function reinitFilters() { moveFilterToSidebar(); initFilters(); initFilterToggle(); buildFilterChrome(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
@@ -603,12 +358,6 @@
   window.addEventListener('load', styleContactCard);
   document.addEventListener('ShoptetDOMCartContentLoaded', styleContactCard);
   setTimeout(styleContactCard, 1000);
-  // karta podpory v košíku – po načtení i po AJAX překreslení košíku
-  function reinitHelp() { styleContactCard(); buildHelpCard(); }
-  window.addEventListener('load', reinitHelp);
-  document.addEventListener('ShoptetDOMCartContentLoaded', reinitHelp);
-  setTimeout(reinitHelp, 800);
-  setTimeout(reinitHelp, 2000);
   // detail – varianty/skladovost/slider se renderují později
   document.addEventListener('ShoptetDOMPageContentLoaded', moveAltToBottom);
   setTimeout(moveAltToBottom, 600);
@@ -629,19 +378,4 @@
       setTimeout(buildLoginExtras, 300);
     }
   });
-
-  /* === Detail: spustit naše úpravy AŽ motiv dostaví pravý sloupec ======
-     Strážce detailReady() drží detailové funkce v klidu, dokud motiv pravý
-     sloupec nedostaví (jinak mu rozhodíme přesun nadpisu/skladovosti/štítků).
-     Tenhle poller je hlídá a jakmile je hotovo, spustí je jednou. */
-  if (document.body && document.body.classList.contains('type-product')) {
-    var __szTries = 0;
-    var __szIv = setInterval(function () {
-      if (detailReady()) {
-        clearInterval(__szIv);
-        initDetailSklad(); moveAltToBottom(); moveUspBelowProduct();
-        moveBadgeToCard(); addOrigPrice();
-      } else if (++__szTries > 100) { clearInterval(__szIv); } // ~10s pojistka
-    }, 100);
-  }
 })();
