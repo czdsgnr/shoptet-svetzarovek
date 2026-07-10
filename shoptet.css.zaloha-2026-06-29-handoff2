@@ -1220,6 +1220,15 @@ body.type-product .p-image .flags-extra,
 .shipping-billing-table .radio-wrapper { margin-bottom: 4px !important; }
 .shipping-billing-table .radio-wrapper > label { padding-top: 9px !important; padding-bottom: 9px !important; }
 
+/* CHECKOUT – Informace o vás (krok 3), přání klienta:
+   3) vyplněné hodnoty (i z ARESu) měly šedou barvu (color:#a3a3a3) → zákazník
+      nevěděl, jestli jsou fakt vyplněné → ztmavit. (Placeholdery zůstanou šedé.)
+   4) formuláře byly moc od sebe (dost scrollování) → zkomprimovat (nižší inputy
+      + menší mezery mezi poli). */
+#order-form .form-control { color: #1d2b30 !important; padding-top: 9px !important; padding-bottom: 9px !important; }
+#order-form .form-group { margin-bottom: 9px !important; }
+#order-form fieldset.box { padding-top: 16px !important; padding-bottom: 16px !important; }
+
 /* Detail – pravý sloupec (.p-info-wrapper = cena, dostupnost, KOŠÍK).
    Motiv ho má opacity:0 a odhaluje přidáním třídy .visible-element (JS reveal).
    Ten reveal je ale NESPOLEHLIVÝ (občas .visible-element nepřidá – hlavně při

@@ -781,6 +781,24 @@
   }
 
   /* === Init =========================================================== */
+  /* CHECKOUT: ARES hláška „Údaje byly automaticky doplněny z 🇨🇿 Aresu" má
+     vlajku 🇨🇿, která se na Windows láme na „||" (paskvil). Po doplnění z ARESu
+     z hlášky vlajkové emoji (regionální indikátory) odstraníme. */
+  function szFixAresFlag() {
+    [].forEach.call(document.querySelectorAll('#content span, #order-form span'), function (el) {
+      if (el.children.length || !/automaticky dopln/i.test(el.textContent || '')) return;
+      var c = el.textContent.replace(/[\uD83C][\uDDE6-\uDDFF]/g, '').replace(/\s{2,}/g, ' ').trim();
+      if (c !== el.textContent) el.textContent = c;
+    });
+  }
+  function initAresFix() {
+    if (!document.getElementById('order-form')) return; // jen checkout
+    szFixAresFlag();
+    if (window.__szAresObs) return;
+    var host = document.getElementById('content') || document.body;
+    window.__szAresObs = new MutationObserver(szFixAresFlag);
+    window.__szAresObs.observe(host, { childList: true, subtree: true });
+  }
   function initAll() {
     buildLoginExtras();
     moveFilterToSidebar(); // filtr do levého sidebaru (nad podporu)
@@ -799,6 +817,7 @@
     buildHeaderPhone();   // telefon+doba vedle vyhledávání
     buildStickyBuy();     // sticky "Do košíku" lišta na mobilu (detail)
     buildCartSticky();    // sticky "Pokračovat" lišta na mobilu (košík)
+    initAresFix();        // checkout: odstranit vlajku z ARES hlášky
   }
   // sticky buy – buy box se na detailu renderuje později
   window.addEventListener('load', buildStickyBuy);
