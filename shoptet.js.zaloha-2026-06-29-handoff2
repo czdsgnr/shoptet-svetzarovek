@@ -563,8 +563,13 @@
      spustí ŽIVĚ nalezené #continue-order-button (zachová chování motivu).
      Zobrazení jen na mobilu řeší CSS (@media). Idempotentní. */
   function buildCartSticky() {
+    // JEN na stránce košíku. `#continue-order-button` je i v cart-dropdownu na
+    // KAŽDÉ stránce (skrytý) → IntersectionObserver ho bral jako „mimo obraz"
+    // a lišta naskakovala všude (homepage, kategorie…). Brána přes body.in-kosik
+    // + jistota, že tlačítko je reálně vidět (ne skrytý dropdown).
+    if (!document.body || !document.body.classList.contains('in-kosik')) return;
     var mainBtn = document.getElementById('continue-order-button');
-    if (!mainBtn) return;
+    if (!mainBtn || mainBtn.offsetParent === null) return;
     if (window.__szCartSticky) return;
     window.__szCartSticky = true;
     function total() {
