@@ -392,11 +392,100 @@
     var open = f.classList.contains('otevreno') && window.matchMedia && window.matchMedia('(max-width: 991px)').matches;
     document.body.classList.toggle('sz-sheet-open', !!open);
   }
+  /* Multi-výběr: složí cílovou URL ze VŠECH změněných checkboxů (checked !=
+     původní stav). Formát parametru neznáme (pv/stock/…), tak diffujeme
+     `data-url` (Shoptet ji počítá vůči PŮVODNÍMU stavu) proti aktuální URL a
+     merge-ujeme hodnoty po klíčích. Vrací null = beze změn. */
+  function szSheetTargetUrl() {
+    var f = document.getElementById('filters');
+    if (!f) return null;
+    var original = new URLSearchParams(location.search);
+    var working = new URLSearchParams(location.search);
+    var changed = 0;
+    [].forEach.call(f.querySelectorAll('input[type="checkbox"]'), function (b) {
+      if (b.__szOrig === undefined || b.checked === b.__szOrig) return;
+      var du = b.getAttribute('data-url') || '';
+      if (du.indexOf('?') < 0) return; // bez URL neumíme spočítat
+      changed++;
+      var cp = new URLSearchParams(du.split('?')[1] || '');
+      var keys = {}; original.forEach(function (v, k) { keys[k] = 1; }); cp.forEach(function (v, k) { keys[k] = 1; });
+      Object.keys(keys).forEach(function (key) {
+        var o = (original.get(key) || '').split(',').filter(Boolean);
+        var n = (cp.get(key) || '').split(',').filter(Boolean);
+        var added = n.filter(function (v) { return o.indexOf(v) < 0; });
+        var removed = o.filter(function (v) { return n.indexOf(v) < 0; });
+        if (!added.length && !removed.length) return;
+        var w = (working.get(key) || '').split(',').filter(Boolean);
+        added.forEach(function (v) { if (w.indexOf(v) < 0) w.push(v); });
+        removed.forEach(function (v) { var i = w.indexOf(v); if (i >= 0) w.splice(i, 1); });
+        if (w.length) working.set(key, w.join(',')); else working.delete(key);
+      });
+    });
+    if (!changed) return null;
+    var qs = working.toString();
+    return location.pathname + (qs ? '?' + qs : '');
+  }
+  function szSheetGroup(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function szSheetPlural(n) { return n === 1 ? 'produkt' : (n >= 2 && n <= 4 ? 'produkty' : 'produktů'); }
+  function szSheetSetFoot(n) {
+    var b = document.querySelector('.sz-sheet-show'); if (!b) return;
+    b.textContent = (n == null || isNaN(n)) ? 'Zobrazit produkty' : ('Zobrazit ' + szSheetGroup(n) + ' ' + szSheetPlural(n));
+  }
+  function szSheetCountFromHtml(html) {
+    // číslo a „položek" odděluje v HTML tag (<span>3678</span> položek) → tagy
+    // nahradíme mezerou, ať jsou vedle sebe a regex je chytne.
+    var text = html.replace(/<[^>]+>/g, ' ');
+    var m = text.match(/(\d[\d\s ]*)\s*polo[žz]ek\s+celkem/i);
+    return m ? parseInt(m[1].replace(/[^0-9]/g, ''), 10) : null;
+  }
+  /* Živý počet: po změně (debounce) načteme na pozadí cílovou URL a přečteme
+     „X položek celkem" → tlačítko „Zobrazit N produktů". Bez placené služby. */
+  function szSheetRefreshCount() {
+    clearTimeout(window.__szCountT);
+    window.__szCountT = setTimeout(function () {
+      var url = szSheetTargetUrl() || (location.pathname + location.search);
+      var b = document.querySelector('.sz-sheet-show');
+      if (b) b.classList.add('sz-loading');
+      fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
+        .then(function (r) { return r.text(); })
+        .then(function (html) { szSheetSetFoot(szSheetCountFromHtml(html)); if (b) b.classList.remove('sz-loading'); })
+        .catch(function () { if (b) b.classList.remove('sz-loading'); });
+    }, 350);
+  }
+  function szSheetCurrentCount() {
+    var els = document.querySelectorAll('main span, main p, main div, .content span, .content p');
+    for (var i = 0; i < els.length; i++) {
+      if (els[i].children.length === 0) {
+        var m = (els[i].textContent || '').match(/(\d[\d\s ]*)\s*polo[žz]ek\s+celkem/i);
+        if (m) return parseInt(m[1].replace(/[^0-9]/g, ''), 10);
+      }
+    }
+    return null;
+  }
   function initFilterSheet() {
     var filters = document.getElementById('filters');
     if (!filters) return;
     var btn = filters.querySelector('.filtrovat');
     if (!btn) return; // .filtrovat je jen v mobilním renderu
+    // snapshot původního (aplikovaného) stavu checkboxů – jen jednou za načtení
+    [].forEach.call(filters.querySelectorAll('input[type="checkbox"]'), function (b) {
+      if (b.__szOrig === undefined) b.__szOrig = b.checked;
+    });
+    // Multi-výběr: na mobilu zachytit klik na value-checkbox → NEnavigovat hned,
+    // jen přepnout stav a přepočítat počet. Aplikuje se až „Zobrazit produkty".
+    if (!filters.__szPickBound) {
+      filters.__szPickBound = true;
+      filters.addEventListener('click', function (e) {
+        if (!window.matchMedia || !window.matchMedia('(max-width: 991px)').matches) return;
+        var t = e.target;
+        var cb = (t.matches && t.matches('input[type="checkbox"]')) ? t : null;
+        if (!cb) { var lbl = t.closest && t.closest('label'); if (lbl) cb = document.getElementById(lbl.getAttribute('for')) || lbl.querySelector('input[type="checkbox"]'); }
+        if (!cb || !cb.getAttribute('data-filter-code')) return; // jen value-checkboxy filtru
+        e.preventDefault(); e.stopPropagation();
+        cb.checked = !cb.checked;
+        szSheetRefreshCount();
+      }, true);
+    }
     // Zavírat VŽDY přes klik na tlačítko = theme toggle. Theme drží otevřeno/
     // zavřeno v interní proměnné; kdybychom .otevreno jen smazali z DOM, stav se
     // rozejde a další ťuknutí sheet neotevře. Proto btn.click() (synchronní).
@@ -430,7 +519,12 @@
       foot.className = 'sz-sheet-foot';
       foot.innerHTML = '<button type="button" class="sz-sheet-show">Zobrazit produkty</button>';
       filters.appendChild(foot);
-      foot.querySelector('.sz-sheet-show').addEventListener('click', closeSheet);
+      // „Zobrazit produkty" = aplikovat vybrané filtry naráz (nebo jen zavřít).
+      foot.querySelector('.sz-sheet-show').addEventListener('click', function () {
+        var url = szSheetTargetUrl();
+        if (url) location.href = url; else closeSheet();
+      });
+      szSheetSetFoot(szSheetCurrentCount()); // počáteční počet z aktuální stránky
     }
     if (!window.__szSheetObs) {
       window.__szSheetObs = new MutationObserver(szSyncSheet);

@@ -432,7 +432,10 @@
     b.textContent = (n == null || isNaN(n)) ? 'Zobrazit produkty' : ('Zobrazit ' + szSheetGroup(n) + ' ' + szSheetPlural(n));
   }
   function szSheetCountFromHtml(html) {
-    var m = html.match(/(\d[\d\s ]*)\s*polo[žz]ek\s+celkem/i);
+    // číslo a „položek" odděluje v HTML tag (<span>3678</span> položek) → tagy
+    // nahradíme mezerou, ať jsou vedle sebe a regex je chytne.
+    var text = html.replace(/<[^>]+>/g, ' ');
+    var m = text.match(/(\d[\d\s ]*)\s*polo[žz]ek\s+celkem/i);
     return m ? parseInt(m[1].replace(/[^0-9]/g, ''), 10) : null;
   }
   /* Živý počet: po změně (debounce) načteme na pozadí cílovou URL a přečteme
