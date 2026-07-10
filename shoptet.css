@@ -1211,6 +1211,12 @@ body.type-product .p-image .flags-extra,
 }
 .next-step--cart > p strong { color: #b23b00 !important; }
 .next-step--cart > p a { color: #b23b00 !important; font-weight: 800 !important; text-decoration: underline !important; }
+/* Košík/checkout (ordering-process) NEMÁ patičku (záměr Shoptetu – nerozptylovat
+   od dokončení). Obsah proto končil flush na hraně stránky → oranžová hláška
+   vypadala useknutá. Přidáme dole vzduch. */
+body.ordering-process .content-wrapper-in,
+body.ordering-process .row.cart-row { padding-bottom: 28px !important; }
+.cart-content.summary-wrapper { padding-bottom: 28px !important; }
 
 /* CHECKOUT – doprava & platba (přání klienta):
    1) neaktivní/nekompatibilní metody (Shoptet je značí .inactive-child + disabled
