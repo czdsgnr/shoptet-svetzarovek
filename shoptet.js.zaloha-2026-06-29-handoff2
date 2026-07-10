@@ -799,6 +799,28 @@
     window.__szAresObs = new MutationObserver(szFixAresFlag);
     window.__szAresObs.observe(host, { childList: true, subtree: true });
   }
+  /* Košík/checkout (ordering-process) nemá patičku → stránka končila „utnutá".
+     Doplníme tenkou čistou patičku (kontakt + copyright). Do .overall-wrapper
+     (blok, plná šířka) – NE do flex řádku obsahu (tam by se stala 3. sloupcem).
+     Zámek jako inline SVG (emoji 🔒 by se na Windows mohlo lámat jako ta vlajka). */
+  function buildCheckoutFooter() {
+    if (!document.body || !document.body.classList.contains('ordering-process')) return;
+    if (document.querySelector('.sz-checkout-footer')) return;
+    var host = document.querySelector('.overall-wrapper') || document.body;
+    var yr = new Date().getFullYear();
+    var lock = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+    var f = document.createElement('div');
+    f.className = 'sz-checkout-footer';
+    f.innerHTML =
+      '<div class="szcf-in">' +
+        '<span class="szcf-brand">© ' + yr + ' Svět žárovek</span>' +
+        '<span class="szcf-sec">' + lock + ' Bezpečný nákup</span>' +
+        '<a href="tel:+420416731365">+420 416 731 365</a>' +
+        '<a href="mailto:info@svetzarovek.eu">info@svetzarovek.eu</a>' +
+        '<span>Po–Pá 8:00–16:30</span>' +
+      '</div>';
+    host.appendChild(f);
+  }
   function initAll() {
     buildLoginExtras();
     moveFilterToSidebar(); // filtr do levého sidebaru (nad podporu)
@@ -818,6 +840,7 @@
     buildStickyBuy();     // sticky "Do košíku" lišta na mobilu (detail)
     buildCartSticky();    // sticky "Pokračovat" lišta na mobilu (košík)
     initAresFix();        // checkout: odstranit vlajku z ARES hlášky
+    buildCheckoutFooter();// checkout: doplnit tenkou patičku (ordering-process ji nemá)
   }
   // sticky buy – buy box se na detailu renderuje později
   window.addEventListener('load', buildStickyBuy);

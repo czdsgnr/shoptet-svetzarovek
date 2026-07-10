@@ -1211,12 +1211,17 @@ body.type-product .p-image .flags-extra,
 }
 .next-step--cart > p strong { color: #b23b00 !important; }
 .next-step--cart > p a { color: #b23b00 !important; font-weight: 800 !important; text-decoration: underline !important; }
-/* Košík/checkout (ordering-process) NEMÁ patičku (záměr Shoptetu – nerozptylovat
-   od dokončení). Obsah proto končil flush na hraně stránky → oranžová hláška
-   vypadala useknutá. Přidáme dole vzduch. */
-body.ordering-process .content-wrapper-in,
-body.ordering-process .row.cart-row { padding-bottom: 28px !important; }
-.cart-content.summary-wrapper { padding-bottom: 28px !important; }
+/* Košík/checkout (ordering-process) NEMÁ patičku (Shoptet ji tam záměrně nedává)
+   → stránka končila „utnutá" bez místa dole. Doplníme tenkou čistou patičku
+   (kontakt + copyright, NE celou rušivou z webu). Staví ji shoptet.js
+   (buildCheckoutFooter) do .overall-wrapper (blok, plná šířka), tady je styl. */
+.sz-checkout-footer { border-top: 1px solid #e3e8ea; margin-top: 34px; padding: 22px 16px calc(24px + env(safe-area-inset-bottom, 0px)); background: #fafbfc; }
+.sz-checkout-footer .szcf-in { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 22px; font-size: 13px; color: #7a868c; text-align: center; }
+.sz-checkout-footer a { color: #174A61 !important; text-decoration: none; font-weight: 600; }
+.sz-checkout-footer a:hover { text-decoration: underline; }
+.sz-checkout-footer .szcf-brand { font-weight: 700; color: #5d6b70; }
+.sz-checkout-footer .szcf-sec { display: inline-flex; align-items: center; gap: 6px; }
+.sz-checkout-footer .szcf-sec svg { opacity: .7; }
 
 /* CHECKOUT – doprava & platba (přání klienta):
    1) neaktivní/nekompatibilní metody (Shoptet je značí .inactive-child + disabled
