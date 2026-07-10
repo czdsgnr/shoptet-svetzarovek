@@ -449,6 +449,11 @@ html, body {
     left: auto !important;
     right: 18px !important;
     color: #fff !important;
+    /* svisle na střed tlačítka (theme má top:10px napevno → po zvětšení tlačítka
+       byl chevron nad středem). */
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
   }
 }
 
