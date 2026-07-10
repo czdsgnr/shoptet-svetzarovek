@@ -562,6 +562,10 @@
      dole fixní lišta s celkovou cenou + tlačítkem na krok objednávky. Klik
      spustí ŽIVĚ nalezené #continue-order-button (zachová chování motivu).
      Zobrazení jen na mobilu řeší CSS (@media). Idempotentní. */
+  function szCartStickyTotal() {
+    var p = document.querySelector('.summary-wrapper .price.price-primary, .price-wrapper .price.price-primary');
+    return p ? p.textContent.replace(/\s+/g, ' ').trim() : '';
+  }
   function buildCartSticky() {
     // JEN na stránce košíku. `#continue-order-button` je i v cart-dropdownu na
     // KAŽDÉ stránce (skrytý) → IntersectionObserver ho bral jako „mimo obraz"
@@ -570,36 +574,33 @@
     if (!document.body || !document.body.classList.contains('in-kosik')) return;
     var mainBtn = document.getElementById('continue-order-button');
     if (!mainBtn || mainBtn.offsetParent === null) return;
-    if (window.__szCartSticky) return;
-    window.__szCartSticky = true;
-    function total() {
-      var p = document.querySelector('.summary-wrapper .price.price-primary, .price-wrapper .price.price-primary');
-      return p ? p.textContent.replace(/\s+/g, ' ').trim() : '';
+    // Idempotentní: po AJAX košíku (ShoptetDOMCartContentLoaded) Shoptet VYMĚNÍ
+    // celý .summary-wrapper i #continue-order-button za nové prvky → lištu
+    // znovupoužijeme (visí na body, přežije), ale cenu přečteme čerstvě a
+    // observer PŘEVĚSÍME na nové tlačítko (starý byl mrtvý → cena mrzla).
+    var bar = document.querySelector('.sz-cart-sticky');
+    if (!bar) {
+      var chevron = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+      bar = document.createElement('div');
+      bar.className = 'sz-cart-sticky';
+      bar.innerHTML =
+        '<span class="scs-price"><span class="scs-lbl">Celkem</span>' +
+        '<span class="scs-val"></span></span>' +
+        '<button type="button" class="scs-btn">Pokračovat' + chevron + '</button>';
+      document.body.appendChild(bar);
+      bar.querySelector('.scs-btn').addEventListener('click', function () {
+        var live = document.getElementById('continue-order-button');
+        if (live) live.click();
+      });
     }
-    var chevron = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
-    var bar = document.createElement('div');
-    bar.className = 'sz-cart-sticky';
-    bar.innerHTML =
-      '<span class="scs-price"><span class="scs-lbl">Celkem</span>' +
-      '<span class="scs-val">' + total() + '</span></span>' +
-      '<button type="button" class="scs-btn">Pokračovat' + chevron + '</button>';
-    document.body.appendChild(bar);
-    bar.querySelector('.scs-btn').addEventListener('click', function () {
-      var live = document.getElementById('continue-order-button');
-      if (live) live.click(); else location.href = mainBtn.getAttribute('href') || '/objednavka/krok-1/';
-    });
-    function syncPrice() { var v = bar.querySelector('.scs-val'); if (v) v.textContent = total(); }
+    var v = bar.querySelector('.scs-val'); if (v) v.textContent = szCartStickyTotal();
+    if (window.__szCartIO) { try { window.__szCartIO.disconnect(); } catch (e) {} }
     if (window.IntersectionObserver) {
-      var io = new IntersectionObserver(function (entries) {
+      window.__szCartIO = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { document.body.classList.toggle('sz-cart-sticky-on', !e.isIntersecting); });
-        syncPrice();
+        var vv = bar.querySelector('.scs-val'); if (vv) vv.textContent = szCartStickyTotal();
       }, { threshold: 0 });
-      io.observe(mainBtn);
-    }
-    // cena se mění po úpravě množství (AJAX/reload souhrnu) → hlídat
-    var sw = document.querySelector('.summary-wrapper');
-    if (sw && window.MutationObserver) {
-      new MutationObserver(syncPrice).observe(sw, { childList: true, subtree: true, characterData: true });
+      window.__szCartIO.observe(mainBtn);
     }
   }
 
@@ -627,9 +628,12 @@
   document.addEventListener('ShoptetDOMPageContentLoaded', buildStickyBuy);
   setTimeout(buildStickyBuy, 800);
   setTimeout(buildStickyBuy, 1800);
-  // sticky "Pokračovat" – souhrn košíku se může renderovat později
+  // sticky "Pokračovat" – souhrn košíku se může renderovat později; po změně
+  // množství Shoptet přerenderuje košík (ShoptetDOMCartContentLoaded) → tam
+  // převěsit observer a přečíst novou cenu (jinak lišta drží starou částku).
   window.addEventListener('load', buildCartSticky);
   document.addEventListener('ShoptetDOMPageContentLoaded', buildCartSticky);
+  document.addEventListener('ShoptetDOMCartContentLoaded', buildCartSticky);
   setTimeout(buildCartSticky, 800);
   setTimeout(buildCartSticky, 1800);
 
