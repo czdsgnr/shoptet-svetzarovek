@@ -469,6 +469,11 @@ html, body {
   body.sz-sheet-open #return-to-top,
   body.sz-sheet-open #OPHWidgetWrapp { display: none !important; }
 
+  /* ZAVŘENÝ filtr na mobilu = jen tlačítko „Filtrovat". Motiv nechává sekci
+     „Příznaky" (.param-filter-top) viset pod tlačítkem i po zavření → skryjeme
+     vše kromě tlačítka, dokud není .otevreno. */
+  #filters:not(.otevreno) > *:not(.filtrovat) { display: none !important; }
+
   #filters.otevreno {
     position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; top: auto !important;
     width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 86vh !important;
