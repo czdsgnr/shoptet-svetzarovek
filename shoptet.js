@@ -389,24 +389,29 @@
   function szSyncSheet() {
     var f = document.getElementById('filters');
     if (!f) return;
-    var mobile = window.matchMedia && window.matchMedia('(max-width: 991px)').matches;
-    if (mobile && f.classList.contains('otevreno')) {
-      if (!window.__szUserTapped) { f.classList.remove('otevreno'); document.body.classList.remove('sz-sheet-open'); return; }
-      document.body.classList.add('sz-sheet-open');
-    } else {
-      document.body.classList.remove('sz-sheet-open');
-    }
+    var open = f.classList.contains('otevreno') && window.matchMedia && window.matchMedia('(max-width: 991px)').matches;
+    document.body.classList.toggle('sz-sheet-open', !!open);
   }
   function initFilterSheet() {
     var filters = document.getElementById('filters');
     if (!filters) return;
     var btn = filters.querySelector('.filtrovat');
     if (!btn) return; // .filtrovat je jen v mobilním renderu
-    function closeSheet() {
-      filters.classList.remove('otevreno');
-      document.body.classList.remove('sz-sheet-open');
+    // Zavírat VŽDY přes klik na tlačítko = theme toggle. Theme drží otevřeno/
+    // zavřeno v interní proměnné; kdybychom .otevreno jen smazali z DOM, stav se
+    // rozejde a další ťuknutí sheet neotevře. Proto btn.click() (synchronní).
+    function closeSheet() { if (filters.classList.contains('otevreno')) btn.click(); }
+    // Theme nechá .otevreno i po reloadu s aktivním filtrem → sheet by naskočil
+    // sám přes produkty. Jednou za načtení zavřeme (přes theme toggle, ať zůstane
+    // synchron). Aktivní filtry zákazník vidí přes štítky nad výpisem.
+    if (!window.__szSheetClosed) {
+      if (filters.classList.contains('otevreno')) {
+        btn.click(); // úspěch jen když theme reálně zavřel (jinak zkusí příští reinit)
+        window.__szSheetClosed = !filters.classList.contains('otevreno');
+      } else {
+        window.__szSheetClosed = true;
+      }
     }
-    if (!btn.__szTap) { btn.__szTap = true; btn.addEventListener('click', function () { window.__szUserTapped = true; }); }
     if (!document.querySelector('.sz-sheet-backdrop')) {
       var bd = document.createElement('div');
       bd.className = 'sz-sheet-backdrop';
@@ -418,8 +423,7 @@
       x.className = 'sz-sheet-x';
       x.setAttribute('aria-hidden', 'true');
       x.textContent = '×';
-      x.addEventListener('click', function (e) { e.stopPropagation(); closeSheet(); });
-      btn.appendChild(x);
+      btn.appendChild(x); // klik na × probublá na .filtrovat → theme zavře
     }
     if (!filters.querySelector('.sz-sheet-foot')) {
       var foot = document.createElement('div');
