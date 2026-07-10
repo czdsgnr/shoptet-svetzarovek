@@ -377,6 +377,64 @@
     if (!bar.parentNode) anchor.parentNode.insertBefore(bar, anchor);
   }
 
+  /* === Filtr jako BOTTOM SHEET na mobilu (přání klienta) ==============
+     Mobilní filtr = #filters s tlačítkem .filtrovat (jen mobilní render).
+     Přidáme podklad (backdrop), × do hlavičky a patičku „Zobrazit produkty";
+     otevřený stav (#filters.otevreno, přepíná ho tlačítko) zrcadlíme do
+     body.sz-sheet-open (podklad + zámek scrollu). Pořadí sekcí NEMĚNÍME
+     (žádný obal → order na přímých potomcích #filters by se rozbil).
+     Auto-open pojistka: theme nechá .otevreno i po reloadu (aktivní filtr) →
+     sheet by naskočil sám; otevřeme až po skutečném ťuknutí na tlačítko
+     (__szUserTapped). Aktivní filtry zákazník vidí přes štítky nad výpisem. */
+  function szSyncSheet() {
+    var f = document.getElementById('filters');
+    if (!f) return;
+    var mobile = window.matchMedia && window.matchMedia('(max-width: 991px)').matches;
+    if (mobile && f.classList.contains('otevreno')) {
+      if (!window.__szUserTapped) { f.classList.remove('otevreno'); document.body.classList.remove('sz-sheet-open'); return; }
+      document.body.classList.add('sz-sheet-open');
+    } else {
+      document.body.classList.remove('sz-sheet-open');
+    }
+  }
+  function initFilterSheet() {
+    var filters = document.getElementById('filters');
+    if (!filters) return;
+    var btn = filters.querySelector('.filtrovat');
+    if (!btn) return; // .filtrovat je jen v mobilním renderu
+    function closeSheet() {
+      filters.classList.remove('otevreno');
+      document.body.classList.remove('sz-sheet-open');
+    }
+    if (!btn.__szTap) { btn.__szTap = true; btn.addEventListener('click', function () { window.__szUserTapped = true; }); }
+    if (!document.querySelector('.sz-sheet-backdrop')) {
+      var bd = document.createElement('div');
+      bd.className = 'sz-sheet-backdrop';
+      document.body.appendChild(bd);
+      bd.addEventListener('click', closeSheet);
+    }
+    if (!btn.querySelector('.sz-sheet-x')) {
+      var x = document.createElement('span');
+      x.className = 'sz-sheet-x';
+      x.setAttribute('aria-hidden', 'true');
+      x.textContent = '×';
+      x.addEventListener('click', function (e) { e.stopPropagation(); closeSheet(); });
+      btn.appendChild(x);
+    }
+    if (!filters.querySelector('.sz-sheet-foot')) {
+      var foot = document.createElement('div');
+      foot.className = 'sz-sheet-foot';
+      foot.innerHTML = '<button type="button" class="sz-sheet-show">Zobrazit produkty</button>';
+      filters.appendChild(foot);
+      foot.querySelector('.sz-sheet-show').addEventListener('click', closeSheet);
+    }
+    if (!window.__szSheetObs) {
+      window.__szSheetObs = new MutationObserver(szSyncSheet);
+      window.__szSheetObs.observe(filters, { attributes: true, attributeFilter: ['class'] });
+    }
+    szSyncSheet();
+  }
+
   /* === Karta podpory „Potřebujete pomoc?" (.contact-box) ===============
      FB odkaz → „Facebook" (místo dlouhé URL), telefon s mezerami.
      Idempotentní – regexy nematchnou už upravený text. */
@@ -612,6 +670,7 @@
     initFilterToggle();   // + vlastní rozbalování (klik na hlavičku)
     buildFilterChrome();  // hlavička + patička filtru (reskin)
     buildFilterChips();   // štítky aktivních filtrů nad produkty
+    initFilterSheet();    // filtr jako bottom sheet na mobilu
     initDetailSklad();
     moveAltToBottom();
     moveUspBelowProduct();
@@ -645,7 +704,7 @@
   setTimeout(buildHeaderPhone, 800);
   setInterval(szSyncOnline, 60000); // „Jsme online" přepočítávat živě (přejezd přes 16:30)
   // Shoptet překresluje filtry/výpis – chyť i tyhle eventy.
-  function reinitFilters() { moveFilterToSidebar(); initFilters(); initFilterToggle(); buildFilterChrome(); buildFilterChips(); }
+  function reinitFilters() { moveFilterToSidebar(); initFilters(); initFilterToggle(); buildFilterChrome(); buildFilterChips(); initFilterSheet(); }
   document.addEventListener('ShoptetDOMPageContentLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageMoreProductsLoaded', reinitFilters);
   document.addEventListener('ShoptetDOMPageProductsLoaded', reinitFilters);

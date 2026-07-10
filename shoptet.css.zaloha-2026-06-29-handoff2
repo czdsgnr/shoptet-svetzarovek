@@ -451,6 +451,54 @@ html, body {
   }
 }
 
+/* === FILTR JAKO BOTTOM SHEET NA MOBILU (přání klienta) ================
+   Klik na „Filtrovat" (#filters dostane .otevreno) → filtr se ukáže jako
+   spodní panel: fixní dole, zaoblený, s podkladem, sticky hlavičkou (× zavře)
+   a sticky patičkou „Zobrazit produkty". Pořadí sekcí drží existující `order`
+   na PŘÍMÝCH potomcích #filters → proto BEZ obalu (patička order:100, hlavička
+   order:-100). Otevření/zavření zrcadlí JS do body.sz-sheet-open. Jen mobil. */
+.sz-sheet-backdrop { display: none; }
+.sz-sheet-foot { display: none; }
+.sz-sheet-x { display: none; }
+@media (max-width: 991px) {
+  .sz-sheet-backdrop { display: block; position: fixed; inset: 0; z-index: 9999; background: rgba(16, 34, 44, .5); opacity: 0; visibility: hidden; transition: opacity .25s ease; }
+  body.sz-sheet-open .sz-sheet-backdrop { opacity: 1; visibility: visible; }
+  body.sz-sheet-open { overflow: hidden; }
+  body.sz-sheet-open #return-to-top { display: none !important; }
+
+  #filters.otevreno {
+    position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; top: auto !important;
+    width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 86vh !important;
+    margin: 0 !important; padding: 0 12px !important; z-index: 10000 !important;
+    background: #fff !important; border-radius: 20px 20px 0 0 !important;
+    box-shadow: 0 -10px 44px rgba(0, 0, 0, .28) !important;
+    overflow-y: auto !important; -webkit-overflow-scrolling: touch;
+    animation: szSheetUp .3s cubic-bezier(.32, .72, 0, 1);
+  }
+  @keyframes szSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  #filters.otevreno .filtrovat {
+    order: -100 !important; position: sticky !important; top: 0 !important; z-index: 5 !important;
+    margin: 0 -12px 8px !important; border-radius: 0 !important;
+    background: #fff !important; color: #16223b !important; box-shadow: none !important;
+    border-bottom: 1px solid #e6ebee !important; padding: 16px 18px !important;
+    font-size: 17px !important; font-weight: 800 !important;
+  }
+  #filters.otevreno .filtrovat::before { background: #174A61 !important; }
+  #filters.otevreno .filtrovat::after { display: none !important; }
+  #filters.otevreno .sz-sheet-x { display: inline-flex; margin-left: auto !important; width: 30px; height: 30px; border-radius: 50%; background: #eef2f4; align-items: center; justify-content: center; color: #5a6b7e; font-size: 22px; line-height: 1; }
+
+  /* všechny sekce na plnou šířku (parametrické měly 50% → nejednotné) */
+  #filters.otevreno .filter-section,
+  #filters.otevreno .param-filter-top,
+  #filters.otevreno .filter-section-parametric,
+  #filters.otevreno .slider-wrapper,
+  #filters.otevreno .filter-sections { width: 100% !important; max-width: 100% !important; flex: 0 0 auto !important; margin-left: 0 !important; margin-right: 0 !important; box-sizing: border-box !important; }
+
+  #filters.otevreno .sz-sheet-foot { display: block; order: 100 !important; position: sticky !important; bottom: 0 !important; z-index: 5 !important; margin: 8px -12px 0 !important; background: #fff !important; border-top: 1px solid #e6ebee !important; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)) !important; }
+  #filters.otevreno .sz-sheet-foot .sz-sheet-show { width: 100% !important; padding: 15px !important; border: 0 !important; border-radius: 12px !important; background: #174A61 !important; color: #fff !important; font-size: 16px !important; font-weight: 800 !important; cursor: pointer; }
+}
+
 /* === POŘADÍ SEKCÍ FILTRU (přání klienta) ============================
    Shora: Příznaky → Patice → Příkon → Barva světla → Barevná teplota →
    Odstín → Délka (mm) → Světelný tok → (ostatní parametry) → Dle ceny.
