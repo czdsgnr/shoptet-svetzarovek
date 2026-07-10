@@ -488,17 +488,19 @@ html, body {
     order: -100 !important; position: sticky !important; top: 0 !important; z-index: 5 !important;
     margin: 0 -12px 8px !important; border-radius: 0 !important;
     background: #fff !important; color: #16223b !important; box-shadow: none !important;
-    border-bottom: 1px solid #e6ebee !important; padding: 16px 58px 16px 18px !important;
+    border-bottom: 1px solid #e6ebee !important; padding: 13px 14px !important;
     font-size: 17px !important; font-weight: 800 !important;
+    align-items: center !important;
   }
   #filters.otevreno .filtrovat::before { background: #174A61 !important; }
   #filters.otevreno .filtrovat::after { display: none !important; }
-  /* × jako pravý horní roh sheetu (absolutně v sticky hlavičce). */
+  /* × vpravo v hlavičce (flex, margin-left:auto – spolehlivé, bez absolutního
+     pozicování, které se u sticky hlavičky rozbíjelo/přesouvalo). */
   #filters.otevreno .sz-sheet-x {
-    display: inline-flex !important; position: absolute !important; top: 11px !important; right: 12px !important;
-    margin: 0 !important; width: 36px !important; height: 36px !important; border-radius: 50% !important;
+    display: inline-flex !important; position: static !important; margin: 0 0 0 auto !important;
+    flex: none !important; width: 34px !important; height: 34px !important; border-radius: 50% !important;
     background: #eef2f4 !important; align-items: center !important; justify-content: center !important;
-    color: #5a6b7e !important; font-size: 24px !important; line-height: 1 !important;
+    color: #5a6b7e !important; font-size: 23px !important; line-height: 1 !important;
   }
   /* badge počtu vybraných filtrů „N vybráno" vedle názvu. */
   #filters.otevreno .sz-sheet-count {
