@@ -488,12 +488,25 @@ html, body {
     order: -100 !important; position: sticky !important; top: 0 !important; z-index: 5 !important;
     margin: 0 -12px 8px !important; border-radius: 0 !important;
     background: #fff !important; color: #16223b !important; box-shadow: none !important;
-    border-bottom: 1px solid #e6ebee !important; padding: 16px 18px !important;
+    border-bottom: 1px solid #e6ebee !important; padding: 16px 58px 16px 18px !important;
     font-size: 17px !important; font-weight: 800 !important;
   }
   #filters.otevreno .filtrovat::before { background: #174A61 !important; }
   #filters.otevreno .filtrovat::after { display: none !important; }
-  #filters.otevreno .sz-sheet-x { display: inline-flex; margin-left: auto !important; width: 30px; height: 30px; border-radius: 50%; background: #eef2f4; align-items: center; justify-content: center; color: #5a6b7e; font-size: 22px; line-height: 1; }
+  /* × jako pravý horní roh sheetu (absolutně v sticky hlavičce). */
+  #filters.otevreno .sz-sheet-x {
+    display: inline-flex !important; position: absolute !important; top: 11px !important; right: 12px !important;
+    margin: 0 !important; width: 36px !important; height: 36px !important; border-radius: 50% !important;
+    background: #eef2f4 !important; align-items: center !important; justify-content: center !important;
+    color: #5a6b7e !important; font-size: 24px !important; line-height: 1 !important;
+  }
+  /* badge počtu vybraných filtrů „N vybráno" vedle názvu. */
+  #filters.otevreno .sz-sheet-count {
+    display: inline-flex !important; align-items: center !important; margin-left: 10px !important;
+    background: #174A61 !important; color: #fff !important; font-size: 12px !important; font-weight: 800 !important;
+    padding: 3px 10px !important; border-radius: 999px !important; line-height: 1.4 !important; white-space: nowrap !important;
+  }
+  #filters.otevreno .sz-sheet-count.sz-empty { display: none !important; }
 
   /* všechny sekce na plnou šířku (parametrické měly 50% → nejednotné) */
   #filters.otevreno .filter-section,

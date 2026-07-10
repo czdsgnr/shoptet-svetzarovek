@@ -462,6 +462,17 @@
     }
     return null;
   }
+  // počet vybraných (zaškrtnutých) filtrů → badge „N vybráno" v hlavičce.
+  function szSheetUpdateSelected() {
+    var f = document.getElementById('filters'); if (!f) return;
+    var badge = f.querySelector('.sz-sheet-count'); if (!badge) return;
+    var n = 0;
+    [].forEach.call(f.querySelectorAll('input[type="checkbox"]'), function (b) {
+      if (b.getAttribute('data-filter-code') && b.checked) n++;
+    });
+    badge.textContent = n ? (n + ' vybráno') : '';
+    badge.classList.toggle('sz-empty', n === 0);
+  }
   function initFilterSheet() {
     var filters = document.getElementById('filters');
     if (!filters) return;
@@ -484,6 +495,7 @@
         e.preventDefault(); e.stopPropagation();
         cb.checked = !cb.checked;
         szSheetRefreshCount();
+        szSheetUpdateSelected();
       }, true);
     }
     // Zavírat VŽDY přes klik na tlačítko = theme toggle. Theme drží otevřeno/
@@ -514,6 +526,14 @@
       x.textContent = '×';
       btn.appendChild(x); // klik na × probublá na .filtrovat → theme zavře
     }
+    // badge počtu vybraných filtrů v hlavičce (živě)
+    if (!btn.querySelector('.sz-sheet-count')) {
+      var cnt = document.createElement('span');
+      cnt.className = 'sz-sheet-count sz-empty';
+      var xEl = btn.querySelector('.sz-sheet-x');
+      if (xEl) btn.insertBefore(cnt, xEl); else btn.appendChild(cnt);
+    }
+    szSheetUpdateSelected();
     if (!filters.querySelector('.sz-sheet-foot')) {
       var foot = document.createElement('div');
       foot.className = 'sz-sheet-foot';
