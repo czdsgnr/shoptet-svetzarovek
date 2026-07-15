@@ -1223,6 +1223,11 @@ body.type-product .p-image .flags-extra,
 .sz-checkout-footer .szcf-sec { display: inline-flex; align-items: center; gap: 6px; }
 .sz-checkout-footer .szcf-sec svg { opacity: .7; }
 
+/* Homepage „Oblíbené kategorie": odkazy měly nejednotné podtržení (dvě dlaždice
+   podtržené, tři ne) → sjednotit. Fotky doplňuje shoptet.js (buildFavCatImages). */
+.fav-cat a { text-decoration: none !important; }
+.fav-cat a:hover { text-decoration: underline !important; }
+
 /* CHECKOUT – doprava & platba (přání klienta):
    1) neaktivní/nekompatibilní metody (Shoptet je značí .inactive-child + disabled
       input, text „Tato kombinace … není možná") byly šedé a viditelné → SKRÝT.

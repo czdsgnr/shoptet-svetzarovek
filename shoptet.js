@@ -821,6 +821,43 @@
       '</div>';
     host.appendChild(f);
   }
+  /* Homepage „Oblíbené kategorie" (.fav-cat): theme vykreslí obrázek jen
+     u kategorií 2. úrovně; u 3. úrovně ho NEvykreslí, i když v adminu nastavený
+     JE (ověřeno – Poziční/Trubicové/Kompaktní obrázek kategorie mají). Doplníme
+     ho tedy sami podle ID položky menu (menu-item-ID = ID kategorie) a zároveň
+     odstraníme osamocené čárky (blok je původně čárkami oddělený seznam odkazů
+     z menu, který se zalomil do dlaždic).
+     POZOR: názvy souborů jsou NATVRDO – když se v adminu obrázek kategorie
+     změní, je potřeba je upravit i tady. */
+  var SZ_FAV_CAT_IMG = {
+    '2229': 'images_(39).jpg',      // Poziční a směrová světla
+    '2325': '1-15.jpg',             // Trubicové zářivky T8 a T5
+    '2456': 'main-a60000921220.jpg' // Kompaktní zářivky (Ostatní zářivky)
+  };
+  function buildFavCatImages() {
+    var fav = document.querySelector('.fav-cat');
+    if (!fav) return;
+    var base = 'https://cdn.myshoptet.com/usr/www.svetzarovek.eu/user/categories/thumb/';
+    [].forEach.call(fav.querySelectorAll('li'), function (li) {
+      [].forEach.call(li.querySelectorAll('div'), function (d) {
+        [].forEach.call(d.childNodes, function (n) {
+          if (n.nodeType === 3 && /^[\s,]+$/.test(n.nodeValue)) n.nodeValue = '';
+        });
+      });
+      if (li.querySelector('img')) return;
+      var m = String(li.className).match(/menu-item-(\d+)/);
+      if (!m || !SZ_FAV_CAT_IMG[m[1]]) return;
+      var a = li.querySelector('a');
+      if (!a) return;
+      var img = document.createElement('img');
+      img.src = base + SZ_FAV_CAT_IMG[m[1]];
+      img.alt = '';
+      img.setAttribute('aria-hidden', 'true');
+      img.width = 140; img.height = 100;
+      img.loading = 'lazy';
+      a.parentNode.insertBefore(img, a);
+    });
+  }
   function initAll() {
     buildLoginExtras();
     moveFilterToSidebar(); // filtr do levého sidebaru (nad podporu)
@@ -841,6 +878,7 @@
     buildCartSticky();    // sticky "Pokračovat" lišta na mobilu (košík)
     initAresFix();        // checkout: odstranit vlajku z ARES hlášky
     buildCheckoutFooter();// checkout: doplnit tenkou patičku (ordering-process ji nemá)
+    buildFavCatImages();  // homepage: fotky u „Oblíbených kategorií" 3. úrovně
   }
   // sticky buy – buy box se na detailu renderuje později
   window.addEventListener('load', buildStickyBuy);
