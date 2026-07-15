@@ -158,6 +158,21 @@
     if (usp && anchor && anchor.nextElementSibling !== usp) anchor.after(usp);
   }
 
+  /* Detail na MOBILU: „Kód produktu" (.p-code) sedí v horním bloku .p-detail-info,
+     který je nad obrázkem → klient ho chce POD obrázek. Přesuneme .p-code do
+     .p-image-wrapper (za obrázek). Jen mobil – na desktopu je layout dvousloupcový
+     (obrázek vlevo, info vpravo) a kód nahoře nevadí. Idempotentní + detailReady
+     (motiv detail dostavuje později, dřívější DOM zásah ho rozhodí). */
+  function moveCodeUnderImage() {
+    if (!detailReady()) return;
+    if (!document.body.classList.contains('type-product')) return;
+    if (!window.matchMedia || !window.matchMedia('(max-width: 991px)').matches) return;
+    var code = document.querySelector('.p-code');
+    var imgWrap = document.querySelector('.p-image-wrapper');
+    if (!code || !imgWrap || code.parentElement === imgWrap) return;
+    imgWrap.appendChild(code);
+  }
+
   /* === F) Vlastní rozbalování filtrů ==================================
      Nativní toggle filtrů na tomhle webu nefunguje. <form> v sekci má
      display:none (zavřeno); klik na hlavičku (h4) přepne třídu .sz-open,
@@ -874,6 +889,7 @@
     initDetailSklad();
     moveAltToBottom();
     moveUspBelowProduct();
+    moveCodeUnderImage(); // detail/mobil: kód produktu pod obrázek
     addOrigPrice();
     moveBadgeToCard();
     styleContactCard();
@@ -962,7 +978,7 @@
       if (detailReady()) {
         clearInterval(__szIv);
         initDetailSklad(); moveAltToBottom(); moveUspBelowProduct();
-        moveBadgeToCard(); addOrigPrice();
+        moveCodeUnderImage(); moveBadgeToCard(); addOrigPrice();
       } else if (++__szTries > 100) { clearInterval(__szIv); } // ~10s pojistka
     }, 100);
   }
