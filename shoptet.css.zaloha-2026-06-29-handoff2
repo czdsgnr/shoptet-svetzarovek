@@ -1227,6 +1227,10 @@ body.type-product .p-image .flags-extra,
    podtržené, tři ne) → sjednotit na TUČNÉ + PODTRŽENÉ u všech (přání klienta).
    Fotky doplňuje shoptet.js (buildFavCatImages). */
 .fav-cat a { text-decoration: underline !important; font-weight: 700 !important; }
+/* Názvy na stejném místě: „Kompaktní zářivky" je jednořádkový, ostatní dvouřádkové
+   → bez pevné výšky měly dlaždice různě vysoký textový blok. Třídu .sz-fav-name
+   přidává shoptet.js odkazu s názvem. */
+.fav-cat .sz-fav-name { display: inline-block !important; min-height: 58px !important; }
 
 /* CHECKOUT – doprava & platba (přání klienta):
    1) neaktivní/nekompatibilní metody (Shoptet je značí .inactive-child + disabled

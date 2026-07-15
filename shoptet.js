@@ -844,6 +844,11 @@
           if (n.nodeType === 3 && /^[\s,]+$/.test(n.nodeValue)) n.nodeValue = '';
         });
       });
+      // označit odkaz s názvem – CSS mu dá pevnou výšku, aby jednořádkové názvy
+      // („Kompaktní zářivky") měly stejně vysoký blok jako dvouřádkové.
+      var links = [].slice.call(li.querySelectorAll('a'));
+      var nameA = links.filter(function (x) { return (x.textContent || '').trim().length > 0; })[0];
+      if (nameA) nameA.classList.add('sz-fav-name');
       if (li.querySelector('img')) return;
       var m = String(li.className).match(/menu-item-(\d+)/);
       if (!m || !SZ_FAV_CAT_IMG[m[1]]) return;
