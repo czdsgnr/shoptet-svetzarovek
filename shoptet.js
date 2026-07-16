@@ -159,18 +159,23 @@
   }
 
   /* Detail na MOBILU: „Kód produktu" (.p-code) sedí v horním bloku .p-detail-info,
-     který je nad obrázkem → klient ho chce POD obrázek. Přesuneme .p-code do
-     .p-image-wrapper (za obrázek). Jen mobil – na desktopu je layout dvousloupcový
-     (obrázek vlevo, info vpravo) a kód nahoře nevadí. Idempotentní + detailReady
-     (motiv detail dostavuje později, dřívější DOM zásah ho rozhodí). */
+     který je nad obrázkem → klient ho chce POD obrázek. Vkládáme ho hned ZA
+     hlavní obrázek (.p-image) – ne na konec .p-image-wrapper, tam by u produktů
+     s galerií skončil až pod náhledy. Vycentrování řeší CSS. Jen mobil – na
+     desktopu je layout dvousloupcový (obrázek vlevo, info vpravo) a kód nahoře
+     nevadí. Idempotentní + detailReady (motiv detail dostavuje později,
+     dřívější DOM zásah ho rozhodí). */
   function moveCodeUnderImage() {
     if (!detailReady()) return;
     if (!document.body.classList.contains('type-product')) return;
     if (!window.matchMedia || !window.matchMedia('(max-width: 991px)').matches) return;
     var code = document.querySelector('.p-code');
     var imgWrap = document.querySelector('.p-image-wrapper');
-    if (!code || !imgWrap || code.parentElement === imgWrap) return;
-    imgWrap.appendChild(code);
+    if (!code || !imgWrap) return;
+    var target = imgWrap.querySelector('.p-image') || imgWrap.firstElementChild;
+    if (!target || target === code) return;
+    if (target.nextElementSibling === code) return; // už je na místě
+    target.after(code);
   }
 
   /* === F) Vlastní rozbalování filtrů ==================================

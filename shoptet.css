@@ -1232,6 +1232,14 @@ body.type-product .p-image .flags-extra,
    přidává shoptet.js odkazu s názvem. */
 .fav-cat .sz-fav-name { display: inline-block !important; min-height: 58px !important; }
 
+/* Detail na MOBILU: „Kód produktu" přesouvá shoptet.js (moveCodeUnderImage) pod
+   hlavní obrázek – tady ho vycentrujeme (přání klienta). */
+@media (max-width: 991px) {
+  .p-image-wrapper > .p-code {
+    display: block !important; text-align: center !important; margin: 10px 0 4px !important;
+  }
+}
+
 /* CHECKOUT – doprava & platba (přání klienta):
    1) neaktivní/nekompatibilní metody (Shoptet je značí .inactive-child + disabled
       input, text „Tato kombinace … není možná") byly šedé a viditelné → SKRÝT.
