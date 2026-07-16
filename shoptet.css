@@ -606,8 +606,14 @@ html body #content-wrapper #filters .filter-sections .visible > .filter-section-
 
 /* VÝJIMKY – kategorie, kde měl starý web jinou logiku pořadí. Cílíme přes
    body.in-<slug> (vyšší specificita než globální pravidlo výše). */
-/* LED trubice/zářivky: starý web měl Délku PRVNÍ */
-html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-54 { order: 0 !important; }
+/* LED trubice/zářivky – starý web: Délka → Barva světla → Barevná teplota →
+   Světelný tok → Příkon → Napětí (tj. Napětí/Příkon až za optikou, ne nahoře). */
+html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-54 { order: 0 !important; }  /* Délka */
+html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39 { order: 1 !important; }  /* Barva světla */
+html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51 { order: 2 !important; }  /* Barevná teplota */
+html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84 { order: 3 !important; }  /* Světelný tok */
+html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30 { order: 4 !important; }  /* Příkon */
+html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24 { order: 5 !important; }  /* Napětí */
 /* Zářivky a příslušenství: starý web měl Odstín PŘED Barevnou teplotou */
 html body.in-zarivky-a-prislusenstvi #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-114 { order: 8 !important; }
 html body.in-zarivky-a-prislusenstvi #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51 { order: 9 !important; }
