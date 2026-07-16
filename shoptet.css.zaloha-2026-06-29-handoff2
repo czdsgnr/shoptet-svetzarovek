@@ -621,6 +621,93 @@ html body.in-zarivky-a-prislusenstvi #content-wrapper #filters .filter-sections 
 html body.in-led-autozarovky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24 { order: 2 !important; }
 html body.in-led-autozarovky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-33 { order: 3 !important; }
 
+
+/* VZOR „Svítidla" dle starého webu (LED svítidla i klasická, Bodová, Nouzová,
+   Solární, Nástěnná, Stropní, Dekorativní):
+   Provedení → Napětí → Příkon → Barva světla → Barevná teplota → PIR →
+   Typ žárovky → Světelný tok. Zbytek (Barva, Krytí, Odpovídá klasické,
+   Stmívatelná) padá do defaultu 20. */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27 { order: 1 !important; } /* Provedení */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24 { order: 2 !important; } /* Napětí */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30 { order: 3 !important; } /* Příkon */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39 { order: 4 !important; } /* Barva světla */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51 { order: 5 !important; } /* Barevná teplota */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-126,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-126,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-126,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-126,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-126,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-126,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-126 { order: 6 !important; } /* PIR */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45 { order: 7 !important; } /* Typ žárovky */
+html body.in-bodova-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84,
+html body.in-nastenna-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84,
+html body.in-stropni-led-svitidla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84,
+html body.in-solarni-led-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84,
+html body.in-nocni-nouzove-a-orientacni #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84,
+html body.in-vnitrni-svetla #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84,
+html body.in-svicny--svicky--lampy #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84 { order: 8 !important; } /* Světelný tok */
+
+/* VZOR „Zářivkové trubice" dle starého webu (Kompaktní, Motýlí a kruhové,
+   Trubicové T8/T5):
+   Příkon → Patice → Odstín → Barva světla → Barevná teplota → Délka.
+   (Staré kat. byly per-patice bez filtru Patice; nové ho mají, proto bereme
+   vzor staré kat. „Zářivkové trubice T8 a T5", která Patici měla.) */
+html body.in-ostatni-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-kruhove-a-motyli #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30,
+html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30 { order: 1 !important; } /* Příkon */
+html body.in-ostatni-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-33,
+html body.in-kruhove-a-motyli #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-33,
+html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-33 { order: 2 !important; } /* Patice */
+html body.in-ostatni-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-114,
+html body.in-kruhove-a-motyli #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-114,
+html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-114 { order: 3 !important; } /* Odstín */
+html body.in-ostatni-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-kruhove-a-motyli #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39,
+html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39 { order: 4 !important; } /* Barva světla */
+html body.in-ostatni-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-kruhove-a-motyli #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51,
+html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51 { order: 5 !important; } /* Barevná teplota */
+html body.in-ostatni-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-54,
+html body.in-kruhove-a-motyli #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-54,
+html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-54 { order: 6 !important; } /* Délka (mm) */
+
 /* tři typy karet */
 #filters .filter-section-parametric,
 #filters .slider-wrapper,
