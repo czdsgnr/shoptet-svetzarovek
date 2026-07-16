@@ -555,14 +555,18 @@ html, body {
   html body #content-wrapper #filters.otevreno h4 span { color: #16223b !important; }
 }
 
-/* === POŘADÍ SEKCÍ FILTRU (přání klienta) ============================
-   Shora: Příznaky → Patice → Příkon → Barva světla → Barevná teplota →
-   Odstín → Délka (mm) → Světelný tok → (ostatní parametry) → Dle ceny.
-   Řadí se přes flex `order`. Kontejnery musí být flex – theme je má `block`
-   s vysokou specificitou, proto SILNÉ selektory (html body #content-wrapper …).
-   `order` cílí na třídy, které přidává initFilters (shoptet.js) z nadpisů h4
-   (diakritika se strhává: Příkon→pkon, Odstín→odstn, Barva světla→barvasvtla…).
-   Číslo produktu/param se liší dle kategorie – řadíme podle názvu, ne id. */
+/* === POŘADÍ SEKCÍ FILTRU (dle starého webu old.svetzarovek.eu) ========
+   Shoptet posílá parametrické filtry ABECEDNĚ → smysluplné pořadí si musíme
+   určit sami. Logiku jsme převzali ze starého webu (klient: „řazení má význam
+   podle použitelnosti při výběru – nejdřív barva auta, ne elektrony"):
+   co to je → kompatibilita → výkon → tvar/provedení → barva → parametry → cena.
+   Řadíme přes flex `order` a STABILNÍ třídy s ID parametru
+   (.filter-section-parametric-id-NN) – napříč kategoriemi stejné, na rozdíl od
+   dřívějších tříd odvozených z názvů (křehké, diakritika).
+   Mapa ID: 45=Typ žárovky 60=Produkt 33=Patice 24=Napětí 30=Příkon 108=Tvar
+   27=Provedení 39=Barva světla 165=Barva 51=Barevná teplota 114=Odstín
+   84=Světelný tok 54=Délka 81=Odpovídá klasické 36=Proud 78=Stmívatelná
+   48=Homologace 90=CANBUS */
 html body #content-wrapper #filters.filters.visible {
   display: flex !important;
   flex-direction: column !important;
@@ -570,21 +574,46 @@ html body #content-wrapper #filters.filters.visible {
 html body #content-wrapper #filters.filters.visible > .filtrovat { order: -100 !important; } /* mobil toggle nahoře */
 html body #content-wrapper #filters.filters.visible > .param-filter-top { order: 1 !important; } /* Příznaky nahoře */
 html body #content-wrapper #filters.filters.visible > .filter-sections { order: 2 !important; }
+/* „Dle ceny" je PŘÍMÝ potomek #filters (ne uvnitř .filter-sections) → staré
+   pravidlo na ni nesedělo, zůstal jí order 0 a byla PRVNÍ. Teď dolů. */
+html body #content-wrapper #filters.filters.visible > .slider-wrapper { order: 90 !important; }
+
 html body #content-wrapper #filters .filter-sections .visible.visible {
   display: flex !important;
   flex-direction: column !important;
 }
-html body #content-wrapper #filters .filter-sections .visible > .param-filter-top { order: 0 !important; } /* Příznaky i kdyby bylo uvnitř */
-html body #content-wrapper #filters .filter-sections .visible > .filter-section { order: 20 !important; } /* default pro neuvedené parametry */
-html body #content-wrapper #filters .filter-sections .visible > .slider-wrapper { order: 100 !important; } /* Dle ceny dole */
-html body #content-wrapper #filters .filter-sections .visible > .patice { order: 2 !important; }
-html body #content-wrapper #filters .filter-sections .visible > .pkon { order: 3 !important; }
-html body #content-wrapper #filters .filter-sections .visible > .barvasvtla { order: 4 !important; }
-html body #content-wrapper #filters .filter-sections .visible > .barevnteplota { order: 5 !important; }
-html body #content-wrapper #filters .filter-sections .visible > .odstn { order: 6 !important; }
-html body #content-wrapper #filters .filter-sections .visible > .dlkamm { order: 7 !important; }
-html body #content-wrapper #filters .filter-sections .visible > .svtelntok { order: 8 !important; }
-html body #content-wrapper #filters .filter-sections .visible > .napt { order: 9 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .param-filter-top { order: 0 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .filter-section { order: 20 !important; } /* default pro neuvedené */
+html body #content-wrapper #filters .filter-sections .visible > .slider-wrapper { order: 90 !important; }
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-45 { order: 1 !important; } /* Typ žárovky */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-60 { order: 1 !important; } /* Produkt */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-33 { order: 2 !important; } /* Patice */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24 { order: 3 !important; } /* Napětí */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-30 { order: 4 !important; } /* Příkon */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-108 { order: 5 !important; } /* Tvar */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-27 { order: 6 !important; } /* Provedení */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-39 { order: 7 !important; } /* Barva světla */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-165 { order: 7 !important; } /* Barva */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51 { order: 8 !important; } /* Barevná teplota */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-114 { order: 9 !important; } /* Odstín */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-84 { order: 10 !important; } /* Světelný tok */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-54 { order: 11 !important; } /* Délka (mm) */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-81 { order: 12 !important; } /* Odpovídá klasické (W) */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-36 { order: 13 !important; } /* Proud */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-78 { order: 14 !important; } /* Stmívatelná */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-48 { order: 15 !important; } /* Homologace */
+html body #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-90 { order: 16 !important; } /* CANBUS */
+
+/* VÝJIMKY – kategorie, kde měl starý web jinou logiku pořadí. Cílíme přes
+   body.in-<slug> (vyšší specificita než globální pravidlo výše). */
+/* LED trubice/zářivky: starý web měl Délku PRVNÍ */
+html body.in-led-trubice-zarivky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-54 { order: 0 !important; }
+/* Zářivky a příslušenství: starý web měl Odstín PŘED Barevnou teplotou */
+html body.in-zarivky-a-prislusenstvi #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-114 { order: 8 !important; }
+html body.in-zarivky-a-prislusenstvi #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-51 { order: 9 !important; }
+/* LED autožárovky: starý web měl Napětí PŘED Paticí */
+html body.in-led-autozarovky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-24 { order: 2 !important; }
+html body.in-led-autozarovky #content-wrapper #filters .filter-sections .visible > .filter-section-parametric-id-33 { order: 3 !important; }
 
 /* tři typy karet */
 #filters .filter-section-parametric,
