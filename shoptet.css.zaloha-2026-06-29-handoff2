@@ -1358,6 +1358,9 @@ body.type-product .p-image .flags-extra,
    menu (moveSiteMsg). Dokud není přesunutý, držíme ho skrytý – jinak se nejdřív
    vykreslí nativně nahoře a po přesunu problikne / vznikne bílá mezera. */
 .site-msg:not(.sz-msg-moved) { display: none !important; }
+/* Světlá čára pod menu = border-bottom 1px #e4e4e4 na #header::after (tmavé
+   pozadí menu). Mezi menu a modrým pruhem vypadala jako bílá linka → pryč. */
+#header::after { border-bottom: 0 !important; }
 
 /* Detail na MOBILU: „Kód produktu" přesouvá shoptet.js (moveCodeUnderImage) pod
    hlavní obrázek – tady ho vycentrujeme (přání klienta). */
