@@ -883,8 +883,19 @@
       a.parentNode.insertBefore(img, a);
     });
   }
+  /* Informační pruh „Zboží označené skladem… expedujeme do 12:00" (.site-msg)
+     je nativně úplně nahoře nad hlavičkou → klient ho chce HNED POD MENU.
+     Přesuneme ho za #header (v něm je i menu). Idempotentní. */
+  function moveSiteMsg() {
+    var msg = document.querySelector('.site-msg');
+    var header = document.getElementById('header');
+    if (!msg || !header) return;
+    if (header.nextElementSibling === msg) return; // už je na místě
+    header.after(msg);
+  }
   function initAll() {
     buildLoginExtras();
+    moveSiteMsg();        // informační pruh pod menu
     moveFilterToSidebar(); // filtr do levého sidebaru (nad podporu)
     initFilters();        // úpravy filtrů
     initFilterToggle();   // + vlastní rozbalování (klik na hlavičku)
@@ -906,6 +917,10 @@
     buildCheckoutFooter();// checkout: doplnit tenkou patičku (ordering-process ji nemá)
     buildFavCatImages();  // homepage: fotky u „Oblíbených kategorií" 3. úrovně
   }
+  // informační pruh pod menu – pruh i hlavička jsou brzy, pro jistotu i po load
+  window.addEventListener('load', moveSiteMsg);
+  document.addEventListener('ShoptetDOMPageContentLoaded', moveSiteMsg);
+  setTimeout(moveSiteMsg, 400);
   // sticky buy – buy box se na detailu renderuje později
   window.addEventListener('load', buildStickyBuy);
   document.addEventListener('ShoptetDOMPageContentLoaded', buildStickyBuy);
