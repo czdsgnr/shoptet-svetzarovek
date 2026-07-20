@@ -1354,6 +1354,11 @@ body.type-product .p-image .flags-extra,
    přidává shoptet.js odkazu s názvem. */
 .fav-cat .sz-fav-name { display: inline-block !important; min-height: 58px !important; }
 
+/* Informační pruh (.site-msg „Zboží označené skladem…") přesouvá shoptet.js pod
+   menu (moveSiteMsg). Dokud není přesunutý, držíme ho skrytý – jinak se nejdřív
+   vykreslí nativně nahoře a po přesunu problikne / vznikne bílá mezera. */
+.site-msg:not(.sz-msg-moved) { display: none !important; }
+
 /* Detail na MOBILU: „Kód produktu" přesouvá shoptet.js (moveCodeUnderImage) pod
    hlavní obrázek – tady ho vycentrujeme (přání klienta). */
 @media (max-width: 991px) {

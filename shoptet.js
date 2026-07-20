@@ -888,10 +888,12 @@
      Přesuneme ho za #header (v něm je i menu). Idempotentní. */
   function moveSiteMsg() {
     var msg = document.querySelector('.site-msg');
+    if (!msg) return;
     var header = document.getElementById('header');
-    if (!msg || !header) return;
-    if (header.nextElementSibling === msg) return; // už je na místě
-    header.after(msg);
+    if (header && header.nextElementSibling !== msg) header.after(msg);
+    // odkrýt AŽ po přesunu (CSS ho do té doby drží display:none, jinak se pruh
+    // nejdřív vykreslí nativně nahoře a po přesunu problikne / bílá mezera).
+    if (header) msg.classList.add('sz-msg-moved');
   }
   function initAll() {
     buildLoginExtras();
@@ -921,6 +923,8 @@
   window.addEventListener('load', moveSiteMsg);
   document.addEventListener('ShoptetDOMPageContentLoaded', moveSiteMsg);
   setTimeout(moveSiteMsg, 400);
+  // failsafe: kdyby #header chyběl, pruh po 2 s stejně odkrýt (ať nezůstane skrytý)
+  setTimeout(function () { var m = document.querySelector('.site-msg'); if (m) m.classList.add('sz-msg-moved'); }, 2000);
   // sticky buy – buy box se na detailu renderuje později
   window.addEventListener('load', buildStickyBuy);
   document.addEventListener('ShoptetDOMPageContentLoaded', buildStickyBuy);
