@@ -1352,11 +1352,11 @@ body.type-product .p-image .flags-extra,
 /* Názvy na stejném místě: „Kompaktní zářivky" je jednořádkový, ostatní dvouřádkové
    → bez pevné výšky měly dlaždice různě vysoký textový blok. Třídu .sz-fav-name
    přidává shoptet.js odkazu s názvem. */
-.fav-cat .sz-fav-name { display: inline-block !important; min-height: 58px !important; }
-/* Naše doplněné obrázky (.sz-fav-img) byly display:inline bez blokové mezery →
-   text u nich začínal o 18px výš než u theme dlaždic (ty mají obrázek v samostatném
-   divu s mezerou). Blokové zobrazení + 18px mezera = texty všech 5 na jedné lajně. */
-.fav-cat .sz-fav-img { display: block !important; margin: 0 auto 18px !important; }
+/* Názvy dlaždic „Oblíbených kategorií": theme dává některým (2. úroveň) na text
+   margin-top:18px, jiným (3. úroveň) ne → texty nezačínaly na stejné lajně.
+   Sjednotíme margin-top u všech; min-height sjednotí i 1řádkové vs 2řádkové názvy,
+   ať jsou dlaždice stejně vysoké. (Třídu .sz-fav-name přidává shoptet.js.) */
+.fav-cat .sz-fav-name { display: inline-block !important; min-height: 58px !important; margin-top: 18px !important; }
 
 /* Informační pruh (.site-msg „Zboží označené skladem…") přesouvá shoptet.js pod
    menu (moveSiteMsg). Dokud není přesunutý, držíme ho skrytý – jinak se nejdřív
