@@ -875,6 +875,7 @@
       var a = li.querySelector('a');
       if (!a) return;
       var img = document.createElement('img');
+      img.className = 'sz-fav-img'; // odlišit MOJE obrázky od theme (kvůli zarovnání textů)
       img.src = base + SZ_FAV_CAT_IMG[m[1]];
       img.alt = '';
       img.setAttribute('aria-hidden', 'true');
