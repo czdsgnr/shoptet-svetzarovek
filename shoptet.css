@@ -178,6 +178,72 @@ html, body {
   order: -1 !important;
 }
 
+/* ---------------------------------------------------------
+   Prázdný košík – blok „Podívejte se na naši nabídku": z ikonek složek
+   uděláme dlaždice s fotkou kategorie (obrázek nahoře, název dole) –
+   vizuálně jako „Oblíbené kategorie" na homepage. Fotky vkládá shoptet.js
+   (buildEmptyCartCats). Silnější selektory kvůli theme pravidlům na ul li a.
+   --------------------------------------------------------- */
+html body .sz-cart-cats {
+  list-style: none !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 14px !important;
+  padding: 0 !important;
+  margin: 14px 0 0 !important;
+}
+html body .sz-cart-cats > li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 156px !important;
+  flex: 0 0 auto !important;
+  background: none !important;
+  border: 0 !important;
+}
+html body .sz-cart-cats > li::marker { content: "" !important; }
+html body .sz-cart-cats > li > a.sz-cart-cat {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
+  gap: 10px !important;
+  padding: 16px 12px !important;
+  border: 1px solid #e4e9f0 !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  color: #16223b !important;
+  text-decoration: none !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 150px !important;
+  transition: border-color .15s, box-shadow .15s, transform .15s !important;
+}
+html body .sz-cart-cat::before { display: none !important; content: none !important; }
+html body .sz-cart-cat:hover {
+  border-color: #174A61 !important;
+  box-shadow: 0 6px 18px rgba(23, 74, 97, .12) !important;
+  transform: translateY(-2px) !important;
+}
+html body .sz-cart-cat-img {
+  width: auto !important;
+  max-width: 110px !important;
+  height: auto !important;
+  max-height: 80px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 !important;
+}
+html body .sz-cart-cat-name {
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+  color: #16223b !important;
+  margin: 0 !important;
+}
+
 /* Horní informační lišta (.site-msg) – modrá. */
 .site-msg {
   background-color: #2550b2 !important;

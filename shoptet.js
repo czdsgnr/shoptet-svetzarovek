@@ -917,9 +917,60 @@
     }
   }
 
+  /* Prázdný košík: blok „Podívejte se na naši nabídku" má u kategorií jen
+     generické ikonky složek (ikonfont). Klient chce fotky kategorií jako na
+     homepage. Hlavní kategorie ale v adminu vlastní obrázek většinou nemají,
+     tak použijeme tematickou fotku z jejich vlastního stromu (thumb kategorie).
+     Idempotentní; po vyprázdnění košíku (AJAX) se blok objeví → volat i na
+     ShoptetDOMCartContentLoaded. */
+  var SZ_CART_CAT_IMG = {
+    '/osvetleni-vozidla-2/': 'images_(6).jpg',            // Automobilové a TIR žárovky
+    '/led-svetelne-zdroje/': 'images_(47).jpg',           // LED žárovky pro domácnost
+    '/svetelne-zdroje-2/': '1-12.jpg',                    // Žárovky
+    '/osvetleni-interieru-a-exterieru-3/': 'images_(48).jpg', // Svítilny a pracovní lampy
+    '/prislusenstvi/': 'prislus.jpg',                     // vlastní obrázek kategorie
+    '/vanocni-osvetleni-3/': 'images_(38).jpg',           // vlastní obrázek kategorie
+    '/akcni-nabidka/': 'akce.jpg'
+  };
+  function buildEmptyCartCats() {
+    if (!/\/kosik/.test(location.pathname)) return;
+    var base = 'https://cdn.myshoptet.com/usr/www.svetzarovek.eu/user/categories/thumb/';
+    var heads = document.querySelectorAll('h3, h2');
+    var ul = null;
+    for (var i = 0; i < heads.length; i++) {
+      if (/Podívejte se na naši nabídku/i.test(heads[i].textContent)) {
+        ul = heads[i].parentElement.querySelector('ul');
+        break;
+      }
+    }
+    if (!ul) return;
+    ul.classList.add('sz-cart-cats');
+    var links = ul.querySelectorAll('a[href]');
+    for (var j = 0; j < links.length; j++) {
+      var a = links[j];
+      a.classList.add('sz-cart-cat');
+      var file = SZ_CART_CAT_IMG[a.getAttribute('href')];
+      if (file && !a.querySelector('.sz-cart-cat-img')) {
+        var name = a.textContent.trim();
+        var img = document.createElement('img');
+        img.className = 'sz-cart-cat-img';
+        img.src = base + file;
+        img.alt = '';
+        img.loading = 'lazy';
+        var span = document.createElement('span');
+        span.className = 'sz-cart-cat-name';
+        span.textContent = name;
+        a.textContent = '';
+        a.appendChild(img);
+        a.appendChild(span);
+      }
+    }
+  }
+
   function initAll() {
     buildLoginExtras();
     fixLoginLandscape();  // přihlášení na šířku: popup scrollovatelný
+    buildEmptyCartCats(); // prázdný košík: fotky u kategorií místo ikonek složek
     moveSiteMsg();        // informační pruh pod menu
     moveFilterToSidebar(); // filtr do levého sidebaru (nad podporu)
     initFilters();        // úpravy filtrů
@@ -961,6 +1012,10 @@
   document.addEventListener('ShoptetDOMCartContentLoaded', buildCartSticky);
   setTimeout(buildCartSticky, 800);
   setTimeout(buildCartSticky, 1800);
+  // prázdný košík: fotky u kategorií – blok se objeví i po vyprázdnění košíku (AJAX)
+  window.addEventListener('load', buildEmptyCartCats);
+  document.addEventListener('ShoptetDOMCartContentLoaded', buildEmptyCartCats);
+  setTimeout(buildEmptyCartCats, 800);
 
   if (document.readyState !== 'loading') initAll();
   document.addEventListener('DOMContentLoaded', initAll);
