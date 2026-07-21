@@ -1085,6 +1085,8 @@ html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-section
   position: static !important;
   top: auto !important;
   text-align: center !important;
+  /* .stars-wrapper je flex → text-align nestačí, hvězdičky centrujeme přes justify */
+  justify-content: center !important;
   margin-bottom: 4px !important;
 }
 
