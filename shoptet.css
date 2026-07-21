@@ -119,6 +119,65 @@ html, body {
   }
 }
 
+/* ---------------------------------------------------------
+   Přepínač měny (CZK/EUR) – nečitelné položky v rozbaleném menu.
+   PC (horní lišta): menu má BÍLÉ pozadí, ale odkazy zdědily bílé
+   písmo z tmavé lišty → bílá na bílé = neviditelné ("nejde přepnout").
+   → text tmavý. Dropdown se přitom otevírá správně (Bootstrap).
+   --------------------------------------------------------- */
+.top-navigation-tools--language .dropdown-menu {
+  background: #fff !important;
+}
+.top-navigation-tools--language .dropdown-menu > li > a,
+.top-navigation-tools--language .dropdown-menu li a {
+  color: #1d2b30 !important;
+}
+.top-navigation-tools--language .dropdown-menu li a:hover,
+.top-navigation-tools--language .dropdown-menu li a:focus {
+  background: #f0f3f5 !important;
+  color: #174A61 !important;
+}
+
+/* Mobil (menu v hamburgeru): dropdown měny má TMAVÉ teal pozadí
+   (#174A61), ale odkazy černé (#24242e) → černá na tmavé = nečitelné.
+   → text bílý. */
+.navigation-in .dropdown-menu li a,
+.navigation-in .dropdown-menu > li > a {
+  color: #fff !important;
+}
+.navigation-in .dropdown-menu li a:hover,
+.navigation-in .dropdown-menu li a:focus {
+  background: rgba(255, 255, 255, .12) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------------------------
+   Košík – krok "Informace o Vás": pořadí bloků a polí (přání klienta).
+   1) Doručovací adresa (#shipping-address) se zobrazovala AŽ pod
+      poznámkou (.co-box-additional) → klient ji chce NAD poznámku.
+      Společný rodič .cart-content je blok → jen na tomto kroku
+      (:has(#shipping-address)) z něj uděláme flex sloupec a tyto DVA
+      bloky prohodíme přes order. Ostatní bloky (účet, osobní údaje,
+      fakturační adresa) zůstávají order:0 = beze změny pořadí.
+      Řešeno CSS (žádná DOM mutace) → přežije AJAX překreslení formuláře.
+   --------------------------------------------------------- */
+.cart-content:has(#shipping-address) {
+  display: flex !important;
+  flex-direction: column !important;
+}
+.cart-content > #shipping-address { order: 4 !important; }
+.cart-content > .co-box-additional { order: 5 !important; }
+
+/* 2) V doručovací adrese chce klient "Název společnosti" jako první pole.
+   Pole nemají rozlišovací třídu → cílíme přes :has() na input. */
+#shipping-address .form-option-block {
+  display: flex !important;
+  flex-direction: column !important;
+}
+#shipping-address .form-option-block > .form-group:has(input[name="deliveryCompany"]) {
+  order: -1 !important;
+}
+
 /* Horní informační lišta (.site-msg) – modrá. */
 .site-msg {
   background-color: #2550b2 !important;
@@ -983,6 +1042,23 @@ html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-section
   inset: auto !important;
 }
 .products-block .p > .p-in { order: 3 !important; }
+
+/* Zarovnat cenu+tlačítko (.p-bottom) ke DNU karty, ať jsou "DO KOŠÍKU"
+   ve všech kartách řádku na stejné lince – i když má karta navíc
+   přeškrtnutou cenu (Akce), hodnocení nebo delší text dostupnosti.
+   Mřížka .products-block je flex-wrap → karty v řádku jsou stejně vysoké;
+   .p ji vyplní, .p-in roste a .p-bottom se přišpendlí dolů.
+   .p-bottom je vnitřně flex řádek (na desktopu cena vlevo / tlačítko vpravo)
+   – zarovnat ke dnu, jinak přeškrtnutá cena posouvá tlačítko nahoru.
+   Na mobilu se řádek zalomí (obojí na celou šířku) → align-items neškodí. */
+.products-block > .product > .p { height: 100% !important; }
+.products-block > .product > .p > .p-in {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.products-block > .product > .p > .p-in > .p-bottom { margin-top: auto !important; }
+.products-block .p-bottom > div { align-items: flex-end !important; }
 
 /* Přeškrtnutá původní cena nad akční cenou (přidává shoptet.js). */
 .products-block .p .p-orig-price {

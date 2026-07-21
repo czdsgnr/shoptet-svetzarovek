@@ -833,7 +833,7 @@
     f.className = 'sz-checkout-footer';
     f.innerHTML =
       '<div class="szcf-in">' +
-        '<span class="szcf-brand">© ' + yr + ' Svět žárovek</span>' +
+        '<span class="szcf-brand">© ' + yr + ' Svět žárovek s.r.o.</span>' +
         '<span class="szcf-sec">' + lock + ' Bezpečný nákup</span>' +
         '<a href="tel:+420416731365">+420 416 731 365</a>' +
         '<a href="mailto:info@svetzarovek.eu">info@svetzarovek.eu</a>' +
@@ -896,8 +896,30 @@
     // nejdřív vykreslí nativně nahoře a po přesunu problikne / bílá mezera).
     if (header) msg.classList.add('sz-msg-moved');
   }
+  /* Přihlášení na mobilu NA ŠÍŘKU (landscape): popup .popup-widget-inner má
+     z theme overflow:hidden (přes ID + !important → nejde přebít vlastním CSS,
+     ověřeno). Na nízkém viewportu (landscape telefon) je obsah formuláře vyšší
+     než okno → spodní pole a tlačítko oříznuté a nedosažitelné, „nejde s tím
+     hýbat". Řešení: inline overflow-y:auto (inline !important přebije i theme)
+     jen když je viewport nízký; na výšku/desktopu vrátit původní stav.
+     Platí pro všechny popupy (login/hledání/košík) – všem to v landscape pomůže. */
+  function fixLoginLandscape() {
+    var shortViewport = window.innerHeight <= 600;
+    var inners = document.querySelectorAll('.popup-widget-inner');
+    for (var i = 0; i < inners.length; i++) {
+      if (shortViewport) {
+        inners[i].style.setProperty('overflow-y', 'auto', 'important');
+        inners[i].style.setProperty('-webkit-overflow-scrolling', 'touch');
+      } else {
+        inners[i].style.removeProperty('overflow-y');
+        inners[i].style.removeProperty('-webkit-overflow-scrolling');
+      }
+    }
+  }
+
   function initAll() {
     buildLoginExtras();
+    fixLoginLandscape();  // přihlášení na šířku: popup scrollovatelný
     moveSiteMsg();        // informační pruh pod menu
     moveFilterToSidebar(); // filtr do levého sidebaru (nad podporu)
     initFilters();        // úpravy filtrů
@@ -943,6 +965,9 @@
   if (document.readyState !== 'loading') initAll();
   document.addEventListener('DOMContentLoaded', initAll);
   document.addEventListener('ShoptetDOMContentLoaded', initAll);
+  // přihlášení na šířku: přepočítat scrollovatelnost popupu při otočení / změně velikosti
+  window.addEventListener('resize', fixLoginLandscape);
+  window.addEventListener('orientationchange', fixLoginLandscape);
   // telefon vedle vyhledávání – hlavička je brzy, ale pro jistotu i po load
   window.addEventListener('load', buildHeaderPhone);
   setTimeout(buildHeaderPhone, 800);
