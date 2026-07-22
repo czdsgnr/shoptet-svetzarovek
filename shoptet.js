@@ -165,10 +165,13 @@
      desktopu je layout dvousloupcový (obrázek vlevo, info vpravo) a kód nahoře
      nevadí. Idempotentní + detailReady (motiv detail dostavuje později,
      dřívější DOM zásah ho rozhodí). */
+  /* Kód produktu („Kód produktu: XY") pod HLAVNÍ obrázek, ne až pod galerii.
+     Platí pro MOBIL I PC (dřív tu byl zámek max-width:991px, kvůli kterému to
+     na PC nikdy neproběhlo – přání klienta je na obou). Idempotentní: když už
+     kód za .p-image je, funkce nic nedělá. Vycentrování řeší CSS. */
   function moveCodeUnderImage() {
     if (!detailReady()) return;
     if (!document.body.classList.contains('type-product')) return;
-    if (!window.matchMedia || !window.matchMedia('(max-width: 991px)').matches) return;
     var code = document.querySelector('.p-code');
     var imgWrap = document.querySelector('.p-image-wrapper');
     if (!code || !imgWrap) return;

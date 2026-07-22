@@ -1523,12 +1523,20 @@ body.type-product .p-image .flags-extra,
    pozadí menu). Mezi menu a modrým pruhem vypadala jako bílá linka → pryč. */
 #header::after { border-bottom: 0 !important; }
 
-/* Detail na MOBILU: „Kód produktu" přesouvá shoptet.js (moveCodeUnderImage) pod
-   hlavní obrázek – tady ho vycentrujeme (přání klienta). */
-@media (max-width: 991px) {
-  .p-image-wrapper > .p-code {
-    display: block !important; text-align: center !important; margin: 10px 0 4px !important;
-  }
+/* Detail: „Kód produktu" pod hlavním obrázkem, VYCENTROVANÝ – přání klienta,
+   platí pro MOBIL I PC. (Dřív bylo zamčené v @media max-width:991px, takže na
+   PC zůstal kód vlevo a nenápadný – proto klient hlásil, že tam není.)
+   Pozice pod obrázkem: shoptet.js (moveCodeUnderImage). */
+.p-image-wrapper > .p-code {
+  display: block !important;
+  text-align: center !important;
+  margin: 10px 0 4px !important;
+}
+/* Šablona vykresluje kód JEŠTĚ JEDNOU v pravém sloupci u popisu (.p-detail-info).
+   Na mobilu ho sama skrývá, na PC ne → na PC se kód zobrazoval dvakrát a ten
+   nápadný byl vpravo, ne pod obrázkem. Skrýváme ho, ať je kód jen pod fotkou. */
+.p-detail-info > .p-code {
+  display: none !important;
 }
 
 /* CHECKOUT – doprava & platba (přání klienta):
