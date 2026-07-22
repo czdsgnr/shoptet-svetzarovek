@@ -172,9 +172,23 @@
   function moveCodeUnderImage() {
     if (!detailReady()) return;
     if (!document.body.classList.contains('type-product')) return;
-    var code = document.querySelector('.p-code');
     var imgWrap = document.querySelector('.p-image-wrapper');
-    if (!code || !imgWrap) return;
+    if (!imgWrap) return;
+
+    /* Který .p-code vzít:
+       1) když už jeden pod obrázkem je (produkty s galerií ho tam mají nativně)
+          → hotovo, nic nepřesouvat;
+       2) jinak z pravého sloupce (.p-detail-info). POZOR: šablona jich tam
+          vykresluje víc a první v DOM bývá SKRYTÝ (v display:none obalu), proto
+          preferujeme viditelný. Hledáme jen v .p-detail-info, ať nesebereme
+          kód z karet souvisejících produktů dole na stránce. */
+    var code = imgWrap.querySelector('.p-code');
+    if (!code) {
+      var cands = [].slice.call(document.querySelectorAll('.p-detail-info .p-code'));
+      code = cands.filter(function (c) { return c.offsetParent !== null; })[0] || cands[0];
+    }
+    if (!code) return;
+
     var target = imgWrap.querySelector('.p-image') || imgWrap.firstElementChild;
     if (!target || target === code) return;
     if (target.nextElementSibling === code) return; // už je na místě
