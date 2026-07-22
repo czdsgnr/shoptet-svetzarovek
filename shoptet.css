@@ -1077,17 +1077,28 @@ html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-section
 }
 
 /* ---------------------------------------------------------
-   Hvězdičky na kartách překrývaly kód (obj.č.)
-   .stars-wrapper měl position:absolute; top:-22px → plaval přes
-   .p-code. Vracíme do normálního toku → kód nahoře, hvězdičky pod.
+   Hvězdičky hodnocení na kartách výpisu.
+   Theme je dává jako .p-in > .stars-wrapper NAD název (position:absolute,
+   top:-22px → plavaly přes kód). Vracíme do toku a dáme jim PEVNOU výšku
+   řádku. .stars-wrapper je flex → centrujeme přes justify-content.
    --------------------------------------------------------- */
 .products-block .p .stars-wrapper {
   position: static !important;
   top: auto !important;
-  text-align: center !important;
-  /* .stars-wrapper je flex → text-align nestačí, hvězdičky centrujeme přes justify */
-  justify-content: center !important;
-  margin-bottom: 4px !important;
+  justify-content: center !important;   /* flex → hvězdičky na střed */
+  align-items: center !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  margin: 0 !important;
+}
+/* Karty BEZ hodnocení nemají .stars-wrapper → obsah (název/cena/tlačítko) byl
+   o řádek výš než u karet s hvězdičkami = „odskok". Rezervujeme stejný řádek
+   (18px) i jim → vše sedí na stejné lince. Rezervace = výška hvězd, takže ani
+   po async doČtení hodnocení nedojde k poskočení layoutu. */
+.products-block .p-in:not(:has(> .stars-wrapper)) .p-in-in::before {
+  content: "" !important;
+  display: block !important;
+  height: 18px !important;
 }
 
 /* Kód (obj.č.) na kartách byl 22px – moc poutavý, zmenšíme. */
