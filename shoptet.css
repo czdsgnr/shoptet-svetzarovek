@@ -1125,18 +1125,20 @@ html body.in-trubicove-zarivky-t8-a-t5 #content-wrapper #filters .filter-section
 /* Zarovnat cenu+tlačítko (.p-bottom) ke DNU karty, ať jsou "DO KOŠÍKU"
    ve všech kartách řádku na stejné lince – i když má karta navíc
    přeškrtnutou cenu (Akce), hodnocení nebo delší text dostupnosti.
-   Mřížka .products-block je flex-wrap → karty v řádku jsou stejně vysoké;
-   .p ji vyplní, .p-in roste a .p-bottom se přišpendlí dolů.
+   Karty v řádku jsou stejně vysoké (výpis = flex-wrap, carousel = slick track);
+   .p kartu vyplní, .p-in roste a .p-bottom se přišpendlí dolů.
    .p-bottom je vnitřně flex řádek (na desktopu cena vlevo / tlačítko vpravo)
    – zarovnat ke dnu, jinak přeškrtnutá cena posouvá tlačítko nahoru.
-   Na mobilu se řádek zalomí (obojí na celou šířku) → align-items neškodí. */
-.products-block > .product > .p { height: 100% !important; }
-.products-block > .product > .p > .p-in {
+   Na mobilu se řádek zalomí (obojí na celou šířku) → align-items neškodí.
+   POZOR: descendant „.product" (ne „> .product") – v carouselu je karta
+   zabalená ve .slick-track, takže přímý potomek by ji minul. */
+.products-block .product > .p { height: 100% !important; }
+.products-block .product > .p > .p-in {
   flex: 1 1 auto !important;
   display: flex !important;
   flex-direction: column !important;
 }
-.products-block > .product > .p > .p-in > .p-bottom { margin-top: auto !important; }
+.products-block .product > .p > .p-in > .p-bottom { margin-top: auto !important; }
 .products-block .p-bottom > div { align-items: flex-end !important; }
 
 /* Přeškrtnutá původní cena nad akční cenou (přidává shoptet.js). */
